@@ -1,0 +1,56 @@
+{
+    "name": "Offer",
+    "fields": [
+        {
+            "fieldName": "timestamp",
+            "fieldType": "Instant",
+            "fieldValidateRules": [
+                "required"
+            ]
+        },
+        {
+            "fieldName": "description",
+            "fieldType": "String"
+        }
+    ],
+    "relationships": [
+        {
+            "relationshipType": "one-to-one",
+            "otherEntityName": "trade",
+            "otherEntityRelationshipName": "offer",
+            "relationshipName": "trade",
+            "otherEntityField": "id",
+            "ownerSide": true
+        },
+        {
+            "relationshipType": "one-to-one",
+            "otherEntityName": "user",
+            "otherEntityRelationshipName": "owner",
+            "relationshipName": "user",
+            "otherEntityField": "id",
+            "ownerSide": true
+        },
+        {
+            "relationshipType": "one-to-many",
+            "otherEntityName": "comment",
+            "otherEntityRelationshipName": "owner",
+            "relationshipName": "comment"
+        },
+        {
+            "relationshipType": "many-to-one",
+            "otherEntityName": "listing",
+            "otherEntityRelationshipName": "offer",
+            "relationshipName": "listing",
+            "otherEntityField": "id"
+        }
+    ],
+    "changelogDate": "20190719043429",
+    "entityTableName": "offer",
+    "dto": "no",
+    "pagination": "no",
+    "service": "serviceImpl",
+    "jpaMetamodelFiltering": false,
+    "fluentMethods": true,
+    "clientRootFolder": "",
+    "applications": "*"
+}

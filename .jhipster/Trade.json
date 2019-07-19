@@ -1,0 +1,51 @@
+{
+    "name": "Trade",
+    "fields": [
+        {
+            "fieldName": "status",
+            "fieldType": "TradeStatusType",
+            "fieldValues": "AWAITING_MIDDLEMAN,CANCELLED,COMPLETED",
+            "fieldValidateRules": [
+                "required"
+            ]
+        }
+    ],
+    "relationships": [
+        {
+            "relationshipType": "one-to-many",
+            "otherEntityName": "comment",
+            "otherEntityRelationshipName": "owner",
+            "relationshipName": "comment"
+        },
+        {
+            "relationshipType": "one-to-one",
+            "otherEntityName": "offer",
+            "otherEntityRelationshipName": "trade",
+            "relationshipName": "offer",
+            "ownerSide": false
+        },
+        {
+            "relationshipType": "one-to-one",
+            "otherEntityName": "middlemanRequest",
+            "otherEntityRelationshipName": "trade",
+            "relationshipName": "middlemanRequest",
+            "ownerSide": false
+        },
+        {
+            "relationshipType": "one-to-one",
+            "otherEntityName": "rating",
+            "otherEntityRelationshipName": "trade",
+            "relationshipName": "rating",
+            "ownerSide": false
+        }
+    ],
+    "changelogDate": "20190719043430",
+    "entityTableName": "trade",
+    "dto": "no",
+    "pagination": "no",
+    "service": "serviceImpl",
+    "jpaMetamodelFiltering": false,
+    "fluentMethods": true,
+    "clientRootFolder": "",
+    "applications": "*"
+}

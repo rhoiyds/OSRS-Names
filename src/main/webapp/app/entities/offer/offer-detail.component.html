@@ -1,0 +1,47 @@
+<div class="row justify-content-center">
+    <div class="col-8">
+        <div *ngIf="offer">
+            <h2><span>Offer</span> {{offer.id}}</h2>
+            <hr>
+            <jhi-alert-error></jhi-alert-error>
+            <dl class="row-md jh-entity-details">
+                <dt><span>Timestamp</span></dt>
+                <dd>
+                    <span>{{offer.timestamp}}</span>
+                </dd>
+                <dt><span>Description</span></dt>
+                <dd>
+                    <span>{{offer.description}}</span>
+                </dd>
+                <dt><span>Trade</span></dt>
+                <dd>
+                    <div *ngIf="offer.trade">
+                        <a [routerLink]="['/trade', offer.trade?.id, 'view']">{{offer.trade?.id}}</a>
+                    </div>
+                </dd>
+                <dt><span>User</span></dt>
+                <dd>
+                    {{offer.user?.id}}
+                </dd>
+                <dt><span>Listing</span></dt>
+                <dd>
+                    <div *ngIf="offer.listing">
+                        <a [routerLink]="['/listing', offer.listing?.id, 'view']">{{offer.listing?.id}}</a>
+                    </div>
+                </dd>
+            </dl>
+
+            <button type="submit"
+                    (click)="previousState()"
+                    class="btn btn-info">
+                <fa-icon [icon]="'arrow-left'"></fa-icon>&nbsp;<span> Back</span>
+            </button>
+
+            <button type="button"
+                    [routerLink]="['/offer', offer.id, 'edit']"
+                    class="btn btn-primary">
+                <fa-icon [icon]="'pencil-alt'"></fa-icon>&nbsp;<span> Edit</span>
+            </button>
+        </div>
+    </div>
+</div>
