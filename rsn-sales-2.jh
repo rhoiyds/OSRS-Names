@@ -1,0 +1,71 @@
+enum ListingType {
+	WANT,
+    HAVE
+}
+
+enum TradeStatusType {
+	AWAITING_MIDDLEMAN,
+	CANCELLED,
+    COMPLETED
+}
+
+entity Listing {
+	timestamp Instant required,
+    type ListingType required,
+    rsn String required,
+    amount Long,
+    description String
+}
+
+entity Offer {
+    timestamp Instant required,
+    description String
+}
+
+entity Trade {
+    status TradeStatusType required
+}
+
+entity Rating {
+    timestamp Instant required,
+    rating Integer required,
+    description String
+}
+
+entity MiddlemanRequest {
+    timestamp Instant required,
+    description String
+}
+
+entity Comment {
+    timestamp Instant required,
+    comment String required
+}
+
+relationship OneToOne {
+	Offer to Trade
+    MiddlemanRequest to Trade
+    Listing to User{owner}
+    MiddlemanRequest to User{owner}
+    MiddlemanRequest to User{recipient}
+    Rating to User{owner}
+    Rating to User{recipient}
+    Comment to User{owner}
+    Offer to User{owner}
+    Rating to Trade
+}
+
+relationship OneToMany {
+	Trade to Comment{owner}
+    Offer to Comment{owner}
+    MiddlemanRequest to Comment{owner}
+    Listing to Offer{listing}
+    
+}
+
+// Set pagination options
+paginate Listing with infinite-scroll
+service all with serviceImpl 
+
+// Set an angular suffix
+// angularSuffix * with mySuffix
