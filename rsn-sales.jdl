@@ -48,7 +48,7 @@ entity User {
 
 relationship OneToOne {
 	Trade{offer(description) required} to Offer
-    MiddlemanRequest{trade(username) required} to Trade
+    MiddlemanRequest{trade(offer) required} to Trade
     Listing{owner(username) required} to User
     MiddlemanRequest{owner(username) required} to User
     MiddlemanRequest{recipient(username) required} to User

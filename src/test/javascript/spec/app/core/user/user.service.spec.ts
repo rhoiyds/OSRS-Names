@@ -36,7 +36,7 @@ describe('Service Tests', () => {
       });
       it('should return User', () => {
         service.find('user').subscribe(received => {
-          expectedResult = received.body.login;
+          expectedResult = received.body.username;
         });
 
         const req = httpMock.expectOne({ method: 'GET' });

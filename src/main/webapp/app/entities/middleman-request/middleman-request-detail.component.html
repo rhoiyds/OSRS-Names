@@ -16,7 +16,7 @@
                 <dt><span>Trade</span></dt>
                 <dd>
                     <div *ngIf="middlemanRequest.trade">
-                        <a [routerLink]="['/trade', middlemanRequest.trade?.id, 'view']">{{middlemanRequest.trade?.username}}</a>
+                        <a [routerLink]="['/trade', middlemanRequest.trade?.id, 'view']">{{middlemanRequest.trade?.id}}</a>
                     </div>
                 </dd>
                 <dt><span>Owner</span></dt>

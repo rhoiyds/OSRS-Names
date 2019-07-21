@@ -51,7 +51,7 @@ describe('Component Tests', () => {
       mockActiveModal = fixture.debugElement.injector.get(NgbActiveModal);
     });
 
-    it('should authenticate the user upon login when previous state was set', inject(
+    it('should authenticate the user upon username when previous state was set', inject(
       [],
       fakeAsync(() => {
         // GIVEN
@@ -75,7 +75,7 @@ describe('Component Tests', () => {
 
         // THEN
         expect(comp.authenticationError).toEqual(false);
-        expect(mockActiveModal.dismissSpy).toHaveBeenCalledWith('login success');
+        expect(mockActiveModal.dismissSpy).toHaveBeenCalledWith('username success');
         expect(mockEventManager.broadcastSpy).toHaveBeenCalledTimes(1);
         expect(mockLoginService.loginSpy).toHaveBeenCalledWith(credentials);
         expect(mockStateStorageService.getUrlSpy).toHaveBeenCalledTimes(1);
@@ -84,7 +84,7 @@ describe('Component Tests', () => {
       })
     ));
 
-    it('should authenticate the user upon login when previous state was not set', inject(
+    it('should authenticate the user upon username when previous state was not set', inject(
       [],
       fakeAsync(() => {
         // GIVEN
@@ -107,7 +107,7 @@ describe('Component Tests', () => {
 
         // THEN
         expect(comp.authenticationError).toEqual(false);
-        expect(mockActiveModal.dismissSpy).toHaveBeenCalledWith('login success');
+        expect(mockActiveModal.dismissSpy).toHaveBeenCalledWith('username success');
         expect(mockEventManager.broadcastSpy).toHaveBeenCalledTimes(1);
         expect(mockLoginService.loginSpy).toHaveBeenCalledWith(credentials);
         expect(mockStateStorageService.getUrlSpy).toHaveBeenCalledTimes(1);

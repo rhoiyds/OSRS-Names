@@ -20,8 +20,8 @@ export class UserService {
     return this.http.put<IUser>(this.resourceUrl, user, { observe: 'response' });
   }
 
-  find(login: string): Observable<HttpResponse<IUser>> {
-    return this.http.get<IUser>(`${this.resourceUrl}/${login}`, { observe: 'response' });
+  find(username: string): Observable<HttpResponse<IUser>> {
+    return this.http.get<IUser>(`${this.resourceUrl}/${username}`, { observe: 'response' });
   }
 
   query(req?: any): Observable<HttpResponse<IUser[]>> {
@@ -29,8 +29,8 @@ export class UserService {
     return this.http.get<IUser[]>(this.resourceUrl, { params: options, observe: 'response' });
   }
 
-  delete(login: string): Observable<HttpResponse<any>> {
-    return this.http.delete(`${this.resourceUrl}/${login}`, { observe: 'response' });
+  delete(username: string): Observable<HttpResponse<any>> {
+    return this.http.delete(`${this.resourceUrl}/${username}`, { observe: 'response' });
   }
 
   authorities(): Observable<string[]> {

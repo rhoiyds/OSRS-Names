@@ -45,7 +45,7 @@ describe('Component Tests', () => {
         expect(comp.user).toEqual(
           jasmine.objectContaining({
             id: 1,
-            login: 'user',
+            username: 'user',
             firstName: 'first',
             lastName: 'last',
             email: 'first@last.com',

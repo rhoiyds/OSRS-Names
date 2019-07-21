@@ -1,7 +1,7 @@
 <div>
     <div class="row justify-content-center">
         <div class="col-md-8">
-            <h2  *ngIf="settingsForm.get('login').value">User settings for [<b>{{settingsForm.get('login').value}}</b>]</h2>
+            <h2  *ngIf="settingsForm.get('username').value">User settings for [<b>{{settingsForm.get('username').value}}</b>]</h2>
 
             <div class="alert alert-success" *ngIf="success">
                 <strong>Settings saved!</strong>
@@ -9,7 +9,7 @@
 
             <jhi-alert-error></jhi-alert-error>
 
-            <form name="form" role="form" (ngSubmit)="save()" [formGroup]="settingsForm" *ngIf="settingsForm.get('login').value" novalidate>
+            <form name="form" role="form" (ngSubmit)="save()" [formGroup]="settingsForm" *ngIf="settingsForm.get('username').value" novalidate>
 
                 <div class="form-group">
                     <label class="form-control-label" for="firstName">First Name</label>

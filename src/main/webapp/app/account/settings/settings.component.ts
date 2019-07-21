@@ -19,7 +19,7 @@ export class SettingsComponent implements OnInit {
     activated: [false],
     authorities: [[]],
     langKey: ['en'],
-    login: [],
+    username: [],
     imageUrl: []
   });
 
@@ -58,7 +58,7 @@ export class SettingsComponent implements OnInit {
       activated: this.settingsForm.get('activated').value,
       authorities: this.settingsForm.get('authorities').value,
       langKey: this.settingsForm.get('langKey').value,
-      login: this.settingsForm.get('login').value,
+      username: this.settingsForm.get('username').value,
       imageUrl: this.settingsForm.get('imageUrl').value
     };
   }
@@ -71,7 +71,7 @@ export class SettingsComponent implements OnInit {
       activated: account.activated,
       authorities: account.authorities,
       langKey: account.langKey,
-      login: account.login,
+      username: account.username,
       imageUrl: account.imageUrl
     });
   }

@@ -6,7 +6,7 @@ export class Account {
     public firstName: string,
     public langKey: string,
     public lastName: string,
-    public login: string,
+    public username: string,
     public imageUrl: string
   ) {}
 }

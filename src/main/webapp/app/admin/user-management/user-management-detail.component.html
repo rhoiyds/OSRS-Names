@@ -2,12 +2,12 @@
     <div class="col-8">
         <div *ngIf="user">
             <h2>
-                <span>User</span> [<b>{{user.login}}</b>]
+                <span>User</span> [<b>{{user.username}}</b>]
             </h2>
             <dl class="row-md jh-entity-details">
-                <dt><span>Login</span></dt>
+                <dt><span>Username</span></dt>
                 <dd>
-                    <span>{{user.login}}</span>
+                    <span>{{user.username}}</span>
                     <jhi-boolean
                         [value]="user.activated"
                         textTrue="Activated"
