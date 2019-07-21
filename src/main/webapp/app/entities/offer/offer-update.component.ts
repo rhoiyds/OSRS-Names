@@ -26,9 +26,7 @@ export class OfferUpdateComponent implements OnInit {
 
   editForm = this.fb.group({
     id: [],
-    timestamp: [null, [Validators.required]],
     description: [],
-    owner: [null, Validators.required],
     listing: [null, Validators.required]
   });
 
@@ -65,9 +63,7 @@ export class OfferUpdateComponent implements OnInit {
   updateForm(offer: IOffer) {
     this.editForm.patchValue({
       id: offer.id,
-      timestamp: offer.timestamp != null ? offer.timestamp.format(DATE_TIME_FORMAT) : null,
       description: offer.description,
-      owner: offer.owner,
       listing: offer.listing
     });
   }
@@ -90,10 +86,7 @@ export class OfferUpdateComponent implements OnInit {
     return {
       ...new Offer(),
       id: this.editForm.get(['id']).value,
-      timestamp:
-        this.editForm.get(['timestamp']).value != null ? moment(this.editForm.get(['timestamp']).value, DATE_TIME_FORMAT) : undefined,
       description: this.editForm.get(['description']).value,
-      owner: this.editForm.get(['owner']).value,
       listing: this.editForm.get(['listing']).value
     };
   }

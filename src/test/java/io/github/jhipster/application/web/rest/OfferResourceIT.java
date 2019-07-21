@@ -7,6 +7,7 @@ import io.github.jhipster.application.domain.Listing;
 import io.github.jhipster.application.repository.OfferRepository;
 import io.github.jhipster.application.repository.search.OfferSearchRepository;
 import io.github.jhipster.application.service.OfferService;
+import io.github.jhipster.application.service.UserService;
 import io.github.jhipster.application.web.rest.errors.ExceptionTranslator;
 
 import org.junit.jupiter.api.BeforeEach;
@@ -77,6 +78,9 @@ public class OfferResourceIT {
     @Autowired
     private Validator validator;
 
+    @Autowired
+    private UserService userService;
+
     private MockMvc restOfferMockMvc;
 
     private Offer offer;
@@ -84,7 +88,7 @@ public class OfferResourceIT {
     @BeforeEach
     public void setup() {
         MockitoAnnotations.initMocks(this);
-        final OfferResource offerResource = new OfferResource(offerService);
+        final OfferResource offerResource = new OfferResource(offerService, userService);
         this.restOfferMockMvc = MockMvcBuilders.standaloneSetup(offerResource)
             .setCustomArgumentResolvers(pageableArgumentResolver)
             .setControllerAdvice(exceptionTranslator)
