@@ -1,0 +1,33 @@
+{
+    "name": "Trade",
+    "fields": [
+        {
+            "fieldName": "status",
+            "fieldType": "TradeStatusType",
+            "fieldValues": "AWAITING_MIDDLEMAN,CANCELLED,COMPLETED",
+            "fieldValidateRules": [
+                "required"
+            ]
+        }
+    ],
+    "relationships": [
+        {
+            "relationshipType": "one-to-one",
+            "otherEntityName": "offer",
+            "otherEntityRelationshipName": "trade",
+            "relationshipValidateRules": "required",
+            "relationshipName": "offer",
+            "otherEntityField": "description",
+            "ownerSide": true
+        }
+    ],
+    "changelogDate": "20190721035733",
+    "entityTableName": "trade",
+    "dto": "no",
+    "pagination": "no",
+    "service": "serviceImpl",
+    "jpaMetamodelFiltering": false,
+    "fluentMethods": true,
+    "clientRootFolder": "",
+    "applications": "*"
+}

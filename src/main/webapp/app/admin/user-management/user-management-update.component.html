@@ -12,24 +12,24 @@
                 </div>
 
                 <div class="form-group">
-                    <label class="form-control-label">Login</label>
-                    <input type="text" class="form-control" name="login"
-                           formControlName="login">
+                    <label class="form-control-label">Username</label>
+                    <input type="text" class="form-control" name="username"
+                           formControlName="username">
 
-                    <div *ngIf="editForm.get('login').invalid && (editForm.get('login').dirty || editForm.get('login').touched)">
+                    <div *ngIf="editForm.get('username').invalid && (editForm.get('username').dirty || editForm.get('username').touched)">
                         <small class="form-text text-danger"
-                        *ngIf="editForm.get('login').errors.required">
+                        *ngIf="editForm.get('username').errors.required">
                             This field is required.
                         </small>
 
                         <small class="form-text text-danger"
-                        *ngIf="editForm.get('login').errors.maxlength"
+                        *ngIf="editForm.get('username').errors.maxlength"
                        >
                             This field cannot be longer than 50 characters.
                         </small>
 
                         <small class="form-text text-danger"
-                        *ngIf="editForm.get('login').errors.pattern">
+                        *ngIf="editForm.get('username').errors.pattern">
                             This field can only contain letters, digits and e-mail addresses.
                         </small>
                     </div>

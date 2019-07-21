@@ -38,11 +38,17 @@ public class CacheConfiguration {
     @Bean
     public JCacheManagerCustomizer cacheManagerCustomizer() {
         return cm -> {
-            createCache(cm, io.github.jhipster.application.repository.UserRepository.USERS_BY_LOGIN_CACHE);
+            createCache(cm, io.github.jhipster.application.repository.UserRepository.USERS_BY_USERNAME_CACHE);
             createCache(cm, io.github.jhipster.application.repository.UserRepository.USERS_BY_EMAIL_CACHE);
             createCache(cm, io.github.jhipster.application.domain.User.class.getName());
             createCache(cm, io.github.jhipster.application.domain.Authority.class.getName());
             createCache(cm, io.github.jhipster.application.domain.User.class.getName() + ".authorities");
+            createCache(cm, io.github.jhipster.application.domain.Listing.class.getName());
+            createCache(cm, io.github.jhipster.application.domain.Offer.class.getName());
+            createCache(cm, io.github.jhipster.application.domain.Trade.class.getName());
+            createCache(cm, io.github.jhipster.application.domain.Rating.class.getName());
+            createCache(cm, io.github.jhipster.application.domain.MiddlemanRequest.class.getName());
+            createCache(cm, io.github.jhipster.application.domain.Comment.class.getName());
             // jhipster-needle-ehcache-add-entry
         };
     }

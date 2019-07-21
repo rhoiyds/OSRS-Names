@@ -1,6 +1,6 @@
 export interface IUser {
   id?: any;
-  login?: string;
+  username?: string;
   firstName?: string;
   lastName?: string;
   email?: string;
@@ -17,7 +17,7 @@ export interface IUser {
 export class User implements IUser {
   constructor(
     public id?: any,
-    public login?: string,
+    public username?: string,
     public firstName?: string,
     public lastName?: string,
     public email?: string,
@@ -31,7 +31,7 @@ export class User implements IUser {
     public password?: string
   ) {
     this.id = id ? id : null;
-    this.login = login ? login : null;
+    this.username = username ? username : null;
     this.firstName = firstName ? firstName : null;
     this.lastName = lastName ? lastName : null;
     this.email = email ? email : null;
