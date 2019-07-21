@@ -1,0 +1,60 @@
+{
+    "name": "Comment",
+    "fields": [
+        {
+            "fieldName": "timestamp",
+            "fieldType": "Instant",
+            "fieldValidateRules": [
+                "required"
+            ]
+        },
+        {
+            "fieldName": "comment",
+            "fieldType": "String",
+            "fieldValidateRules": [
+                "required"
+            ]
+        }
+    ],
+    "relationships": [
+        {
+            "relationshipType": "one-to-one",
+            "otherEntityName": "user",
+            "otherEntityRelationshipName": "comment",
+            "relationshipValidateRules": "required",
+            "relationshipName": "owner",
+            "otherEntityField": "username",
+            "ownerSide": true
+        },
+        {
+            "relationshipType": "many-to-one",
+            "otherEntityName": "trade",
+            "otherEntityRelationshipName": "comment",
+            "relationshipName": "trade",
+            "otherEntityField": "offer"
+        },
+        {
+            "relationshipType": "many-to-one",
+            "otherEntityName": "offer",
+            "otherEntityRelationshipName": "comment",
+            "relationshipName": "offer",
+            "otherEntityField": "description"
+        },
+        {
+            "relationshipType": "many-to-one",
+            "otherEntityName": "middlemanRequest",
+            "otherEntityRelationshipName": "comment",
+            "relationshipName": "middlemanRequest",
+            "otherEntityField": "description"
+        }
+    ],
+    "changelogDate": "20190721035736",
+    "entityTableName": "comment",
+    "dto": "no",
+    "pagination": "no",
+    "service": "serviceImpl",
+    "jpaMetamodelFiltering": false,
+    "fluentMethods": true,
+    "clientRootFolder": "",
+    "applications": "*"
+}
