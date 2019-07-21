@@ -6,6 +6,7 @@ import io.github.jhipster.application.domain.User;
 import io.github.jhipster.application.repository.ListingRepository;
 import io.github.jhipster.application.repository.search.ListingSearchRepository;
 import io.github.jhipster.application.service.ListingService;
+import io.github.jhipster.application.service.UserService;
 import io.github.jhipster.application.web.rest.errors.ExceptionTranslator;
 
 import org.junit.jupiter.api.BeforeEach;
@@ -65,6 +66,9 @@ public class ListingResourceIT {
     @Autowired
     private ListingService listingService;
 
+    @Autowired
+    private UserService userService;
+
     /**
      * This repository is mocked in the io.github.jhipster.application.repository.search test package.
      *
@@ -95,7 +99,7 @@ public class ListingResourceIT {
     @BeforeEach
     public void setup() {
         MockitoAnnotations.initMocks(this);
-        final ListingResource listingResource = new ListingResource(listingService);
+        final ListingResource listingResource = new ListingResource(listingService, userService);
         this.restListingMockMvc = MockMvcBuilders.standaloneSetup(listingResource)
             .setCustomArgumentResolvers(pageableArgumentResolver)
             .setControllerAdvice(exceptionTranslator)

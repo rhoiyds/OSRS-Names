@@ -1,7 +1,9 @@
 package io.github.jhipster.application.web.rest;
 
 import io.github.jhipster.application.domain.Listing;
+import io.github.jhipster.application.domain.User;
 import io.github.jhipster.application.service.ListingService;
+import io.github.jhipster.application.service.UserService;
 import io.github.jhipster.application.web.rest.errors.BadRequestAlertException;
 
 import io.github.jhipster.web.util.HeaderUtil;
@@ -23,6 +25,7 @@ import javax.validation.Valid;
 import java.net.URI;
 import java.net.URISyntaxException;
 
+import java.time.Instant;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.StreamSupport;
@@ -45,9 +48,9 @@ public class ListingResource {
 
     private final ListingService listingService;
 
-    public ListingResource(ListingService listingService) {
-        this.listingService = listingService;
-    }
+    private final UserService userService;
+
+    public ListingResource(ListingService listingService, UserService userService) { this.listingService = listingService; this.userService = userService; }
 
     /**
      * {@code POST  /listings} : Create a new listing.
@@ -62,6 +65,12 @@ public class ListingResource {
         if (listing.getId() != null) {
             throw new BadRequestAlertException("A new listing cannot already have an ID", ENTITY_NAME, "idexists");
         }
+        Optional<User> user = this.userService.getUserWithAuthorities();
+        if (!user.isPresent()) {
+            throw new BadRequestAlertException("You must create an entity as a logged user", ENTITY_NAME, "notloggeduser");
+        }
+        listing.setOwner(user.get());
+        listing.setTimestamp(Instant.now());
         Listing result = listingService.save(listing);
         return ResponseEntity.created(new URI("/api/listings/" + result.getId()))
             .headers(HeaderUtil.createEntityCreationAlert(applicationName, false, ENTITY_NAME, result.getId().toString()))

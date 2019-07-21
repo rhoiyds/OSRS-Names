@@ -27,7 +27,6 @@ public class Listing implements Serializable {
     @org.springframework.data.elasticsearch.annotations.Field(type = FieldType.Keyword)
     private Long id;
 
-    @NotNull
     @Column(name = "timestamp", nullable = false)
     private Instant timestamp;
 
@@ -46,9 +45,8 @@ public class Listing implements Serializable {
     @Column(name = "description")
     private String description;
 
-    @OneToOne(optional = false)    @NotNull
-
-    @JoinColumn(unique = true)
+    @OneToOne(optional = false)
+    @JoinColumn()
     private User owner;
 
     // jhipster-needle-entity-add-field - JHipster will add fields here, do not remove

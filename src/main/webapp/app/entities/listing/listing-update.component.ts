@@ -22,12 +22,10 @@ export class ListingUpdateComponent implements OnInit {
 
   editForm = this.fb.group({
     id: [],
-    timestamp: [null, [Validators.required]],
     type: [null, [Validators.required]],
     rsn: [null, [Validators.required]],
     amount: [],
-    description: [],
-    owner: [null, Validators.required]
+    description: []
   });
 
   constructor(
@@ -55,12 +53,10 @@ export class ListingUpdateComponent implements OnInit {
   updateForm(listing: IListing) {
     this.editForm.patchValue({
       id: listing.id,
-      timestamp: listing.timestamp != null ? listing.timestamp.format(DATE_TIME_FORMAT) : null,
       type: listing.type,
       rsn: listing.rsn,
       amount: listing.amount,
-      description: listing.description,
-      owner: listing.owner
+      description: listing.description
     });
   }
 
@@ -82,13 +78,10 @@ export class ListingUpdateComponent implements OnInit {
     return {
       ...new Listing(),
       id: this.editForm.get(['id']).value,
-      timestamp:
-        this.editForm.get(['timestamp']).value != null ? moment(this.editForm.get(['timestamp']).value, DATE_TIME_FORMAT) : undefined,
       type: this.editForm.get(['type']).value,
       rsn: this.editForm.get(['rsn']).value,
       amount: this.editForm.get(['amount']).value,
-      description: this.editForm.get(['description']).value,
-      owner: this.editForm.get(['owner']).value
+      description: this.editForm.get(['description']).value
     };
   }
 
