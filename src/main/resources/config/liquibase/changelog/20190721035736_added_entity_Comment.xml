@@ -24,7 +24,7 @@
                 <constraints nullable="false" />
             </column>
             <column name="owner_id" type="bigint">
-                <constraints unique="true" nullable="false" uniqueConstraintName="ux_comment_owner_id" />
+                <constraints nullable="false" uniqueConstraintName="ux_comment_owner_id" />
             </column>
             <column name="trade_id" type="bigint">
                 <constraints nullable="true" />

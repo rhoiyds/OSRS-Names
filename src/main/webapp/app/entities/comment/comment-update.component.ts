@@ -34,9 +34,7 @@ export class CommentUpdateComponent implements OnInit {
 
   editForm = this.fb.group({
     id: [],
-    timestamp: [null, [Validators.required]],
     comment: [null, [Validators.required]],
-    owner: [null, Validators.required],
     trade: [],
     offer: [],
     middlemanRequest: []
@@ -118,10 +116,7 @@ export class CommentUpdateComponent implements OnInit {
     return {
       ...new Comment(),
       id: this.editForm.get(['id']).value,
-      timestamp:
-        this.editForm.get(['timestamp']).value != null ? moment(this.editForm.get(['timestamp']).value, DATE_TIME_FORMAT) : undefined,
       comment: this.editForm.get(['comment']).value,
-      owner: this.editForm.get(['owner']).value,
       trade: this.editForm.get(['trade']).value,
       offer: this.editForm.get(['offer']).value,
       middlemanRequest: this.editForm.get(['middlemanRequest']).value

@@ -26,7 +26,6 @@ public class Comment implements Serializable {
     @org.springframework.data.elasticsearch.annotations.Field(type = FieldType.Keyword)
     private Long id;
 
-    @NotNull
     @Column(name = "timestamp", nullable = false)
     private Instant timestamp;
 
@@ -34,9 +33,8 @@ public class Comment implements Serializable {
     @Column(name = "comment", nullable = false)
     private String comment;
 
-    @OneToOne(optional = false)    @NotNull
-
-    @JoinColumn(unique = true)
+    @OneToOne(optional = false)
+    @JoinColumn()
     private User owner;
 
     @ManyToOne

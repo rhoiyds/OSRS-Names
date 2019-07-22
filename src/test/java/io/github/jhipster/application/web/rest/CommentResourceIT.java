@@ -6,6 +6,7 @@ import io.github.jhipster.application.domain.User;
 import io.github.jhipster.application.repository.CommentRepository;
 import io.github.jhipster.application.repository.search.CommentSearchRepository;
 import io.github.jhipster.application.service.CommentService;
+import io.github.jhipster.application.service.UserService;
 import io.github.jhipster.application.web.rest.errors.ExceptionTranslator;
 
 import org.junit.jupiter.api.BeforeEach;
@@ -76,6 +77,9 @@ public class CommentResourceIT {
     @Autowired
     private Validator validator;
 
+    @Autowired
+    private UserService userService;
+
     private MockMvc restCommentMockMvc;
 
     private Comment comment;
@@ -83,7 +87,7 @@ public class CommentResourceIT {
     @BeforeEach
     public void setup() {
         MockitoAnnotations.initMocks(this);
-        final CommentResource commentResource = new CommentResource(commentService);
+        final CommentResource commentResource = new CommentResource(commentService, userService);
         this.restCommentMockMvc = MockMvcBuilders.standaloneSetup(commentResource)
             .setCustomArgumentResolvers(pageableArgumentResolver)
             .setControllerAdvice(exceptionTranslator)
