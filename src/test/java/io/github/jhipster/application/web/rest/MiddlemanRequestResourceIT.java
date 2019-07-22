@@ -7,6 +7,7 @@ import io.github.jhipster.application.domain.User;
 import io.github.jhipster.application.repository.MiddlemanRequestRepository;
 import io.github.jhipster.application.repository.search.MiddlemanRequestSearchRepository;
 import io.github.jhipster.application.service.MiddlemanRequestService;
+import io.github.jhipster.application.service.UserService;
 import io.github.jhipster.application.web.rest.errors.ExceptionTranslator;
 
 import org.junit.jupiter.api.BeforeEach;
@@ -77,6 +78,9 @@ public class MiddlemanRequestResourceIT {
     @Autowired
     private Validator validator;
 
+    @Autowired
+    private UserService userService;
+
     private MockMvc restMiddlemanRequestMockMvc;
 
     private MiddlemanRequest middlemanRequest;
@@ -84,7 +88,7 @@ public class MiddlemanRequestResourceIT {
     @BeforeEach
     public void setup() {
         MockitoAnnotations.initMocks(this);
-        final MiddlemanRequestResource middlemanRequestResource = new MiddlemanRequestResource(middlemanRequestService);
+        final MiddlemanRequestResource middlemanRequestResource = new MiddlemanRequestResource(middlemanRequestService, userService);
         this.restMiddlemanRequestMockMvc = MockMvcBuilders.standaloneSetup(middlemanRequestResource)
             .setCustomArgumentResolvers(pageableArgumentResolver)
             .setControllerAdvice(exceptionTranslator)

@@ -25,26 +25,24 @@ public class MiddlemanRequest implements Serializable {
     @org.springframework.data.elasticsearch.annotations.Field(type = FieldType.Keyword)
     private Long id;
 
-    @NotNull
     @Column(name = "timestamp", nullable = false)
     private Instant timestamp;
 
     @Column(name = "description")
     private String description;
 
-    @OneToOne(optional = false)    @NotNull
-
-    @JoinColumn(unique = true)
+    @OneToOne(optional = false)
+    @NotNull
+    @JoinColumn()
     private Trade trade;
 
-    @OneToOne(optional = false)    @NotNull
-
-    @JoinColumn(unique = true)
+    @OneToOne(optional = false)
+    @JoinColumn()
     private User owner;
 
-    @OneToOne(optional = false)    @NotNull
-
-    @JoinColumn(unique = true)
+    @OneToOne(optional = false)
+    @NotNull
+    @JoinColumn()
     private User recipient;
 
     // jhipster-needle-entity-add-field - JHipster will add fields here, do not remove

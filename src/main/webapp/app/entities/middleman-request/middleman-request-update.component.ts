@@ -26,10 +26,8 @@ export class MiddlemanRequestUpdateComponent implements OnInit {
 
   editForm = this.fb.group({
     id: [],
-    timestamp: [null, [Validators.required]],
     description: [],
     trade: [null, Validators.required],
-    owner: [null, Validators.required],
     recipient: [null, Validators.required]
   });
 
@@ -84,10 +82,8 @@ export class MiddlemanRequestUpdateComponent implements OnInit {
   updateForm(middlemanRequest: IMiddlemanRequest) {
     this.editForm.patchValue({
       id: middlemanRequest.id,
-      timestamp: middlemanRequest.timestamp != null ? middlemanRequest.timestamp.format(DATE_TIME_FORMAT) : null,
       description: middlemanRequest.description,
       trade: middlemanRequest.trade,
-      owner: middlemanRequest.owner,
       recipient: middlemanRequest.recipient
     });
   }
@@ -110,11 +106,8 @@ export class MiddlemanRequestUpdateComponent implements OnInit {
     return {
       ...new MiddlemanRequest(),
       id: this.editForm.get(['id']).value,
-      timestamp:
-        this.editForm.get(['timestamp']).value != null ? moment(this.editForm.get(['timestamp']).value, DATE_TIME_FORMAT) : undefined,
       description: this.editForm.get(['description']).value,
       trade: this.editForm.get(['trade']).value,
-      owner: this.editForm.get(['owner']).value,
       recipient: this.editForm.get(['recipient']).value
     };
   }

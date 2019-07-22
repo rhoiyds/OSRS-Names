@@ -1,7 +1,10 @@
 package io.github.jhipster.application.web.rest;
 
 import io.github.jhipster.application.domain.MiddlemanRequest;
+import io.github.jhipster.application.domain.User;
+import io.github.jhipster.application.security.SecurityUtils;
 import io.github.jhipster.application.service.MiddlemanRequestService;
+import io.github.jhipster.application.service.UserService;
 import io.github.jhipster.application.web.rest.errors.BadRequestAlertException;
 
 import io.github.jhipster.web.util.HeaderUtil;
@@ -16,6 +19,7 @@ import javax.validation.Valid;
 import java.net.URI;
 import java.net.URISyntaxException;
 
+import java.time.Instant;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.StreamSupport;
@@ -37,9 +41,11 @@ public class MiddlemanRequestResource {
     private String applicationName;
 
     private final MiddlemanRequestService middlemanRequestService;
+    private final UserService userService;
 
-    public MiddlemanRequestResource(MiddlemanRequestService middlemanRequestService) {
+    public MiddlemanRequestResource(MiddlemanRequestService middlemanRequestService, UserService userService) {
         this.middlemanRequestService = middlemanRequestService;
+        this.userService = userService;
     }
 
     /**
@@ -55,6 +61,12 @@ public class MiddlemanRequestResource {
         if (middlemanRequest.getId() != null) {
             throw new BadRequestAlertException("A new middlemanRequest cannot already have an ID", ENTITY_NAME, "idexists");
         }
+        Optional<User> owner = userService.getUserWithAuthorities();
+        if (!owner.isPresent()) {
+            throw new BadRequestAlertException("You must create an entity as a logged user", ENTITY_NAME, "notloggeduser");
+        }
+        middlemanRequest.setOwner(owner.get());
+        middlemanRequest.setTimestamp(Instant.now());
         MiddlemanRequest result = middlemanRequestService.save(middlemanRequest);
         return ResponseEntity.created(new URI("/api/middleman-requests/" + result.getId()))
             .headers(HeaderUtil.createEntityCreationAlert(applicationName, false, ENTITY_NAME, result.getId().toString()))
