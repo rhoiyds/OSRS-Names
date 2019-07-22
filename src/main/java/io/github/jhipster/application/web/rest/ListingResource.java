@@ -2,6 +2,7 @@ package io.github.jhipster.application.web.rest;
 
 import io.github.jhipster.application.domain.Listing;
 import io.github.jhipster.application.domain.User;
+import io.github.jhipster.application.security.SecurityUtils;
 import io.github.jhipster.application.service.ListingService;
 import io.github.jhipster.application.service.UserService;
 import io.github.jhipster.application.web.rest.errors.BadRequestAlertException;
@@ -97,8 +98,8 @@ public class ListingResource {
             throw new BadRequestAlertException("You must create an entity as a logged user", ENTITY_NAME, "not logged user");
         }
         Optional<Listing> existingEntity = listingService.findOne(listing.getId());
-        if (!existingEntity.isPresent() || !existingEntity.get().getOwner().getId().equals(owner.get().getId())) {
-            throw new BadRequestAlertException("Only the owner of an entity can update the entity", ENTITY_NAME, "owner not updating");
+        if (!existingEntity.isPresent() || !existingEntity.get().getOwner().getId().equals(owner.get().getId()) || !existingEntity.get().isActive()) {
+            throw new BadRequestAlertException("Only the owner of an entity can update an active entity", ENTITY_NAME, "owner not updating");
         }
         listing.setOwner(owner.get());
         listing.setTimestamp(Instant.now());
@@ -146,7 +147,17 @@ public class ListingResource {
     @DeleteMapping("/listings/{id}")
     public ResponseEntity<Void> deleteListing(@PathVariable Long id) {
         log.debug("REST request to delete Listing : {}", id);
-        listingService.delete(id);
+        Optional<Listing> optionalListing = listingService.findOne(id);
+        Optional<String> ownerUserName = SecurityUtils.getCurrentUserUsername();
+        if (!optionalListing.isPresent()
+            || !ownerUserName.isPresent()
+            || !ownerUserName.get().equals(optionalListing.get().getOwner().getUsername())
+            || !optionalListing.get().isActive()) {
+            throw new BadRequestAlertException("Only the owner of an entity can delete an active the entity", ENTITY_NAME, "owner not deleting");
+        }
+        Listing listing = optionalListing.get();
+        listing.setActive(false);
+        listingService.save(listing);
         return ResponseEntity.noContent().headers(HeaderUtil.createEntityDeletionAlert(applicationName, false, ENTITY_NAME, id.toString())).build();
     }
 

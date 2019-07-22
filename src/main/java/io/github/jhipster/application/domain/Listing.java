@@ -1,4 +1,5 @@
 package io.github.jhipster.application.domain;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import org.hibernate.annotations.Cache;
 import org.hibernate.annotations.CacheConcurrencyStrategy;
 
@@ -45,8 +46,11 @@ public class Listing implements Serializable {
     @Column(name = "description")
     private String description;
 
-    @OneToOne(optional = false)
-    @JoinColumn()
+    @Column(name = "active")
+    private Boolean active = true;
+
+    @ManyToOne(optional = false)
+    @JsonIgnoreProperties("listings")
     private User owner;
 
     // jhipster-needle-entity-add-field - JHipster will add fields here, do not remove
@@ -123,6 +127,19 @@ public class Listing implements Serializable {
         this.description = description;
     }
 
+    public Boolean isActive() {
+        return active;
+    }
+
+    public Listing active(Boolean active) {
+        this.active = active;
+        return this;
+    }
+
+    public void setActive(Boolean active) {
+        this.active = active;
+    }
+
     public User getOwner() {
         return owner;
     }
@@ -162,6 +179,7 @@ public class Listing implements Serializable {
             ", rsn='" + getRsn() + "'" +
             ", amount=" + getAmount() +
             ", description='" + getDescription() + "'" +
+            ", active='" + isActive() + "'" +
             "}";
     }
 }

@@ -1,5 +1,17 @@
 {
-    "name": "Listing",
+    "fluentMethods": true,
+    "clientRootFolder": "",
+    "relationships": [
+        {
+            "relationshipType": "many-to-one",
+            "otherEntityName": "user",
+            "otherEntityRelationshipName": "listing",
+            "relationshipValidateRules": "required",
+            "relationshipName": "owner",
+            "otherEntityField": "username",
+            "ownerSide": true
+        }
+    ],
     "fields": [
         {
             "fieldName": "timestamp",
@@ -30,26 +42,18 @@
         {
             "fieldName": "description",
             "fieldType": "String"
-        }
-    ],
-    "relationships": [
+        },
         {
-            "relationshipType": "many-to-one",
-            "otherEntityName": "user",
-            "otherEntityRelationshipName": "listing",
-            "relationshipValidateRules": "required",
-            "relationshipName": "owner",
-            "otherEntityField": "username",
-            "ownerSide": true
+            "fieldName": "active",
+            "fieldType": "Boolean"
         }
     ],
     "changelogDate": "20190721035731",
-    "entityTableName": "listing",
     "dto": "no",
-    "pagination": "infinite-scroll",
+    "searchEngine": "elasticsearch",
     "service": "serviceImpl",
+    "entityTableName": "listing",
+    "databaseType": "sql",
     "jpaMetamodelFiltering": false,
-    "fluentMethods": true,
-    "clientRootFolder": "",
-    "applications": "*"
+    "pagination": "infinite-scroll"
 }

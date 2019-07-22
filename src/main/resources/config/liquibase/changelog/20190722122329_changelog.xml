@@ -1,0 +1,69 @@
+<?xml version="1.1" encoding="UTF-8" standalone="no"?>
+<databaseChangeLog xmlns="http://www.liquibase.org/xml/ns/dbchangelog" xmlns:ext="http://www.liquibase.org/xml/ns/dbchangelog-ext" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog-ext http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-ext.xsd http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.6.xsd">
+    <changeSet author="roypo (generated)" id="1563798219077-13">
+        <addUniqueConstraint columnNames="owner_id" constraintName="UK_2at9xfsk6lpefeiccht13hsrc" tableName="offer"/>
+    </changeSet>
+    <changeSet author="roypo (generated)" id="1563798219077-14">
+        <addUniqueConstraint columnNames="recipient_id" constraintName="UK_4a3vnido3a7ej21h8ilnpb13y" tableName="middleman_request"/>
+    </changeSet>
+    <changeSet author="roypo (generated)" id="1563798219077-15">
+        <addUniqueConstraint columnNames="owner_id" constraintName="UK_64b1wbrgy9mv2p2ifv2s4fc62" tableName="comment"/>
+    </changeSet>
+    <changeSet author="roypo (generated)" id="1563798219077-16">
+        <addUniqueConstraint columnNames="owner_id" constraintName="UK_empggo0ipkffkifcir2agx8b7" tableName="middleman_request"/>
+    </changeSet>
+    <changeSet author="roypo (generated)" id="1563798219077-17">
+        <addUniqueConstraint columnNames="owner_id" constraintName="UK_fdv9bmbyj5t4vh8f2hjaqiajf" tableName="listing"/>
+    </changeSet>
+    <changeSet author="roypo (generated)" id="1563798219077-18">
+        <addUniqueConstraint columnNames="trade_id" constraintName="UK_luymi2gnb2f5c8t25c1v7js8h" tableName="middleman_request"/>
+    </changeSet>
+    <changeSet author="roypo (generated)" id="1563798219077-1">
+        <dropUniqueConstraint constraintName="UC_JHI_USEREMAIL_COL" tableName="jhi_user"/>
+        <addUniqueConstraint columnNames="email" constraintName="UC_JHI_USEREMAIL_COL" tableName="jhi_user"/>
+    </changeSet>
+    <changeSet author="roypo (generated)" id="1563798219077-2">
+        <dropUniqueConstraint constraintName="UC_JHI_USERUSERNAME_COL" tableName="jhi_user"/>
+        <addUniqueConstraint columnNames="username" constraintName="UC_JHI_USERUSERNAME_COL" tableName="jhi_user"/>
+    </changeSet>
+    <changeSet author="roypo (generated)" id="1563798219077-3">
+        <dropUniqueConstraint constraintName="UK_3hf3eb66c631jvrgf9u6cf849" tableName="rating"/>
+        <addUniqueConstraint columnNames="owner_id" constraintName="UK_3hf3eb66c631jvrgf9u6cf849" tableName="rating"/>
+    </changeSet>
+    <changeSet author="roypo (generated)" id="1563798219077-4">
+        <dropUniqueConstraint constraintName="UK_5enb3dt45oqyyb4itvmtupg3v" tableName="rating"/>
+        <addUniqueConstraint columnNames="recipient_id" constraintName="UK_5enb3dt45oqyyb4itvmtupg3v" tableName="rating"/>
+    </changeSet>
+    <changeSet author="roypo (generated)" id="1563798219077-5">
+        <dropUniqueConstraint constraintName="UK_7tt0o1bj3ryasu29ts2jlwals" tableName="trade"/>
+        <addUniqueConstraint columnNames="offer_id" constraintName="UK_7tt0o1bj3ryasu29ts2jlwals" tableName="trade"/>
+    </changeSet>
+    <changeSet author="roypo (generated)" id="1563798219077-6">
+        <dropUniqueConstraint constraintName="UK_klovpqhxb8t8eb67mhswamy8j" tableName="rating"/>
+        <addUniqueConstraint columnNames="trade_id" constraintName="UK_klovpqhxb8t8eb67mhswamy8j" tableName="rating"/>
+    </changeSet>
+    <changeSet author="roypo (generated)" id="1563798219077-7">
+        <dropUniqueConstraint constraintName="UK_64b1wbrgy9mv2p2ifv2s4fc62" tableName="comment"/>
+        <addUniqueConstraint columnNames="owner_id" constraintName="UK_64b1wbrgy9mv2p2ifv2s4fc62" tableName="comment"/>
+    </changeSet>
+    <changeSet author="roypo (generated)" id="1563798219077-8">
+        <dropUniqueConstraint constraintName="UK_fdv9bmbyj5t4vh8f2hjaqiajf" tableName="listing"/>
+        <addUniqueConstraint columnNames="owner_id" constraintName="UK_fdv9bmbyj5t4vh8f2hjaqiajf" tableName="listing"/>
+    </changeSet>
+    <changeSet author="roypo (generated)" id="1563798219077-9">
+        <dropUniqueConstraint constraintName="UK_empggo0ipkffkifcir2agx8b7" tableName="middleman_request"/>
+        <addUniqueConstraint columnNames="owner_id" constraintName="UK_empggo0ipkffkifcir2agx8b7" tableName="middleman_request"/>
+    </changeSet>
+    <changeSet author="roypo (generated)" id="1563798219077-10">
+        <dropUniqueConstraint constraintName="UK_4a3vnido3a7ej21h8ilnpb13y" tableName="middleman_request"/>
+        <addUniqueConstraint columnNames="recipient_id" constraintName="UK_4a3vnido3a7ej21h8ilnpb13y" tableName="middleman_request"/>
+    </changeSet>
+    <changeSet author="roypo (generated)" id="1563798219077-11">
+        <dropUniqueConstraint constraintName="UK_luymi2gnb2f5c8t25c1v7js8h" tableName="middleman_request"/>
+        <addUniqueConstraint columnNames="trade_id" constraintName="UK_luymi2gnb2f5c8t25c1v7js8h" tableName="middleman_request"/>
+    </changeSet>
+    <changeSet author="roypo (generated)" id="1563798219077-12">
+        <dropUniqueConstraint constraintName="UK_2at9xfsk6lpefeiccht13hsrc" tableName="offer"/>
+        <addUniqueConstraint columnNames="owner_id" constraintName="UK_2at9xfsk6lpefeiccht13hsrc" tableName="offer"/>
+    </changeSet>
+</databaseChangeLog>
