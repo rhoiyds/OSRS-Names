@@ -1,8 +1,8 @@
 package io.github.jhipster.application.web.rest;
 
+
 import io.github.jhipster.application.domain.MiddlemanRequest;
 import io.github.jhipster.application.domain.User;
-import io.github.jhipster.application.security.SecurityUtils;
 import io.github.jhipster.application.service.MiddlemanRequestService;
 import io.github.jhipster.application.service.UserService;
 import io.github.jhipster.application.web.rest.errors.BadRequestAlertException;
@@ -88,6 +88,16 @@ public class MiddlemanRequestResource {
         if (middlemanRequest.getId() == null) {
             throw new BadRequestAlertException("Invalid id", ENTITY_NAME, "idnull");
         }
+        Optional<User> owner = userService.getUserWithAuthorities();
+        if (!owner.isPresent()) {
+            throw new BadRequestAlertException("You must create an entity as a logged user", ENTITY_NAME, "notloggeduser");
+        }
+        Optional<MiddlemanRequest> existingEntity = middlemanRequestService.findOne(middlemanRequest.getId());
+        if (!existingEntity.isPresent() || !existingEntity.get().getOwner().getId().equals(owner.get().getId())) {
+            throw new BadRequestAlertException("Only the owner of an entity can update the entity", ENTITY_NAME, "owner not updating");
+        }
+        middlemanRequest.setOwner(owner.get());
+        middlemanRequest.setTimestamp(Instant.now());
         MiddlemanRequest result = middlemanRequestService.save(middlemanRequest);
         return ResponseEntity.ok()
             .headers(HeaderUtil.createEntityUpdateAlert(applicationName, false, ENTITY_NAME, middlemanRequest.getId().toString()))

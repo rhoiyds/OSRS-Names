@@ -1,5 +1,6 @@
 package io.github.jhipster.application.web.rest;
 
+import io.github.jhipster.application.domain.MiddlemanRequest;
 import io.github.jhipster.application.domain.Offer;
 import io.github.jhipster.application.domain.User;
 import io.github.jhipster.application.service.OfferService;
@@ -61,11 +62,11 @@ public class OfferResource {
         if (offer.getId() != null) {
             throw new BadRequestAlertException("A new offer cannot already have an ID", ENTITY_NAME, "idexists");
         }
-        Optional<User> user = this.userService.getUserWithAuthorities();
-        if (!user.isPresent()) {
+        Optional<User> owner = this.userService.getUserWithAuthorities();
+        if (!owner.isPresent()) {
             throw new BadRequestAlertException("You must create an entity as a logged user", ENTITY_NAME, "notloggeduser");
         }
-        offer.setOwner(user.get());
+        offer.setOwner(owner.get());
         offer.setTimestamp(Instant.now());
         Offer result = offerService.save(offer);
         return ResponseEntity.created(new URI("/api/offers/" + result.getId()))
@@ -88,6 +89,16 @@ public class OfferResource {
         if (offer.getId() == null) {
             throw new BadRequestAlertException("Invalid id", ENTITY_NAME, "idnull");
         }
+        Optional<User> owner = this.userService.getUserWithAuthorities();
+        if (!owner.isPresent()) {
+            throw new BadRequestAlertException("You must create an entity as a logged user", ENTITY_NAME, "notloggeduser");
+        }
+        Optional<Offer> existingEntity = offerService.findOne(offer.getId());
+        if (!existingEntity.isPresent() || !existingEntity.get().getOwner().getId().equals(owner.get().getId())) {
+            throw new BadRequestAlertException("Only the owner of an entity can update the entity", ENTITY_NAME, "owner not updating");
+        }
+        offer.setOwner(owner.get());
+        offer.setTimestamp(Instant.now());
         Offer result = offerService.save(offer);
         return ResponseEntity.ok()
             .headers(HeaderUtil.createEntityUpdateAlert(applicationName, false, ENTITY_NAME, offer.getId().toString()))

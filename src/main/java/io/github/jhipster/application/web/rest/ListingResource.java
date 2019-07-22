@@ -65,11 +65,11 @@ public class ListingResource {
         if (listing.getId() != null) {
             throw new BadRequestAlertException("A new listing cannot already have an ID", ENTITY_NAME, "idexists");
         }
-        Optional<User> user = this.userService.getUserWithAuthorities();
-        if (!user.isPresent()) {
+        Optional<User> owner = this.userService.getUserWithAuthorities();
+        if (!owner.isPresent()) {
             throw new BadRequestAlertException("You must create an entity as a logged user", ENTITY_NAME, "notloggeduser");
         }
-        listing.setOwner(user.get());
+        listing.setOwner(owner.get());
         listing.setTimestamp(Instant.now());
         Listing result = listingService.save(listing);
         return ResponseEntity.created(new URI("/api/listings/" + result.getId()))
@@ -92,6 +92,16 @@ public class ListingResource {
         if (listing.getId() == null) {
             throw new BadRequestAlertException("Invalid id", ENTITY_NAME, "idnull");
         }
+        Optional<User> owner = this.userService.getUserWithAuthorities();
+        if (!owner.isPresent()) {
+            throw new BadRequestAlertException("You must create an entity as a logged user", ENTITY_NAME, "not logged user");
+        }
+        Optional<Listing> existingEntity = listingService.findOne(listing.getId());
+        if (!existingEntity.isPresent() || !existingEntity.get().getOwner().getId().equals(owner.get().getId())) {
+            throw new BadRequestAlertException("Only the owner of an entity can update the entity", ENTITY_NAME, "owner not updating");
+        }
+        listing.setOwner(owner.get());
+        listing.setTimestamp(Instant.now());
         Listing result = listingService.save(listing);
         return ResponseEntity.ok()
             .headers(HeaderUtil.createEntityUpdateAlert(applicationName, false, ENTITY_NAME, listing.getId().toString()))

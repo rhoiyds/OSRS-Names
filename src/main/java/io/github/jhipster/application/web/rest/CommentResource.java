@@ -88,6 +88,16 @@ public class CommentResource {
         if (comment.getId() == null) {
             throw new BadRequestAlertException("Invalid id", ENTITY_NAME, "idnull");
         }
+        Optional<User> owner = this.userService.getUserWithAuthorities();
+        if (!owner.isPresent()) {
+            throw new BadRequestAlertException("You must create an entity as a logged user", ENTITY_NAME, "notloggeduser");
+        }
+        Optional<Comment> existingEntity = commentService.findOne(comment.getId());
+        if (!existingEntity.isPresent() || !existingEntity.get().getOwner().getId().equals(owner.get().getId())) {
+            throw new BadRequestAlertException("Only the owner of an entity can update the entity", ENTITY_NAME, "owner not updating");
+        }
+        comment.setOwner(owner.get());
+        comment.setTimestamp(Instant.now());
         Comment result = commentService.save(comment);
         return ResponseEntity.ok()
             .headers(HeaderUtil.createEntityUpdateAlert(applicationName, false, ENTITY_NAME, comment.getId().toString()))
