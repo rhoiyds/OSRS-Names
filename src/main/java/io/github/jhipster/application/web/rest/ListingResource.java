@@ -174,6 +174,7 @@ public class ListingResource {
     @GetMapping("/_search/listings")
     public ResponseEntity<List<Listing>> searchListings(@RequestParam String query, Pageable pageable, @RequestParam MultiValueMap<String, String> queryParams, UriComponentsBuilder uriBuilder) {
         log.debug("REST request to search for a page of Listings for query {}", query);
+        query = query.replace("active:false", "") + " AND active:true";
         Page<Listing> page = listingService.search(query, pageable);
         HttpHeaders headers = PaginationUtil.generatePaginationHttpHeaders(uriBuilder.queryParams(queryParams), page);
         return ResponseEntity.ok().headers(headers).body(page.getContent());

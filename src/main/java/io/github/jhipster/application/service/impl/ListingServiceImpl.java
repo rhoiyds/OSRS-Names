@@ -58,7 +58,7 @@ public class ListingServiceImpl implements ListingService {
     @Transactional(readOnly = true)
     public Page<Listing> findAll(Pageable pageable) {
         log.debug("Request to get all Listings");
-        return listingRepository.findAll(pageable);
+        return listingRepository.findAllActive(pageable);
     }
 
 

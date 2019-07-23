@@ -39,6 +39,7 @@
             <th jhiSortBy="amount"><span>Amount</span> <fa-icon [icon]="'sort'"></fa-icon></th>
             <th jhiSortBy="description"><span>Description</span> <fa-icon [icon]="'sort'"></fa-icon></th>
             <th jhiSortBy="owner.username"><span>Owner</span> <fa-icon [icon]="'sort'"></fa-icon></th>
+            <th jhiSortBy="active"><span>Active</span> <fa-icon [icon]="'sort'"></fa-icon></th>
             <th></th>
             </tr>
             </thead>
@@ -53,6 +54,7 @@
                 <td>
                     {{listing.owner?.username}}
                 </td>
+                <td>{{listing.active}}</td>
                 <td class="text-right">
                     <div class="btn-group">
                         <button type="submit"
@@ -63,12 +65,14 @@
                         </button>
                         <button type="submit"
                                 [routerLink]="['/listing', listing.id, 'edit']"
+                                [disabled]="currentAccount.id !== listing.owner.id"
                                 class="btn btn-primary btn-sm">
                             <fa-icon [icon]="'pencil-alt'"></fa-icon>
                             <span class="d-none d-md-inline">Edit</span>
                         </button>
                         <button type="submit"
                                 [routerLink]="['/', 'listing', { outlets: { popup: listing.id + '/delete'} }]"
+                                [disabled]="currentAccount.id !== listing.owner.id"
                                 replaceUrl="true"
                                 queryParamsHandling="merge"
                                 class="btn btn-danger btn-sm">

@@ -14,6 +14,7 @@ export interface IListing {
   amount?: number;
   description?: string;
   owner?: IUser;
+  active?: boolean;
 }
 
 export class Listing implements IListing {
@@ -24,6 +25,7 @@ export class Listing implements IListing {
     public rsn?: string,
     public amount?: number,
     public description?: string,
-    public owner?: IUser
+    public owner?: IUser,
+    public active?: boolean
   ) {}
 }
