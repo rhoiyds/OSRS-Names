@@ -33,9 +33,9 @@ import { JhiMainComponent, NavbarComponent, FooterComponent, PageRibbonComponent
     RsnsalesSharedModule.forRoot(),
     RsnsalesCoreModule,
     RsnsalesHomeModule,
+    RsnsalesEntityModule,
     RsnsalesAccountModule,
     // jhipster-needle-angular-add-module JHipster will add new module here
-    RsnsalesEntityModule,
     RsnsalesAppRoutingModule
   ],
   declarations: [JhiMainComponent, NavbarComponent, ErrorComponent, PageRibbonComponent, FooterComponent],
