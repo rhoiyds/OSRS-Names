@@ -1,5 +1,6 @@
 package io.github.jhipster.application.service;
 
+import io.github.jhipster.application.domain.Listing;
 import io.github.jhipster.application.domain.Offer;
 
 import java.util.List;
@@ -49,4 +50,6 @@ public interface OfferService {
      * @return the list of entities.
      */
     List<Offer> search(String query);
+
+    Offer[] findAllForListing(Listing listing);
 }

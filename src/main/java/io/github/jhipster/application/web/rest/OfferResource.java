@@ -1,8 +1,10 @@
 package io.github.jhipster.application.web.rest;
 
+import io.github.jhipster.application.domain.Listing;
 import io.github.jhipster.application.domain.MiddlemanRequest;
 import io.github.jhipster.application.domain.Offer;
 import io.github.jhipster.application.domain.User;
+import io.github.jhipster.application.service.ListingService;
 import io.github.jhipster.application.service.OfferService;
 import io.github.jhipster.application.service.UserService;
 import io.github.jhipster.application.web.rest.errors.BadRequestAlertException;
@@ -44,9 +46,12 @@ public class OfferResource {
 
     private final UserService userService;
 
-    public OfferResource(OfferService offerService, UserService userService) {
+    private final ListingService listingService;
+
+    public OfferResource(OfferService offerService, UserService userService, ListingService listingService) {
         this.offerService = offerService;
         this.userService = userService;
+        this.listingService = listingService;
     }
 
     /**
@@ -127,6 +132,22 @@ public class OfferResource {
         log.debug("REST request to get Offer : {}", id);
         Optional<Offer> offer = offerService.findOne(id);
         return ResponseUtil.wrapOrNotFound(offer);
+    }
+
+    /**
+     * {@code GET  /offers/listing/:id} : get the "id" offer.
+     *
+     * @param id the id of the listing to retrieve all offers for.
+     * @return the {@link ResponseEntity} with status {@code 200 (OK)} and with body the offer, or with status {@code 404 (Not Found)}.
+     */
+    @GetMapping("/offers/listing/{id}")
+    public Offer[] getOffersForListing(@PathVariable Long id) {
+        log.debug("REST request to get Offers for Listing : {}", id);
+        Optional<Listing> existingEntity = listingService.findOne(id);
+        if (!existingEntity.isPresent()) {
+            throw new BadRequestAlertException("You cannot find offers for a listing that does not exist", ENTITY_NAME, "listing does not exist");
+        }
+        return offerService.findAllForListing(existingEntity.get());
     }
 
     /**

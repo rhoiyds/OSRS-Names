@@ -57,6 +57,12 @@ export class OfferService {
       .pipe(map((res: EntityArrayResponseType) => this.convertDateArrayFromServer(res)));
   }
 
+  getOffersForListing(id: number): Observable<EntityArrayResponseType> {
+    return this.http
+      .get<IOffer[]>(`${this.resourceUrl}/listing/${id}`, { observe: 'response' })
+      .pipe(map((res: EntityArrayResponseType) => this.convertDateArrayFromServer(res)));
+  }
+
   protected convertDateFromClient(offer: IOffer): IOffer {
     const copy: IOffer = Object.assign({}, offer, {
       timestamp: offer.timestamp != null && offer.timestamp.isValid() ? offer.timestamp.toJSON() : null

@@ -1,5 +1,6 @@
 package io.github.jhipster.application.service.impl;
 
+import io.github.jhipster.application.domain.Listing;
 import io.github.jhipster.application.service.OfferService;
 import io.github.jhipster.application.domain.Offer;
 import io.github.jhipster.application.repository.OfferRepository;
@@ -100,5 +101,11 @@ public class OfferServiceImpl implements OfferService {
         return StreamSupport
             .stream(offerSearchRepository.search(queryStringQuery(query)).spliterator(), false)
             .collect(Collectors.toList());
+    }
+
+    @Override
+    @Transactional(readOnly = true)
+    public Offer[] findAllForListing(Listing listing) {
+        return offerRepository.findAllForListing(listing);
     }
 }
