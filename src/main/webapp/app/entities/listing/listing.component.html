@@ -65,14 +65,14 @@
                         </button>
                         <button type="submit"
                                 [routerLink]="['/listing', listing.id, 'edit']"
-                                [disabled]="currentAccount.id !== listing.owner.id"
+                                [disabled]="!currentAccount || currentAccount.id !== listing.owner.id"
                                 class="btn btn-primary btn-sm">
                             <fa-icon [icon]="'pencil-alt'"></fa-icon>
                             <span class="d-none d-md-inline">Edit</span>
                         </button>
                         <button type="submit"
                                 [routerLink]="['/', 'listing', { outlets: { popup: listing.id + '/delete'} }]"
-                                [disabled]="currentAccount.id !== listing.owner.id"
+                                [disabled]="!currentAccount || currentAccount.id !== listing.owner.id"
                                 replaceUrl="true"
                                 queryParamsHandling="merge"
                                 class="btn btn-danger btn-sm">
