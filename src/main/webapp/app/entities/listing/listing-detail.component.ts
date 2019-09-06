@@ -4,6 +4,7 @@ import { ActivatedRoute } from '@angular/router';
 import { IListing } from 'app/shared/model/listing.model';
 import { IOffer } from 'app/shared/model/offer.model';
 import { OfferService } from 'app/entities/offer';
+import { AccountService, Account } from 'app/core';
 
 @Component({
   selector: 'jhi-listing-detail',
@@ -12,14 +13,17 @@ import { OfferService } from 'app/entities/offer';
 export class ListingDetailComponent implements OnInit {
   listing: IListing;
   offers: IOffer[];
+  currentAccount: Account;
 
-  constructor(protected activatedRoute: ActivatedRoute, private offerService: OfferService) {}
+  constructor(protected activatedRoute: ActivatedRoute, private offerService: OfferService, private accountService: AccountService) {}
 
   ngOnInit() {
     this.activatedRoute.data.subscribe(({ listing }) => {
-      console.log(listing);
       this.listing = listing;
       this.getOffersForListing();
+    });
+    this.accountService.identity().then(account => {
+      this.currentAccount = account;
     });
   }
 

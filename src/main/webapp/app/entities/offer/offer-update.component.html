@@ -5,22 +5,9 @@
             <div>
                 <jhi-alert-error></jhi-alert-error>
                 <div class="form-group">
-                    <label class="form-control-label" for="field_description">Description</label>
+                    <label class="form-control-label" for="field_description">Message</label>
                     <input type="text" class="form-control" name="description" id="field_description"
                            formControlName="description"/>
-                </div>
-                <div class="form-group">
-                    <label class="form-control-label" for="field_listing">Listing</label>
-                    <select class="form-control" id="field_listing" name="listing" formControlName="listing">
-                        <option *ngIf="!editForm.get('listing').value" [ngValue]="null" selected></option>
-                        <option [ngValue]="listingOption.id === editForm.get('listing').value?.id ? editForm.get('listing').value : listingOption" *ngFor="let listingOption of listings; trackBy: trackListingById">{{listingOption.description}}</option>
-                    </select>
-                </div>
-                <div *ngIf="editForm.get('listing').invalid && (editForm.get('listing').dirty || editForm.get('listing').touched)">
-                    <small class="form-text text-danger"
-                           *ngIf="editForm.get('listing').errors.required">
-                        This field is required.
-                    </small>
                 </div>
             </div>
             <div>

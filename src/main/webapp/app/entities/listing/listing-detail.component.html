@@ -39,12 +39,15 @@
 
             <button type="button"
                     [routerLink]="['/listing', listing.id, 'edit']"
+                    [disabled]="currentAccount?.id !== listing.owner.id"
                     class="btn btn-primary">
                 <fa-icon [icon]="'pencil-alt'"></fa-icon>&nbsp;<span> Edit</span>
             </button>
 
             <button type="button"
                     [routerLink]="['/offer', 'new']"
+                    [queryParams]="{ listingId: listing.id}"
+                    [disabled]="currentAccount?.id === listing.owner.id"
                     class="btn btn-success">
                 <fa-icon [icon]="'hand-holding-usd'"></fa-icon>&nbsp;<span> Offer</span>
             </button>

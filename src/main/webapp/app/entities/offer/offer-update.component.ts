@@ -3,15 +3,13 @@ import { HttpResponse, HttpErrorResponse } from '@angular/common/http';
 import { FormBuilder, Validators } from '@angular/forms';
 import { ActivatedRoute } from '@angular/router';
 import { Observable } from 'rxjs';
-import { filter, map } from 'rxjs/operators';
-import * as moment from 'moment';
-import { DATE_TIME_FORMAT } from 'app/shared/constants/input.constants';
 import { JhiAlertService } from 'ng-jhipster';
 import { IOffer, Offer } from 'app/shared/model/offer.model';
 import { OfferService } from './offer.service';
 import { IUser, UserService } from 'app/core';
-import { IListing } from 'app/shared/model/listing.model';
+import { IListing, Listing } from 'app/shared/model/listing.model';
 import { ListingService } from 'app/entities/listing';
+import { filter, map } from 'rxjs/operators';
 
 @Component({
   selector: 'jhi-offer-update',
@@ -43,24 +41,25 @@ export class OfferUpdateComponent implements OnInit {
     this.isSaving = false;
     this.activatedRoute.data.subscribe(({ offer }) => {
       this.updateForm(offer);
+      this.getListingForOffer(offer);
     });
-    this.userService
-      .query()
-      .pipe(
-        filter((mayBeOk: HttpResponse<IUser[]>) => mayBeOk.ok),
-        map((response: HttpResponse<IUser[]>) => response.body)
-      )
-      .subscribe((res: IUser[]) => (this.users = res), (res: HttpErrorResponse) => this.onError(res.message));
-    this.listingService
-      .query()
-      .pipe(
-        filter((mayBeOk: HttpResponse<IListing[]>) => mayBeOk.ok),
-        map((response: HttpResponse<IListing[]>) => response.body)
-      )
-      .subscribe((res: IListing[]) => (this.listings = res), (res: HttpErrorResponse) => this.onError(res.message));
   }
 
-  updateForm(offer: IOffer) {
+  getListingForOffer(offer: IOffer) {
+    if (!offer.listing) {
+      this.listingService
+        .find(this.activatedRoute.snapshot.queryParams.listingId)
+        .pipe(
+          filter((response: HttpResponse<Listing>) => response.ok),
+          map((listing: HttpResponse<Listing>) => listing.body)
+        )
+        .subscribe(listing => {
+          this.editForm.patchValue({ listing });
+        });
+    }
+  }
+
+  updateForm(offer) {
     this.editForm.patchValue({
       id: offer.id,
       description: offer.description,
@@ -105,13 +104,5 @@ export class OfferUpdateComponent implements OnInit {
   }
   protected onError(errorMessage: string) {
     this.jhiAlertService.error(errorMessage, null, null);
-  }
-
-  trackUserById(index: number, item: IUser) {
-    return item.id;
-  }
-
-  trackListingById(index: number, item: IListing) {
-    return item.id;
   }
 }
