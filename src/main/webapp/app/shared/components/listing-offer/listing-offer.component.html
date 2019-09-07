@@ -1,0 +1,9 @@
+<div class="c-offer" >
+    {{offer.owner.username}} made an offer at {{offer.timestamp}}
+    <em>{{offer.description}}</em>
+    <button type="button"
+    (click)="onAcceptOfferClick()"
+    class="btn btn-success">
+        <fa-icon [icon]="'exchange-alt'"></fa-icon>&nbsp;<span> Accept</span>
+    </button>
+</div>

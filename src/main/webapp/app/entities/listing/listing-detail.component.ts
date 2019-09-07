@@ -1,10 +1,12 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, IterableDiffers } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 
 import { IListing } from 'app/shared/model/listing.model';
 import { IOffer } from 'app/shared/model/offer.model';
+import { Trade, TradeStatusType, ITrade } from 'app/shared/model/trade.model';
 import { OfferService } from 'app/entities/offer';
 import { AccountService, Account } from 'app/core';
+import { TradeService } from '../trade';
 
 @Component({
   selector: 'jhi-listing-detail',
@@ -15,7 +17,12 @@ export class ListingDetailComponent implements OnInit {
   offers: IOffer[];
   currentAccount: Account;
 
-  constructor(protected activatedRoute: ActivatedRoute, private offerService: OfferService, private accountService: AccountService) {}
+  constructor(
+    protected activatedRoute: ActivatedRoute,
+    private offerService: OfferService,
+    private accountService: AccountService,
+    private tradeService: TradeService
+  ) {}
 
   ngOnInit() {
     this.activatedRoute.data.subscribe(({ listing }) => {

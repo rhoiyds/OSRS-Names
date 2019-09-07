@@ -53,6 +53,10 @@
             </button>
         </div>
     </div>
+    <div class="col-8">
+        <ng-container *ngIf="currentAccount?.id === listing.owner.id">
+            <h1>Offers</h1>
+            <jhi-listing-offer *ngFor="let offer of offers" [offer]="offer"></jhi-listing-offer>
+        </ng-container>
+    </div>
 </div>
-
-<pre *ngFor="let offer of offers">{{offer | json}}</pre>
