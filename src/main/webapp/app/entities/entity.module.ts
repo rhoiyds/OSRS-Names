@@ -31,6 +31,10 @@ import { RouterModule } from '@angular/router';
       {
         path: 'comment',
         loadChildren: './comment/comment.module#RsnsalesCommentModule'
+      },
+      {
+        path: 'tag',
+        loadChildren: './tag/tag.module#RsnsalesTagModule'
       }
       /* jhipster-needle-add-entity-route - JHipster will add entity modules routes here */
     ])
