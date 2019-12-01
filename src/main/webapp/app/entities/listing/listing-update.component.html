@@ -38,6 +38,12 @@
                     <input type="text" class="form-control" name="description" id="field_description"
                            formControlName="description"/>
                 </div>
+                <div class="form-group">
+                    <label for="field_tags">Tags</label>
+                    <select class="form-control" id="field_tags" multiple name="tags" formControlName="tags">
+                        <option [ngValue]="getSelected(editForm.get('tags').value, tagOption)" *ngFor="let tagOption of tags; trackBy: trackTagById">{{tagOption.name}}</option>
+                    </select>
+                </div>
             </div>
             <div>
                 <button type="button" id="cancel-save" class="btn btn-secondary"  (click)="previousState()">

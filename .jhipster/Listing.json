@@ -10,6 +10,15 @@
             "relationshipName": "owner",
             "otherEntityField": "username",
             "ownerSide": true
+        },
+        {
+            "relationshipName": "tags",
+            "otherEntityName": "tag",
+            "relationshipType": "many-to-many",
+            "relationshipValidateRules": [],
+            "otherEntityField": "name",
+            "ownerSide": true,
+            "otherEntityRelationshipName": "listings"
         }
     ],
     "fields": [

@@ -1,5 +1,6 @@
 import { Moment } from 'moment';
 import { IUser } from 'app/core/user/user.model';
+import { ITag } from 'app/shared/model/tag.model';
 
 export const enum ListingType {
   WANT = 'WANT',
@@ -13,8 +14,9 @@ export interface IListing {
   rsn?: string;
   amount?: number;
   description?: string;
-  owner?: IUser;
   active?: boolean;
+  owner?: IUser;
+  tags?: ITag[];
 }
 
 export class Listing implements IListing {
@@ -26,6 +28,6 @@ export class Listing implements IListing {
     public amount?: number,
     public description?: string,
     public owner?: IUser,
-    public active?: boolean
+    public tags?: ITag[]
   ) {}
 }

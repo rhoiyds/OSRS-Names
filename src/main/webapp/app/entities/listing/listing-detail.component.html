@@ -29,6 +29,12 @@
                 <dd>
                     {{listing.owner?.username}}
                 </dd>
+                <dt><span>Tags</span></dt>
+                <dd>
+                    <span *ngFor="let tags of listing.tags; let last = last">
+                        <a [routerLink]="['/tag', tags?.id, 'view' ]">{{tags.name}}</a>{{last ? '' : ', '}}
+                    </span>
+                </dd>
             </dl>
 
             <button type="submit"

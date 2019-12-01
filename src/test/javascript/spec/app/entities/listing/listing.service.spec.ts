@@ -27,7 +27,7 @@ describe('Service Tests', () => {
       httpMock = injector.get(HttpTestingController);
       currentDate = moment();
 
-      elemDefault = new Listing(0, currentDate, ListingType.WANT, 'AAAAAAA', 0, 'AAAAAAA');
+      elemDefault = new Listing(0, currentDate, ListingType.WANT, 'AAAAAAA', 0, 'AAAAAAA', false);
     });
 
     describe('Service methods', () => {
@@ -78,7 +78,8 @@ describe('Service Tests', () => {
             type: 'BBBBBB',
             rsn: 'BBBBBB',
             amount: 1,
-            description: 'BBBBBB'
+            description: 'BBBBBB',
+            active: true
           },
           elemDefault
         );
@@ -105,7 +106,8 @@ describe('Service Tests', () => {
             type: 'BBBBBB',
             rsn: 'BBBBBB',
             amount: 1,
-            description: 'BBBBBB'
+            description: 'BBBBBB',
+            active: true
           },
           elemDefault
         );
