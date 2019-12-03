@@ -9,6 +9,8 @@ import javax.validation.constraints.*;
 import org.springframework.data.elasticsearch.annotations.FieldType;
 import java.io.Serializable;
 import java.time.Instant;
+import java.util.HashSet;
+import java.util.Set;
 
 import io.github.jhipster.application.domain.enumeration.ListingType;
 
@@ -52,6 +54,13 @@ public class Listing implements Serializable {
     @ManyToOne(optional = false)
     @JsonIgnoreProperties("listings")
     private User owner;
+
+    @ManyToMany
+    @Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)
+    @JoinTable(name = "listing_tags",
+               joinColumns = @JoinColumn(name = "listing_id", referencedColumnName = "id"),
+               inverseJoinColumns = @JoinColumn(name = "tags_id", referencedColumnName = "id"))
+    private Set<Tag> tags = new HashSet<>();
 
     // jhipster-needle-entity-add-field - JHipster will add fields here, do not remove
     public Long getId() {
@@ -151,6 +160,31 @@ public class Listing implements Serializable {
 
     public void setOwner(User user) {
         this.owner = user;
+    }
+
+    public Set<Tag> getTags() {
+        return tags;
+    }
+
+    public Listing tags(Set<Tag> tags) {
+        this.tags = tags;
+        return this;
+    }
+
+    public Listing addTags(Tag tag) {
+        this.tags.add(tag);
+        tag.getListings().add(this);
+        return this;
+    }
+
+    public Listing removeTags(Tag tag) {
+        this.tags.remove(tag);
+        tag.getListings().remove(this);
+        return this;
+    }
+
+    public void setTags(Set<Tag> tags) {
+        this.tags = tags;
     }
     // jhipster-needle-entity-add-getters-setters - JHipster will add getters and setters here, do not remove
 

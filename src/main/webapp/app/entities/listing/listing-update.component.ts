@@ -10,6 +10,8 @@ import { JhiAlertService } from 'ng-jhipster';
 import { IListing, Listing } from 'app/shared/model/listing.model';
 import { ListingService } from './listing.service';
 import { IUser, UserService } from 'app/core';
+import { ITag } from 'app/shared/model/tag.model';
+import { TagService } from 'app/entities/tag';
 
 @Component({
   selector: 'jhi-listing-update',
@@ -20,18 +22,22 @@ export class ListingUpdateComponent implements OnInit {
 
   users: IUser[];
 
+  tags: ITag[];
+
   editForm = this.fb.group({
     id: [],
     type: [null, [Validators.required]],
     rsn: [null, [Validators.required]],
     amount: [],
-    description: []
+    description: [],
+    tags: []
   });
 
   constructor(
     protected jhiAlertService: JhiAlertService,
     protected listingService: ListingService,
     protected userService: UserService,
+    protected tagService: TagService,
     protected activatedRoute: ActivatedRoute,
     private fb: FormBuilder
   ) {}
@@ -48,6 +54,13 @@ export class ListingUpdateComponent implements OnInit {
         map((response: HttpResponse<IUser[]>) => response.body)
       )
       .subscribe((res: IUser[]) => (this.users = res), (res: HttpErrorResponse) => this.onError(res.message));
+    this.tagService
+      .query()
+      .pipe(
+        filter((mayBeOk: HttpResponse<ITag[]>) => mayBeOk.ok),
+        map((response: HttpResponse<ITag[]>) => response.body)
+      )
+      .subscribe((res: ITag[]) => (this.tags = res), (res: HttpErrorResponse) => this.onError(res.message));
   }
 
   updateForm(listing: IListing) {
@@ -56,7 +69,8 @@ export class ListingUpdateComponent implements OnInit {
       type: listing.type,
       rsn: listing.rsn,
       amount: listing.amount,
-      description: listing.description
+      description: listing.description,
+      tags: listing.tags
     });
   }
 
@@ -81,7 +95,8 @@ export class ListingUpdateComponent implements OnInit {
       type: this.editForm.get(['type']).value,
       rsn: this.editForm.get(['rsn']).value,
       amount: this.editForm.get(['amount']).value,
-      description: this.editForm.get(['description']).value
+      description: this.editForm.get(['description']).value,
+      tags: this.editForm.get(['tags']).value
     };
   }
 
@@ -103,5 +118,20 @@ export class ListingUpdateComponent implements OnInit {
 
   trackUserById(index: number, item: IUser) {
     return item.id;
+  }
+
+  trackTagById(index: number, item: ITag) {
+    return item.id;
+  }
+
+  getSelected(selectedVals: Array<any>, option: any) {
+    if (selectedVals) {
+      for (let i = 0; i < selectedVals.length; i++) {
+        if (option.id === selectedVals[i].id) {
+          return selectedVals[i];
+        }
+      }
+    }
+    return option;
   }
 }

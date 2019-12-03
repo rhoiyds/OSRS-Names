@@ -36,7 +36,7 @@ export const listingRoute: Routes = [
       authorities: ['ROLE_USER'],
       pageTitle: 'Listings'
     },
-    canActivate: []
+    canActivate: [UserRouteAccessService]
   },
   {
     path: ':id/view',

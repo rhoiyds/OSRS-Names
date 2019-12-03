@@ -6,11 +6,11 @@ import io.github.jhipster.application.domain.User;
 import io.github.jhipster.application.repository.ListingRepository;
 import io.github.jhipster.application.repository.search.ListingSearchRepository;
 import io.github.jhipster.application.service.ListingService;
-import io.github.jhipster.application.service.UserService;
 import io.github.jhipster.application.web.rest.errors.ExceptionTranslator;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -27,6 +27,7 @@ import org.springframework.validation.Validator;
 import javax.persistence.EntityManager;
 import java.time.Instant;
 import java.time.temporal.ChronoUnit;
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
@@ -60,14 +61,20 @@ public class ListingResourceIT {
     private static final String DEFAULT_DESCRIPTION = "AAAAAAAAAA";
     private static final String UPDATED_DESCRIPTION = "BBBBBBBBBB";
 
+    private static final Boolean DEFAULT_ACTIVE = false;
+    private static final Boolean UPDATED_ACTIVE = true;
+
     @Autowired
     private ListingRepository listingRepository;
 
-    @Autowired
-    private ListingService listingService;
+    @Mock
+    private ListingRepository listingRepositoryMock;
+
+    @Mock
+    private ListingService listingServiceMock;
 
     @Autowired
-    private UserService userService;
+    private ListingService listingService;
 
     /**
      * This repository is mocked in the io.github.jhipster.application.repository.search test package.
@@ -99,7 +106,7 @@ public class ListingResourceIT {
     @BeforeEach
     public void setup() {
         MockitoAnnotations.initMocks(this);
-        final ListingResource listingResource = new ListingResource(listingService, userService);
+        final ListingResource listingResource = new ListingResource(listingService);
         this.restListingMockMvc = MockMvcBuilders.standaloneSetup(listingResource)
             .setCustomArgumentResolvers(pageableArgumentResolver)
             .setControllerAdvice(exceptionTranslator)
@@ -120,7 +127,8 @@ public class ListingResourceIT {
             .type(DEFAULT_TYPE)
             .rsn(DEFAULT_RSN)
             .amount(DEFAULT_AMOUNT)
-            .description(DEFAULT_DESCRIPTION);
+            .description(DEFAULT_DESCRIPTION)
+            .active(DEFAULT_ACTIVE);
         // Add required entity
         User user = UserResourceIT.createEntity(em);
         em.persist(user);
@@ -140,7 +148,8 @@ public class ListingResourceIT {
             .type(UPDATED_TYPE)
             .rsn(UPDATED_RSN)
             .amount(UPDATED_AMOUNT)
-            .description(UPDATED_DESCRIPTION);
+            .description(UPDATED_DESCRIPTION)
+            .active(UPDATED_ACTIVE);
         // Add required entity
         User user = UserResourceIT.createEntity(em);
         em.persist(user);
@@ -174,6 +183,7 @@ public class ListingResourceIT {
         assertThat(testListing.getRsn()).isEqualTo(DEFAULT_RSN);
         assertThat(testListing.getAmount()).isEqualTo(DEFAULT_AMOUNT);
         assertThat(testListing.getDescription()).isEqualTo(DEFAULT_DESCRIPTION);
+        assertThat(testListing.isActive()).isEqualTo(DEFAULT_ACTIVE);
 
         // Validate the Listing in Elasticsearch
         verify(mockListingSearchRepository, times(1)).save(testListing);
@@ -271,9 +281,43 @@ public class ListingResourceIT {
             .andExpect(jsonPath("$.[*].type").value(hasItem(DEFAULT_TYPE.toString())))
             .andExpect(jsonPath("$.[*].rsn").value(hasItem(DEFAULT_RSN.toString())))
             .andExpect(jsonPath("$.[*].amount").value(hasItem(DEFAULT_AMOUNT.intValue())))
-            .andExpect(jsonPath("$.[*].description").value(hasItem(DEFAULT_DESCRIPTION.toString())));
+            .andExpect(jsonPath("$.[*].description").value(hasItem(DEFAULT_DESCRIPTION.toString())))
+            .andExpect(jsonPath("$.[*].active").value(hasItem(DEFAULT_ACTIVE.booleanValue())));
     }
     
+    @SuppressWarnings({"unchecked"})
+    public void getAllListingsWithEagerRelationshipsIsEnabled() throws Exception {
+        ListingResource listingResource = new ListingResource(listingServiceMock);
+        when(listingServiceMock.findAllWithEagerRelationships(any())).thenReturn(new PageImpl(new ArrayList<>()));
+
+        MockMvc restListingMockMvc = MockMvcBuilders.standaloneSetup(listingResource)
+            .setCustomArgumentResolvers(pageableArgumentResolver)
+            .setControllerAdvice(exceptionTranslator)
+            .setConversionService(createFormattingConversionService())
+            .setMessageConverters(jacksonMessageConverter).build();
+
+        restListingMockMvc.perform(get("/api/listings?eagerload=true"))
+        .andExpect(status().isOk());
+
+        verify(listingServiceMock, times(1)).findAllWithEagerRelationships(any());
+    }
+
+    @SuppressWarnings({"unchecked"})
+    public void getAllListingsWithEagerRelationshipsIsNotEnabled() throws Exception {
+        ListingResource listingResource = new ListingResource(listingServiceMock);
+            when(listingServiceMock.findAllWithEagerRelationships(any())).thenReturn(new PageImpl(new ArrayList<>()));
+            MockMvc restListingMockMvc = MockMvcBuilders.standaloneSetup(listingResource)
+            .setCustomArgumentResolvers(pageableArgumentResolver)
+            .setControllerAdvice(exceptionTranslator)
+            .setConversionService(createFormattingConversionService())
+            .setMessageConverters(jacksonMessageConverter).build();
+
+        restListingMockMvc.perform(get("/api/listings?eagerload=true"))
+        .andExpect(status().isOk());
+
+            verify(listingServiceMock, times(1)).findAllWithEagerRelationships(any());
+    }
+
     @Test
     @Transactional
     public void getListing() throws Exception {
@@ -289,7 +333,8 @@ public class ListingResourceIT {
             .andExpect(jsonPath("$.type").value(DEFAULT_TYPE.toString()))
             .andExpect(jsonPath("$.rsn").value(DEFAULT_RSN.toString()))
             .andExpect(jsonPath("$.amount").value(DEFAULT_AMOUNT.intValue()))
-            .andExpect(jsonPath("$.description").value(DEFAULT_DESCRIPTION.toString()));
+            .andExpect(jsonPath("$.description").value(DEFAULT_DESCRIPTION.toString()))
+            .andExpect(jsonPath("$.active").value(DEFAULT_ACTIVE.booleanValue()));
     }
 
     @Test
@@ -319,7 +364,8 @@ public class ListingResourceIT {
             .type(UPDATED_TYPE)
             .rsn(UPDATED_RSN)
             .amount(UPDATED_AMOUNT)
-            .description(UPDATED_DESCRIPTION);
+            .description(UPDATED_DESCRIPTION)
+            .active(UPDATED_ACTIVE);
 
         restListingMockMvc.perform(put("/api/listings")
             .contentType(TestUtil.APPLICATION_JSON_UTF8)
@@ -335,6 +381,7 @@ public class ListingResourceIT {
         assertThat(testListing.getRsn()).isEqualTo(UPDATED_RSN);
         assertThat(testListing.getAmount()).isEqualTo(UPDATED_AMOUNT);
         assertThat(testListing.getDescription()).isEqualTo(UPDATED_DESCRIPTION);
+        assertThat(testListing.isActive()).isEqualTo(UPDATED_ACTIVE);
 
         // Validate the Listing in Elasticsearch
         verify(mockListingSearchRepository, times(1)).save(testListing);
@@ -398,7 +445,8 @@ public class ListingResourceIT {
             .andExpect(jsonPath("$.[*].type").value(hasItem(DEFAULT_TYPE.toString())))
             .andExpect(jsonPath("$.[*].rsn").value(hasItem(DEFAULT_RSN)))
             .andExpect(jsonPath("$.[*].amount").value(hasItem(DEFAULT_AMOUNT.intValue())))
-            .andExpect(jsonPath("$.[*].description").value(hasItem(DEFAULT_DESCRIPTION)));
+            .andExpect(jsonPath("$.[*].description").value(hasItem(DEFAULT_DESCRIPTION)))
+            .andExpect(jsonPath("$.[*].active").value(hasItem(DEFAULT_ACTIVE.booleanValue())));
     }
 
     @Test
