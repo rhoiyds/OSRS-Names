@@ -3,6 +3,8 @@ import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 
 import { AccountService } from 'app/core';
 import { Account } from 'app/core/user/account.model';
+import { Md5 } from 'ts-md5';
+import { GRAVATAR_BASE_URL, GRAVATAR_AVATAR_PATH, GRAVATAR_PARAMETERS } from 'app/shared/constants/gravatar.constants';
 
 @Component({
   selector: 'jhi-settings',
@@ -74,5 +76,11 @@ export class SettingsComponent implements OnInit {
       username: account.username,
       imageUrl: account.imageUrl
     });
+  }
+
+  getGravatarImageURL() {
+    const email = this.settingsForm.get('email').value || '';
+    const hash = Md5.hashStr(email.trim().toLowerCase());
+    return GRAVATAR_BASE_URL + GRAVATAR_AVATAR_PATH + hash + GRAVATAR_PARAMETERS;
   }
 }

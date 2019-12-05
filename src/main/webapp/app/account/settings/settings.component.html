@@ -1,13 +1,18 @@
 <div>
     <div class="row justify-content-center">
         <div class="col-md-8">
-            <h2  *ngIf="settingsForm.get('username').value">User settings for [<b>{{settingsForm.get('username').value}}</b>]</h2>
+            <h2  *ngIf="settingsForm.get('username').value">Settings for <b>{{settingsForm.get('username').value}}</b></h2>
 
             <div class="alert alert-success" *ngIf="success">
                 <strong>Settings saved!</strong>
             </div>
 
             <jhi-alert-error></jhi-alert-error>
+
+            <p class="form-control-label">Profile picture</p>
+            <a href="https://gravatar.com" target="_blank">
+                <img src="{{getGravatarImageURL()}}" class="rounded-circle" style="margin-bottom: 16px; margin-top: -8px;"/>
+            </a>
 
             <form name="form" role="form" (ngSubmit)="save()" [formGroup]="settingsForm" *ngIf="settingsForm.get('username').value" novalidate>
 
