@@ -171,12 +171,12 @@ public class UserResource {
     }
 
     /**
-     * {@code GET /users/:username} : get the "username" user.
+     * {@code GET /users/:login} : get the "login" user.
      *
      * @param login the username of the user to find.
      * @return the {@link ResponseEntity} with status {@code 200 (OK)} and with body the "username" user, or with status {@code 404 (Not Found)}.
      */
-    @GetMapping("/users/{username:" + Constants.LOGIN_REGEX + "}")
+    @GetMapping("/users/{login:" + Constants.LOGIN_REGEX + "}")
     public ResponseEntity<UserDTO> getUser(@PathVariable String login) {
         log.debug("REST request to get User : {}", login);
         return ResponseUtil.wrapOrNotFound(
@@ -185,12 +185,12 @@ public class UserResource {
     }
 
     /**
-     * {@code DELETE /users/:username} : delete the "username" User.
+     * {@code DELETE /users/:login} : delete the "username" User.
      *
      * @param login the username of the user to delete.
      * @return the {@link ResponseEntity} with status {@code 204 (NO_CONTENT)}.
      */
-    @DeleteMapping("/users/{username:" + Constants.LOGIN_REGEX + "}")
+    @DeleteMapping("/users/{login:" + Constants.LOGIN_REGEX + "}")
     @PreAuthorize("hasRole(\"" + AuthoritiesConstants.ADMIN + "\")")
     public ResponseEntity<Void> deleteUser(@PathVariable String login) {
         log.debug("REST request to delete User: {}", login);

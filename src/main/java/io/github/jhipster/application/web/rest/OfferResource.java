@@ -24,9 +24,8 @@ import java.net.URISyntaxException;
 import java.time.Instant;
 import java.util.List;
 import java.util.Optional;
-import java.util.stream.StreamSupport;
-
-import static org.elasticsearch.index.query.QueryBuilders.*;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 /**
  * REST controller for managing {@link io.github.jhipster.application.domain.Offer}.
@@ -141,13 +140,16 @@ public class OfferResource {
      * @return the {@link ResponseEntity} with status {@code 200 (OK)} and with body the offer, or with status {@code 404 (Not Found)}.
      */
     @GetMapping("/offers/listing/{id}")
-    public Offer[] getOffersForListing(@PathVariable Long id) {
+    public List<Offer> getOffersForListing(@PathVariable Long id) {
         log.debug("REST request to get Offers for Listing : {}", id);
         Optional<Listing> existingEntity = listingService.findOne(id);
         if (!existingEntity.isPresent()) {
             throw new BadRequestAlertException("You cannot find offers for a listing that does not exist", ENTITY_NAME, "listing does not exist");
         }
-        return offerService.findAllForListing(existingEntity.get());
+        Optional<User> loggedUser = this.userService.getUserWithAuthorities();
+        return Stream.of(offerService.findAllForListing(existingEntity.get())).filter(offer -> {
+            return offer.getListing().getOwner().getId().equals(loggedUser.get().getId()) || offer.getOwner().getId().equals(loggedUser.get().getId());
+        }).collect(Collectors.toList());
     }
 
     /**
