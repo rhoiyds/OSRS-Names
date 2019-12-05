@@ -1,7 +1,7 @@
 <div class="c-offer">
     <div class="card">
         <div class="card-body">
-            <h5 class="card-title">{{offer.owner.username}}</h5>
+            <h5 class="card-title"><jhi-user-profile [user]="offer.owner"></jhi-user-profile></h5>
             <p class="card-text">{{offer.description}}</p>
             <button type="button" (click)="onAcceptOfferClick()" class="btn btn-success">
                 <fa-icon [icon]="'exchange-alt'"></fa-icon>&nbsp;<span>Accept</span>

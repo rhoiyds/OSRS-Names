@@ -8,7 +8,7 @@
 
                 <div class="card">
                     <div class="card-body">
-                        <h5 class="card-title">{{listing.owner?.username}}</h5>
+                        <h5 class="card-title"><jhi-user-profile [user]="listing.owner"></jhi-user-profile></h5>
                         <h6 class="card-subtitle mb-2 text-muted">{{listing.amount}}</h6>
                         <p class="card-text">{{listing.description}}</p>
                         <div>

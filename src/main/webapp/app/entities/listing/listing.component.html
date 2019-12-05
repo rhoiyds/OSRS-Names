@@ -29,32 +29,24 @@
         <span>No listings found</span>
     </div>
     <div class="table-responsive" *ngIf="listings?.length > 0">
-        <table class="table table-striped">
+        <table class="table table-borderless">
             <thead>
             <tr jhiSort [(predicate)]="predicate" [(ascending)]="reverse" [callback]="reset.bind(this)">
-            <th jhiSortBy="id"><span>ID</span> <fa-icon [icon]="'sort'"></fa-icon></th>
-            <th jhiSortBy="timestamp"><span>Timestamp</span> <fa-icon [icon]="'sort'"></fa-icon></th>
-            <th jhiSortBy="type"><span>Type</span> <fa-icon [icon]="'sort'"></fa-icon></th>
-            <th jhiSortBy="rsn"><span>Rsn</span> <fa-icon [icon]="'sort'"></fa-icon></th>
-            <th jhiSortBy="amount"><span>Amount</span> <fa-icon [icon]="'sort'"></fa-icon></th>
-            <th jhiSortBy="description"><span>Description</span> <fa-icon [icon]="'sort'"></fa-icon></th>
             <th jhiSortBy="owner.username"><span>Owner</span> <fa-icon [icon]="'sort'"></fa-icon></th>
-            <th jhiSortBy="active"><span>Active</span> <fa-icon [icon]="'sort'"></fa-icon></th>
+            <th jhiSortBy="rsn"><span>Name</span> <fa-icon [icon]="'sort'"></fa-icon></th>
+            <th jhiSortBy="amount"><span>GP</span> <fa-icon [icon]="'sort'"></fa-icon></th>
+            <th jhiSortBy="timestamp"><span>Posted</span> <fa-icon [icon]="'sort'"></fa-icon></th>
             <th></th>
             </tr>
             </thead>
             <tbody infinite-scroll (scrolled)="loadPage(page + 1)" [infiniteScrollDisabled]="page >= links['last']" [infiniteScrollDistance]="0">
             <tr *ngFor="let listing of listings ;trackBy: trackId">
-                <td><a [routerLink]="['/listing', listing.id, 'view' ]">{{listing.id}}</a></td>
-                <td>{{listing.timestamp | date:'medium'}}</td>
-                <td>{{listing.type}}</td>
+                <td>
+                    <jhi-user-profile [user]="listing.owner"></jhi-user-profile>
+                </td>
                 <td>{{listing.rsn}}</td>
                 <td>{{listing.amount}}</td>
-                <td>{{listing.description}}</td>
-                <td>
-                    {{listing.owner?.username}}
-                </td>
-                <td>{{listing.active}}</td>
+                <td>{{listing.timestamp | date:'medium'}}</td>
                 <td class="text-right">
                     <div class="btn-group">
                         <button type="submit"
