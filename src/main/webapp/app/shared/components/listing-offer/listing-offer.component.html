@@ -1,9 +1,17 @@
-<div class="c-offer" >
-    {{offer.owner.username}} made an offer at {{offer.timestamp}}
-    <em>{{offer.description}}</em>
-    <button type="button"
-    (click)="onAcceptOfferClick()"
-    class="btn btn-success">
-        <fa-icon [icon]="'exchange-alt'"></fa-icon>&nbsp;<span> Accept</span>
-    </button>
+<div class="c-offer">
+    <div class="card">
+        <div class="card-body">
+            <h5 class="card-title">{{offer.owner.username}}</h5>
+            <p class="card-text">{{offer.description}}</p>
+            <button type="button" (click)="onAcceptOfferClick()" class="btn btn-success">
+                <fa-icon [icon]="'exchange-alt'"></fa-icon>&nbsp;<span>Accept</span>
+            </button>
+            <button type="button" (click)="onAcceptOfferClick()" class="btn btn-danger">
+                <fa-icon [icon]="'times'"></fa-icon>&nbsp;<span>Decline</span>
+            </button>
+        </div>
+        <div class="card-footer">
+            <small class="text-muted">Last updated {{offer.timestamp | date:'medium'}}</small>
+        </div>
+    </div>
 </div>
