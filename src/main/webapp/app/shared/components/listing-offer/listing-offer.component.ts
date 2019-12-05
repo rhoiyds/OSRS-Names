@@ -43,6 +43,12 @@ export class ListingOfferComponent implements OnInit, OnDestroy {
     });
   }
 
+  onDeclineOfferClick() {
+    this.tradeService.create(new Trade(null, TradeStatusType.AWAITING_MIDDLEMAN, this.offer)).subscribe(data => {
+      console.log(data);
+    });
+  }
+
   registerChangeInOffer() {
     this.eventSubscriber = this.eventManager.subscribe('offerListModification', response => this.loadAll());
   }
