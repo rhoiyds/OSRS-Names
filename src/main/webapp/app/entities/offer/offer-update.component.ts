@@ -44,7 +44,6 @@ export class OfferUpdateComponent implements OnInit {
       this.getListingForOffer(offer);
     });
   }
-
   getListingForOffer(offer: IOffer) {
     if (!offer.listing) {
       this.listingService
