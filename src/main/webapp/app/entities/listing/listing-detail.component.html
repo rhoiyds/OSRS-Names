@@ -14,11 +14,11 @@
                         </h6>
                         <p class="card-text">{{listing.description}}</p>
                         <button type="button" [routerLink]="['/listing', listing.id, 'edit']"
-                            *ngIf="currentAccount?.id === listing.owner.id" class="btn btn-primary">
+                            *ngIf="currentAccount?.username === listing.owner.username" class="btn btn-primary">
                             <fa-icon [icon]="'pencil-alt'"></fa-icon>&nbsp;<span>Edit</span>
                         </button>
                         <button type="button" [routerLink]="['/offer', 'new']" [queryParams]="{ listingId: listing.id}"
-                            *ngIf="currentAccount?.id !== listing.owner.id" class="btn btn-success">
+                            *ngIf="currentAccount?.username !== listing.owner.username" class="btn btn-success">
                             <fa-icon [icon]="'hand-holding-usd'"></fa-icon>&nbsp;<span> Offer</span>
                         </button>
                     </div>
