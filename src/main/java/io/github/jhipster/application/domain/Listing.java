@@ -55,7 +55,7 @@ public class Listing implements Serializable {
     @JsonIgnoreProperties("listings")
     private User owner;
 
-    @ManyToMany
+    @ManyToMany(fetch = FetchType.EAGER)
     @Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)
     @JoinTable(name = "listing_tags",
                joinColumns = @JoinColumn(name = "listing_id", referencedColumnName = "id"),
