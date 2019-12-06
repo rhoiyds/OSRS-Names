@@ -9,11 +9,10 @@
                 <div class="card">
                     <div class="card-body">
                         <h5 class="card-title"><jhi-user-profile [user]="listing.owner"></jhi-user-profile></h5>
-                        <h6 class="card-subtitle mb-2 text-muted">{{listing.amount | osrsCurrency}}</h6>
+                        <h6 class="card-subtitle mb-2 text-muted">{{listing.amount | osrsCurrency}}
+                            <span *ngFor="let tag of listing.tags" class="badge badge-pill badge-info" style="margin-left: 6px">{{tag.name}}</span>
+                        </h6>
                         <p class="card-text">{{listing.description}}</p>
-                        <div>
-                            <span *ngFor="let tag of listing.tags" class="badge badge-pill badge-info">{{tag.name}}</span>
-                        </div>
                         <button type="button" [routerLink]="['/listing', listing.id, 'edit']"
                             *ngIf="currentAccount?.id === listing.owner.id" class="btn btn-primary">
                             <fa-icon [icon]="'pencil-alt'"></fa-icon>&nbsp;<span>Edit</span>
