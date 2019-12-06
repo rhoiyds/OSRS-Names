@@ -8,7 +8,14 @@ import { OsrsCurrencyPipe } from './osrs-currency.pipe';
   imports: [RsnsalesSharedCommonModule],
   declarations: [JhiLoginModalComponent, HasAnyAuthorityDirective, ListingOfferComponent, UserProfileComponent, OsrsCurrencyPipe],
   entryComponents: [JhiLoginModalComponent],
-  exports: [RsnsalesSharedCommonModule, JhiLoginModalComponent, HasAnyAuthorityDirective, ListingOfferComponent, UserProfileComponent],
+  exports: [
+    RsnsalesSharedCommonModule,
+    JhiLoginModalComponent,
+    HasAnyAuthorityDirective,
+    ListingOfferComponent,
+    UserProfileComponent,
+    OsrsCurrencyPipe
+  ],
   schemas: [CUSTOM_ELEMENTS_SCHEMA]
 })
 export class RsnsalesSharedModule {

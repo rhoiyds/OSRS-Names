@@ -6,6 +6,7 @@ import io.github.jhipster.application.domain.User;
 import io.github.jhipster.application.repository.ListingRepository;
 import io.github.jhipster.application.repository.search.ListingSearchRepository;
 import io.github.jhipster.application.service.ListingService;
+import io.github.jhipster.application.service.UserService;
 import io.github.jhipster.application.web.rest.errors.ExceptionTranslator;
 
 import org.junit.jupiter.api.BeforeEach;
@@ -76,6 +77,9 @@ public class ListingResourceIT {
     @Autowired
     private ListingService listingService;
 
+    @Autowired
+    private UserService userService;
+
     /**
      * This repository is mocked in the io.github.jhipster.application.repository.search test package.
      *
@@ -106,7 +110,7 @@ public class ListingResourceIT {
     @BeforeEach
     public void setup() {
         MockitoAnnotations.initMocks(this);
-        final ListingResource listingResource = new ListingResource(listingService);
+        final ListingResource listingResource = new ListingResource(listingService, userService);
         this.restListingMockMvc = MockMvcBuilders.standaloneSetup(listingResource)
             .setCustomArgumentResolvers(pageableArgumentResolver)
             .setControllerAdvice(exceptionTranslator)
@@ -283,39 +287,6 @@ public class ListingResourceIT {
             .andExpect(jsonPath("$.[*].amount").value(hasItem(DEFAULT_AMOUNT.intValue())))
             .andExpect(jsonPath("$.[*].description").value(hasItem(DEFAULT_DESCRIPTION.toString())))
             .andExpect(jsonPath("$.[*].active").value(hasItem(DEFAULT_ACTIVE.booleanValue())));
-    }
-    
-    @SuppressWarnings({"unchecked"})
-    public void getAllListingsWithEagerRelationshipsIsEnabled() throws Exception {
-        ListingResource listingResource = new ListingResource(listingServiceMock);
-        when(listingServiceMock.findAllWithEagerRelationships(any())).thenReturn(new PageImpl(new ArrayList<>()));
-
-        MockMvc restListingMockMvc = MockMvcBuilders.standaloneSetup(listingResource)
-            .setCustomArgumentResolvers(pageableArgumentResolver)
-            .setControllerAdvice(exceptionTranslator)
-            .setConversionService(createFormattingConversionService())
-            .setMessageConverters(jacksonMessageConverter).build();
-
-        restListingMockMvc.perform(get("/api/listings?eagerload=true"))
-        .andExpect(status().isOk());
-
-        verify(listingServiceMock, times(1)).findAllWithEagerRelationships(any());
-    }
-
-    @SuppressWarnings({"unchecked"})
-    public void getAllListingsWithEagerRelationshipsIsNotEnabled() throws Exception {
-        ListingResource listingResource = new ListingResource(listingServiceMock);
-            when(listingServiceMock.findAllWithEagerRelationships(any())).thenReturn(new PageImpl(new ArrayList<>()));
-            MockMvc restListingMockMvc = MockMvcBuilders.standaloneSetup(listingResource)
-            .setCustomArgumentResolvers(pageableArgumentResolver)
-            .setControllerAdvice(exceptionTranslator)
-            .setConversionService(createFormattingConversionService())
-            .setMessageConverters(jacksonMessageConverter).build();
-
-        restListingMockMvc.perform(get("/api/listings?eagerload=true"))
-        .andExpect(status().isOk());
-
-            verify(listingServiceMock, times(1)).findAllWithEagerRelationships(any());
     }
 
     @Test

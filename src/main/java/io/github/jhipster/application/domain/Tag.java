@@ -7,6 +7,7 @@ import javax.validation.constraints.*;
 
 import org.springframework.data.elasticsearch.annotations.FieldType;
 import java.io.Serializable;
+import java.util.Collection;
 
 /**
  * A Tag.
@@ -74,4 +75,5 @@ public class Tag implements Serializable {
             ", name='" + getName() + "'" +
             "}";
     }
+
 }

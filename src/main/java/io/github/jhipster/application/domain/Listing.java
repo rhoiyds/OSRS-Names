@@ -173,13 +173,11 @@ public class Listing implements Serializable {
 
     public Listing addTags(Tag tag) {
         this.tags.add(tag);
-        tag.getListings().add(this);
         return this;
     }
 
     public Listing removeTags(Tag tag) {
         this.tags.remove(tag);
-        tag.getListings().remove(this);
         return this;
     }
 
