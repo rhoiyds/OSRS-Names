@@ -1,11 +1,4 @@
 id;timestamp;type;rsn;amount;description;active;owner_id
-1;2019-12-01T05:52:43;WANT;Dam;9997;Trace;false;2
-2;2019-12-01T11:26:19;HAVE;Chips;18340;methodology Albania;false;1
-3;2019-12-01T07:52:41;WANT;Coordinator;23277;Licensed Savings Account;false;2
-4;2019-11-30T15:16:13;WANT;Table Small Frozen Sausages Planner;80839;access Intelligent;true;1
-5;2019-12-01T04:18:14;HAVE;incentivize Tuna copy;42515;sky blue Georgia;false;2
-6;2019-11-30T18:39:10;HAVE;National Awesome sky blue;4522;software scale interactive;true;2
-7;2019-12-01T06:18:20;HAVE;Car Industrial deliverables;39488;24 hour;false;2
-8;2019-12-01T10:05:43;WANT;world-class Frozen IB;62329;archive Fantastic Plastic Chicken;false;2
-9;2019-11-30T21:21:26;WANT;embrace Developer;84891;hard drive Robust Networked;false;2
-10;2019-11-30T21:48:42;WANT;Outdoors;63641;knowledge base Buckinghamshire;true;1
+1;2019-12-01T05:52:43;WANT;Roy;125000000;Trace;true;5
+2;2019-12-01T11:26:19;HAVE;Luffy;600000000;Sick name;true;6
+3;2019-12-01T07:52:41;WANT;Coordinator;23277;You shouldn't be able to see this tbh;false;7
