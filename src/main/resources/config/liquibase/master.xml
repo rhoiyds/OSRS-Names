@@ -16,17 +16,9 @@
     <include file="config/liquibase/changelog/00000000000000_initial_schema.xml" relativeToChangelogFile="false"/>
     <include file="config/liquibase/changelog/20190721035731_added_entity_Listing.xml" relativeToChangelogFile="false"/>
     <include file="config/liquibase/changelog/20190721035732_added_entity_Offer.xml" relativeToChangelogFile="false"/>
-    <include file="config/liquibase/changelog/20190721035733_added_entity_Trade.xml" relativeToChangelogFile="false"/>
-    <include file="config/liquibase/changelog/20190721035734_added_entity_Rating.xml" relativeToChangelogFile="false"/>
-    <include file="config/liquibase/changelog/20190721035735_added_entity_MiddlemanRequest.xml" relativeToChangelogFile="false"/>
-    <include file="config/liquibase/changelog/20190721035736_added_entity_Comment.xml" relativeToChangelogFile="false"/>
     <include file="config/liquibase/changelog/20191201143710_added_entity_Tag.xml" relativeToChangelogFile="false"/>
     <!-- jhipster-needle-liquibase-add-changelog - JHipster will add liquibase changelogs here -->
     <include file="config/liquibase/changelog/20190721035731_added_entity_constraints_Listing.xml" relativeToChangelogFile="false"/>
     <include file="config/liquibase/changelog/20190721035732_added_entity_constraints_Offer.xml" relativeToChangelogFile="false"/>
-    <include file="config/liquibase/changelog/20190721035733_added_entity_constraints_Trade.xml" relativeToChangelogFile="false"/>
-    <include file="config/liquibase/changelog/20190721035734_added_entity_constraints_Rating.xml" relativeToChangelogFile="false"/>
-    <include file="config/liquibase/changelog/20190721035735_added_entity_constraints_MiddlemanRequest.xml" relativeToChangelogFile="false"/>
-    <include file="config/liquibase/changelog/20190721035736_added_entity_constraints_Comment.xml" relativeToChangelogFile="false"/>
     <!-- jhipster-needle-liquibase-add-constraints-changelog - JHipster will add liquibase constraints changelogs here -->
 </databaseChangeLog>
