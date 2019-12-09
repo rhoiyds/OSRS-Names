@@ -3,8 +3,6 @@ package io.github.jhipster.application.config;
 import io.github.jhipster.application.security.*;
 import io.github.jhipster.application.security.jwt.*;
 
-import org.springframework.beans.factory.BeanInitializationException;
-import org.springframework.beans.factory.InitializingBean;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Import;
 import org.springframework.http.HttpMethod;

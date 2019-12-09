@@ -1,7 +1,6 @@
 package io.github.jhipster.application.web.rest;
 
 import io.github.jhipster.application.domain.Listing;
-import io.github.jhipster.application.domain.MiddlemanRequest;
 import io.github.jhipster.application.domain.Offer;
 import io.github.jhipster.application.domain.User;
 import io.github.jhipster.application.service.ListingService;
