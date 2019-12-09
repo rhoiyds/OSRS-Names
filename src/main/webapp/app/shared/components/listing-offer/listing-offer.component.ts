@@ -6,8 +6,6 @@ import { IOffer } from 'app/shared/model/offer.model';
 import { AccountService } from 'app/core';
 import { Subscription } from 'rxjs';
 import { OfferService } from 'app/entities/offer';
-import { TradeService } from 'app/entities/trade';
-import { Trade, TradeStatusType } from 'app/shared/model/trade.model';
 
 @Component({
   selector: 'jhi-listing-offer',
@@ -19,7 +17,6 @@ export class ListingOfferComponent implements OnInit, OnDestroy {
 
   constructor(
     protected offerService: OfferService,
-    protected tradeService: TradeService,
     protected jhiAlertService: JhiAlertService,
     protected eventManager: JhiEventManager,
     protected activatedRoute: ActivatedRoute,
@@ -38,15 +35,11 @@ export class ListingOfferComponent implements OnInit, OnDestroy {
   loadAll() {}
 
   onAcceptOfferClick() {
-    this.tradeService.create(new Trade(null, TradeStatusType.AWAITING_MIDDLEMAN, this.offer)).subscribe(data => {
-      console.log(data);
-    });
+    console.log('Accept');
   }
 
   onDeclineOfferClick() {
-    this.tradeService.create(new Trade(null, TradeStatusType.AWAITING_MIDDLEMAN, this.offer)).subscribe(data => {
-      console.log(data);
-    });
+    console.log('Decline');
   }
 
   registerChangeInOffer() {

@@ -45,10 +45,6 @@ public class CacheConfiguration {
             createCache(cm, io.github.jhipster.application.domain.User.class.getName() + ".authorities");
             createCache(cm, io.github.jhipster.application.domain.Listing.class.getName());
             createCache(cm, io.github.jhipster.application.domain.Offer.class.getName());
-            createCache(cm, io.github.jhipster.application.domain.Trade.class.getName());
-            createCache(cm, io.github.jhipster.application.domain.Rating.class.getName());
-            createCache(cm, io.github.jhipster.application.domain.MiddlemanRequest.class.getName());
-            createCache(cm, io.github.jhipster.application.domain.Comment.class.getName());
             createCache(cm, io.github.jhipster.application.domain.Tag.class.getName());
             createCache(cm, io.github.jhipster.application.domain.Listing.class.getName() + ".tags");
             // jhipster-needle-ehcache-add-entry

@@ -17,22 +17,6 @@ import { RouterModule } from '@angular/router';
         loadChildren: './offer/offer.module#RsnsalesOfferModule'
       },
       {
-        path: 'trade',
-        loadChildren: './trade/trade.module#RsnsalesTradeModule'
-      },
-      {
-        path: 'rating',
-        loadChildren: './rating/rating.module#RsnsalesRatingModule'
-      },
-      {
-        path: 'middleman-request',
-        loadChildren: './middleman-request/middleman-request.module#RsnsalesMiddlemanRequestModule'
-      },
-      {
-        path: 'comment',
-        loadChildren: './comment/comment.module#RsnsalesCommentModule'
-      },
-      {
         path: 'tag',
         loadChildren: './tag/tag.module#RsnsalesTagModule'
       }
