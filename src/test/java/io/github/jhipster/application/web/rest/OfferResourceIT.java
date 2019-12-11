@@ -38,6 +38,7 @@ import static org.mockito.Mockito.*;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
+import io.github.jhipster.application.domain.enumeration.OfferStatus;
 /**
  * Integration tests for the {@Link OfferResource} REST controller.
  */
@@ -49,6 +50,9 @@ public class OfferResourceIT {
 
     private static final String DEFAULT_DESCRIPTION = "AAAAAAAAAA";
     private static final String UPDATED_DESCRIPTION = "BBBBBBBBBB";
+
+    private static final OfferStatus DEFAULT_STATUS = OfferStatus.ACCEPTED;
+    private static final OfferStatus UPDATED_STATUS = OfferStatus.DECLINED;
 
     @Autowired
     private OfferRepository offerRepository;
@@ -84,7 +88,6 @@ public class OfferResourceIT {
 
     @Autowired
     private ListingService listingService;
-
     private MockMvc restOfferMockMvc;
 
     private Offer offer;
@@ -110,7 +113,8 @@ public class OfferResourceIT {
     public static Offer createEntity(EntityManager em) {
         Offer offer = new Offer()
             .timestamp(DEFAULT_TIMESTAMP)
-            .description(DEFAULT_DESCRIPTION);
+            .description(DEFAULT_DESCRIPTION)
+            .status(DEFAULT_STATUS);
         // Add required entity
         User user = UserResourceIT.createEntity(em);
         em.persist(user);
@@ -137,7 +141,8 @@ public class OfferResourceIT {
     public static Offer createUpdatedEntity(EntityManager em) {
         Offer offer = new Offer()
             .timestamp(UPDATED_TIMESTAMP)
-            .description(UPDATED_DESCRIPTION);
+            .description(UPDATED_DESCRIPTION)
+            .status(UPDATED_STATUS);
         // Add required entity
         User user = UserResourceIT.createEntity(em);
         em.persist(user);
@@ -178,6 +183,7 @@ public class OfferResourceIT {
         Offer testOffer = offerList.get(offerList.size() - 1);
         assertThat(testOffer.getTimestamp()).isEqualTo(DEFAULT_TIMESTAMP);
         assertThat(testOffer.getDescription()).isEqualTo(DEFAULT_DESCRIPTION);
+        assertThat(testOffer.getStatus()).isEqualTo(DEFAULT_STATUS);
 
         // Validate the Offer in Elasticsearch
         verify(mockOfferSearchRepository, times(1)).save(testOffer);
@@ -236,7 +242,8 @@ public class OfferResourceIT {
             .andExpect(content().contentType(MediaType.APPLICATION_JSON_UTF8_VALUE))
             .andExpect(jsonPath("$.[*].id").value(hasItem(offer.getId().intValue())))
             .andExpect(jsonPath("$.[*].timestamp").value(hasItem(DEFAULT_TIMESTAMP.toString())))
-            .andExpect(jsonPath("$.[*].description").value(hasItem(DEFAULT_DESCRIPTION.toString())));
+            .andExpect(jsonPath("$.[*].description").value(hasItem(DEFAULT_DESCRIPTION.toString())))
+            .andExpect(jsonPath("$.[*].status").value(hasItem(DEFAULT_STATUS.toString())));
     }
     
     @Test
@@ -251,7 +258,8 @@ public class OfferResourceIT {
             .andExpect(content().contentType(MediaType.APPLICATION_JSON_UTF8_VALUE))
             .andExpect(jsonPath("$.id").value(offer.getId().intValue()))
             .andExpect(jsonPath("$.timestamp").value(DEFAULT_TIMESTAMP.toString()))
-            .andExpect(jsonPath("$.description").value(DEFAULT_DESCRIPTION.toString()));
+            .andExpect(jsonPath("$.description").value(DEFAULT_DESCRIPTION.toString()))
+            .andExpect(jsonPath("$.status").value(DEFAULT_STATUS.toString()));
     }
 
     @Test
@@ -278,7 +286,8 @@ public class OfferResourceIT {
         em.detach(updatedOffer);
         updatedOffer
             .timestamp(UPDATED_TIMESTAMP)
-            .description(UPDATED_DESCRIPTION);
+            .description(UPDATED_DESCRIPTION)
+            .status(UPDATED_STATUS);
 
         restOfferMockMvc.perform(put("/api/offers")
             .contentType(TestUtil.APPLICATION_JSON_UTF8)
@@ -291,6 +300,7 @@ public class OfferResourceIT {
         Offer testOffer = offerList.get(offerList.size() - 1);
         assertThat(testOffer.getTimestamp()).isEqualTo(UPDATED_TIMESTAMP);
         assertThat(testOffer.getDescription()).isEqualTo(UPDATED_DESCRIPTION);
+        assertThat(testOffer.getStatus()).isEqualTo(UPDATED_STATUS);
 
         // Validate the Offer in Elasticsearch
         verify(mockOfferSearchRepository, times(1)).save(testOffer);
@@ -351,7 +361,8 @@ public class OfferResourceIT {
             .andExpect(content().contentType(MediaType.APPLICATION_JSON_UTF8_VALUE))
             .andExpect(jsonPath("$.[*].id").value(hasItem(offer.getId().intValue())))
             .andExpect(jsonPath("$.[*].timestamp").value(hasItem(DEFAULT_TIMESTAMP.toString())))
-            .andExpect(jsonPath("$.[*].description").value(hasItem(DEFAULT_DESCRIPTION)));
+            .andExpect(jsonPath("$.[*].description").value(hasItem(DEFAULT_DESCRIPTION)))
+            .andExpect(jsonPath("$.[*].status").value(hasItem(DEFAULT_STATUS.toString())));
     }
 
     @Test

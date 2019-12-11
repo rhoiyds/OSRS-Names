@@ -10,6 +10,8 @@ import org.springframework.data.elasticsearch.annotations.FieldType;
 import java.io.Serializable;
 import java.time.Instant;
 
+import io.github.jhipster.application.domain.enumeration.OfferStatus;
+
 /**
  * A Offer.
  */
@@ -26,13 +28,19 @@ public class Offer implements Serializable {
     @org.springframework.data.elasticsearch.annotations.Field(type = FieldType.Keyword)
     private Long id;
 
+    @NotNull
     @Column(name = "timestamp", nullable = false)
     private Instant timestamp;
 
     @Column(name = "description")
     private String description;
 
-    @OneToOne(optional = false)
+    @Enumerated(EnumType.STRING)
+    @Column(name = "status")
+    private OfferStatus status;
+
+    @OneToOne(optional = false)    @NotNull
+
     @JoinColumn(unique = true)
     private User owner;
 
@@ -40,6 +48,10 @@ public class Offer implements Serializable {
     @NotNull
     @JsonIgnoreProperties("offers")
     private Listing listing;
+
+    @ManyToOne
+    @JsonIgnoreProperties("offers")
+    private Comment comments;
 
     // jhipster-needle-entity-add-field - JHipster will add fields here, do not remove
     public Long getId() {
@@ -76,6 +88,19 @@ public class Offer implements Serializable {
         this.description = description;
     }
 
+    public OfferStatus getStatus() {
+        return status;
+    }
+
+    public Offer status(OfferStatus status) {
+        this.status = status;
+        return this;
+    }
+
+    public void setStatus(OfferStatus status) {
+        this.status = status;
+    }
+
     public User getOwner() {
         return owner;
     }
@@ -101,6 +126,19 @@ public class Offer implements Serializable {
     public void setListing(Listing listing) {
         this.listing = listing;
     }
+
+    public Comment getComments() {
+        return comments;
+    }
+
+    public Offer comments(Comment comment) {
+        this.comments = comment;
+        return this;
+    }
+
+    public void setComments(Comment comment) {
+        this.comments = comment;
+    }
     // jhipster-needle-entity-add-getters-setters - JHipster will add getters and setters here, do not remove
 
     @Override
@@ -125,6 +163,7 @@ public class Offer implements Serializable {
             "id=" + getId() +
             ", timestamp='" + getTimestamp() + "'" +
             ", description='" + getDescription() + "'" +
+            ", status='" + getStatus() + "'" +
             "}";
     }
 }
