@@ -33,7 +33,7 @@ public class Comment implements Serializable {
     @Column(name = "text", length = 1024, nullable = false)
     private String text;
 
-    @OneToOne(optional = false)    @NotNull
+    @ManyToOne(optional = false)    @NotNull
 
     @MapsId
     @JoinColumn(name = "id")

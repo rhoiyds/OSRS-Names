@@ -13,6 +13,10 @@
                 <dd>
                     <span>{{offer.description}}</span>
                 </dd>
+                <dt><span>Status</span></dt>
+                <dd>
+                    <span>{{offer.status}}</span>
+                </dd>
                 <dt><span>Owner</span></dt>
                 <dd>
                     {{offer.owner?.username}}
@@ -21,6 +25,12 @@
                 <dd>
                     <div *ngIf="offer.listing">
                         <a [routerLink]="['/listing', offer.listing?.id, 'view']">{{offer.listing?.description}}</a>
+                    </div>
+                </dd>
+                <dt><span>Comments</span></dt>
+                <dd>
+                    <div *ngIf="offer.comments">
+                        <a [routerLink]="['/comment', offer.comments?.id, 'view']">{{offer.comments?.text}}</a>
                     </div>
                 </dd>
             </dl>

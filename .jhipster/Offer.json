@@ -1,18 +1,6 @@
 {
-    "name": "Offer",
-    "fields": [
-        {
-            "fieldName": "timestamp",
-            "fieldType": "Instant",
-            "fieldValidateRules": [
-                "required"
-            ]
-        },
-        {
-            "fieldName": "description",
-            "fieldType": "String"
-        }
-    ],
+    "fluentMethods": true,
+    "clientRootFolder": "",
     "relationships": [
         {
             "relationshipType": "one-to-one",
@@ -30,15 +18,41 @@
             "relationshipValidateRules": "required",
             "relationshipName": "listing",
             "otherEntityField": "description"
+        },
+        {
+            "relationshipName": "comments",
+            "otherEntityName": "comment",
+            "relationshipType": "many-to-one",
+            "relationshipValidateRules": [],
+            "otherEntityField": "text",
+            "otherEntityRelationshipName": "offer"
+        }
+    ],
+    "fields": [
+        {
+            "fieldName": "timestamp",
+            "fieldType": "Instant",
+            "fieldValidateRules": [
+                "required"
+            ]
+        },
+        {
+            "fieldName": "description",
+            "fieldType": "String"
+        },
+        {
+            "fieldName": "status",
+            "fieldType": "OfferStatus",
+            "fieldValues": "ACCEPTED,DECLINED,CANCELLED",
+            "fieldValidateRules": []
         }
     ],
     "changelogDate": "20190721035732",
-    "entityTableName": "offer",
     "dto": "no",
-    "pagination": "no",
+    "searchEngine": "elasticsearch",
     "service": "serviceImpl",
+    "entityTableName": "offer",
+    "databaseType": "sql",
     "jpaMetamodelFiltering": false,
-    "fluentMethods": true,
-    "clientRootFolder": "",
-    "applications": "*"
+    "pagination": "no"
 }

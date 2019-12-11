@@ -4,10 +4,73 @@
             <h2 id="jhi-offer-heading">Create or edit a Offer</h2>
             <div>
                 <jhi-alert-error></jhi-alert-error>
+                <div class="form-group" [hidden]="!editForm.get('id').value">
+                    <label for="id">ID</label>
+                    <input type="text" class="form-control" id="id" name="id" formControlName="id"
+                        readonly />
+                </div>
                 <div class="form-group">
-                    <label class="form-control-label" for="field_description">Message</label>
+                    <label class="form-control-label" for="field_timestamp">Timestamp</label>
+                    <div class="d-flex">
+                        <input id="field_timestamp" type="datetime-local" class="form-control" name="timestamp" formControlName="timestamp" placeholder="YYYY-MM-DD HH:mm"/>
+                    </div>
+                    <div *ngIf="editForm.get('timestamp').invalid && (editForm.get('timestamp').dirty || editForm.get('timestamp').touched)">
+                        <small class="form-text text-danger"
+                               *ngIf="editForm.get('timestamp').errors.required">
+                        This field is required.
+                        </small>
+                        <small class="form-text text-danger"
+                            [hidden]="!editForm.get('timestamp').errors?.ZonedDateTimelocal">
+                            This field should be a date and time.
+                        </small>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="form-control-label" for="field_description">Description</label>
                     <input type="text" class="form-control" name="description" id="field_description"
                            formControlName="description"/>
+                </div>
+                <div class="form-group">
+                    <label class="form-control-label" for="field_status">Status</label>
+                    <select class="form-control" name="status" formControlName="status" id="field_status">
+                        <option value="ACCEPTED">ACCEPTED</option>
+                        <option value="DECLINED">DECLINED</option>
+                        <option value="CANCELLED">CANCELLED</option>
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <label class="form-control-label" for="field_owner">Owner</label>
+                    <select class="form-control" id="field_owner" name="owner" formControlName="owner">
+                        <option *ngIf="!editForm.get('owner').value" [ngValue]="null" selected></option>
+                        <option [ngValue]="userOption.id === editForm.get('owner').value?.id ? editForm.get('owner').value : userOption" *ngFor="let userOption of users; trackBy: trackUserById">{{userOption.username}}</option>
+                    </select>
+                </div>
+                <div *ngIf="editForm.get('owner').invalid && (editForm.get('owner').dirty || editForm.get('owner').touched)">
+                    <small class="form-text text-danger"
+                           *ngIf="editForm.get('owner').errors.required">
+                        This field is required.
+                    </small>
+                </div>
+                <div class="form-group">
+                    <label class="form-control-label" for="field_listing">Listing</label>
+                    <select class="form-control" id="field_listing" name="listing" formControlName="listing">
+                        <option *ngIf="!editForm.get('listing').value" [ngValue]="null" selected></option>
+                        <option [ngValue]="listingOption.id === editForm.get('listing').value?.id ? editForm.get('listing').value : listingOption" *ngFor="let listingOption of listings; trackBy: trackListingById">{{listingOption.description}}</option>
+                    </select>
+                </div>
+                <div *ngIf="editForm.get('listing').invalid && (editForm.get('listing').dirty || editForm.get('listing').touched)">
+                    <small class="form-text text-danger"
+                           *ngIf="editForm.get('listing').errors.required">
+                        This field is required.
+                    </small>
+                </div>
+                <div class="form-group">
+                    <label class="form-control-label" for="field_comments">Comments</label>
+                    <select class="form-control" id="field_comments" name="comments" formControlName="comments">
+                        <option [ngValue]="null"></option>
+                        <option [ngValue]="commentOption.id === editForm.get('comments').value?.id ? editForm.get('comments').value : commentOption" *ngFor="let commentOption of comments; trackBy: trackCommentById">{{commentOption.text}}</option>
+                    </select>
                 </div>
             </div>
             <div>

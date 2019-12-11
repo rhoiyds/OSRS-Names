@@ -7,7 +7,7 @@ import { take, map } from 'rxjs/operators';
 import * as moment from 'moment';
 import { DATE_TIME_FORMAT } from 'app/shared/constants/input.constants';
 import { OfferService } from 'app/entities/offer/offer.service';
-import { IOffer, Offer } from 'app/shared/model/offer.model';
+import { IOffer, Offer, OfferStatus } from 'app/shared/model/offer.model';
 
 describe('Service Tests', () => {
   describe('Offer Service', () => {
@@ -27,7 +27,7 @@ describe('Service Tests', () => {
       httpMock = injector.get(HttpTestingController);
       currentDate = moment();
 
-      elemDefault = new Offer(0, currentDate, 'AAAAAAA');
+      elemDefault = new Offer(0, currentDate, 'AAAAAAA', OfferStatus.ACCEPTED);
     });
 
     describe('Service methods', () => {
@@ -75,7 +75,8 @@ describe('Service Tests', () => {
         const returnedFromService = Object.assign(
           {
             timestamp: currentDate.format(DATE_TIME_FORMAT),
-            description: 'BBBBBB'
+            description: 'BBBBBB',
+            status: 'BBBBBB'
           },
           elemDefault
         );
@@ -99,7 +100,8 @@ describe('Service Tests', () => {
         const returnedFromService = Object.assign(
           {
             timestamp: currentDate.format(DATE_TIME_FORMAT),
-            description: 'BBBBBB'
+            description: 'BBBBBB',
+            status: 'BBBBBB'
           },
           elemDefault
         );

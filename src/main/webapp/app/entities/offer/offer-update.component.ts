@@ -3,13 +3,17 @@ import { HttpResponse, HttpErrorResponse } from '@angular/common/http';
 import { FormBuilder, Validators } from '@angular/forms';
 import { ActivatedRoute } from '@angular/router';
 import { Observable } from 'rxjs';
+import { filter, map } from 'rxjs/operators';
+import * as moment from 'moment';
+import { DATE_TIME_FORMAT } from 'app/shared/constants/input.constants';
 import { JhiAlertService } from 'ng-jhipster';
 import { IOffer, Offer } from 'app/shared/model/offer.model';
 import { OfferService } from './offer.service';
 import { IUser, UserService } from 'app/core';
-import { IListing, Listing } from 'app/shared/model/listing.model';
+import { IListing } from 'app/shared/model/listing.model';
 import { ListingService } from 'app/entities/listing';
-import { filter, map } from 'rxjs/operators';
+import { IComment } from 'app/shared/model/comment.model';
+import { CommentService } from 'app/entities/comment';
 
 @Component({
   selector: 'jhi-offer-update',
@@ -22,10 +26,16 @@ export class OfferUpdateComponent implements OnInit {
 
   listings: IListing[];
 
+  comments: IComment[];
+
   editForm = this.fb.group({
     id: [],
+    timestamp: [null, [Validators.required]],
     description: [],
-    listing: [null, Validators.required]
+    status: [],
+    owner: [null, Validators.required],
+    listing: [null, Validators.required],
+    comments: []
   });
 
   constructor(
@@ -33,6 +43,7 @@ export class OfferUpdateComponent implements OnInit {
     protected offerService: OfferService,
     protected userService: UserService,
     protected listingService: ListingService,
+    protected commentService: CommentService,
     protected activatedRoute: ActivatedRoute,
     private fb: FormBuilder
   ) {}
@@ -41,28 +52,39 @@ export class OfferUpdateComponent implements OnInit {
     this.isSaving = false;
     this.activatedRoute.data.subscribe(({ offer }) => {
       this.updateForm(offer);
-      this.getListingForOffer(offer);
     });
-  }
-  getListingForOffer(offer: IOffer) {
-    if (!offer.listing) {
-      this.listingService
-        .find(this.activatedRoute.snapshot.queryParams.listingId)
-        .pipe(
-          filter((response: HttpResponse<Listing>) => response.ok),
-          map((listing: HttpResponse<Listing>) => listing.body)
-        )
-        .subscribe(listing => {
-          this.editForm.patchValue({ listing });
-        });
-    }
+    this.userService
+      .query()
+      .pipe(
+        filter((mayBeOk: HttpResponse<IUser[]>) => mayBeOk.ok),
+        map((response: HttpResponse<IUser[]>) => response.body)
+      )
+      .subscribe((res: IUser[]) => (this.users = res), (res: HttpErrorResponse) => this.onError(res.message));
+    this.listingService
+      .query()
+      .pipe(
+        filter((mayBeOk: HttpResponse<IListing[]>) => mayBeOk.ok),
+        map((response: HttpResponse<IListing[]>) => response.body)
+      )
+      .subscribe((res: IListing[]) => (this.listings = res), (res: HttpErrorResponse) => this.onError(res.message));
+    this.commentService
+      .query()
+      .pipe(
+        filter((mayBeOk: HttpResponse<IComment[]>) => mayBeOk.ok),
+        map((response: HttpResponse<IComment[]>) => response.body)
+      )
+      .subscribe((res: IComment[]) => (this.comments = res), (res: HttpErrorResponse) => this.onError(res.message));
   }
 
-  updateForm(offer) {
+  updateForm(offer: IOffer) {
     this.editForm.patchValue({
       id: offer.id,
+      timestamp: offer.timestamp != null ? offer.timestamp.format(DATE_TIME_FORMAT) : null,
       description: offer.description,
-      listing: offer.listing
+      status: offer.status,
+      owner: offer.owner,
+      listing: offer.listing,
+      comments: offer.comments
     });
   }
 
@@ -84,8 +106,13 @@ export class OfferUpdateComponent implements OnInit {
     return {
       ...new Offer(),
       id: this.editForm.get(['id']).value,
+      timestamp:
+        this.editForm.get(['timestamp']).value != null ? moment(this.editForm.get(['timestamp']).value, DATE_TIME_FORMAT) : undefined,
       description: this.editForm.get(['description']).value,
-      listing: this.editForm.get(['listing']).value
+      status: this.editForm.get(['status']).value,
+      owner: this.editForm.get(['owner']).value,
+      listing: this.editForm.get(['listing']).value,
+      comments: this.editForm.get(['comments']).value
     };
   }
 
@@ -103,5 +130,17 @@ export class OfferUpdateComponent implements OnInit {
   }
   protected onError(errorMessage: string) {
     this.jhiAlertService.error(errorMessage, null, null);
+  }
+
+  trackUserById(index: number, item: IUser) {
+    return item.id;
+  }
+
+  trackListingById(index: number, item: IListing) {
+    return item.id;
+  }
+
+  trackCommentById(index: number, item: IComment) {
+    return item.id;
   }
 }

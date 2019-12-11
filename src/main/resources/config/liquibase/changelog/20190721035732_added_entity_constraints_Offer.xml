@@ -20,5 +20,11 @@
                                  referencedColumnNames="id"
                                  referencedTableName="listing"/>
 
+        <addForeignKeyConstraint baseColumnNames="comments_id"
+                                 baseTableName="offer"
+                                 constraintName="fk_offer_comments_id"
+                                 referencedColumnNames="id"
+                                 referencedTableName="comment"/>
+
     </changeSet>
 </databaseChangeLog>
