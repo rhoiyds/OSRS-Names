@@ -13,6 +13,7 @@ import { OfferService } from 'app/entities/offer';
 })
 export class ListingOfferComponent implements OnInit, OnDestroy {
   @Input() offer: IOffer;
+  currentAccount: any;
   eventSubscriber: Subscription;
 
   constructor(
@@ -32,7 +33,11 @@ export class ListingOfferComponent implements OnInit, OnDestroy {
     this.eventManager.destroy(this.eventSubscriber);
   }
 
-  loadAll() {}
+  loadAll() {
+    this.accountService.identity().then(account => {
+      this.currentAccount = account;
+    });
+  }
 
   onAcceptOfferClick() {
     console.log('Accept');

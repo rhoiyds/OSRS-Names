@@ -17,8 +17,9 @@
                             *ngIf="currentAccount?.username === listing.owner.username" class="btn btn-primary">
                             <fa-icon [icon]="'pencil-alt'"></fa-icon>&nbsp;<span>Edit</span>
                         </button>
-                        <button type="button" [routerLink]="['/offer', 'new']" [queryParams]="{ listingId: listing.id}"
-                            *ngIf="currentAccount?.username !== listing.owner.username" class="btn btn-success">
+                        <button [routerLink]="['/', 'listing', { outlets: { popup: listing.id + '/offer'} }]"
+                                *ngIf="currentAccount?.username !== listing.owner.username"
+                                replaceUrl="true" queryParamsHandling="merge" class="btn btn-success">
                             <fa-icon [icon]="'hand-holding-usd'"></fa-icon>&nbsp;<span> Offer</span>
                         </button>
                     </div>

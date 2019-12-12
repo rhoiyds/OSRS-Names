@@ -30,7 +30,6 @@ public class Offer implements Serializable {
     @org.springframework.data.elasticsearch.annotations.Field(type = FieldType.Keyword)
     private Long id;
 
-    @NotNull
     @Column(name = "timestamp", nullable = false)
     private Instant timestamp;
 
@@ -41,8 +40,7 @@ public class Offer implements Serializable {
     @Column(name = "status")
     private OfferStatus status;
 
-    @OneToOne(optional = false)    @NotNull
-
+    @OneToOne(optional = false)
     @JoinColumn(unique = true)
     private User owner;
 

@@ -8,6 +8,8 @@ import {
   ListingUpdateComponent,
   ListingDeletePopupComponent,
   ListingDeleteDialogComponent,
+  ListingOfferDialogComponent,
+  ListingOfferPopupComponent,
   listingRoute,
   listingPopupRoute
 } from './';
@@ -21,9 +23,18 @@ const ENTITY_STATES = [...listingRoute, ...listingPopupRoute];
     ListingDetailComponent,
     ListingUpdateComponent,
     ListingDeleteDialogComponent,
-    ListingDeletePopupComponent
+    ListingDeletePopupComponent,
+    ListingOfferDialogComponent,
+    ListingOfferPopupComponent
   ],
-  entryComponents: [ListingComponent, ListingUpdateComponent, ListingDeleteDialogComponent, ListingDeletePopupComponent],
+  entryComponents: [
+    ListingComponent,
+    ListingUpdateComponent,
+    ListingDeleteDialogComponent,
+    ListingDeletePopupComponent,
+    ListingOfferDialogComponent,
+    ListingOfferPopupComponent
+  ],
   schemas: [CUSTOM_ELEMENTS_SCHEMA]
 })
 export class RsnsalesListingModule {}

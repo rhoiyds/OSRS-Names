@@ -3,6 +3,7 @@ package io.github.jhipster.application.web.rest;
 import io.github.jhipster.application.domain.Listing;
 import io.github.jhipster.application.domain.Offer;
 import io.github.jhipster.application.domain.User;
+import io.github.jhipster.application.domain.enumeration.OfferStatus;
 import io.github.jhipster.application.service.ListingService;
 import io.github.jhipster.application.service.OfferService;
 import io.github.jhipster.application.service.UserService;
@@ -72,6 +73,7 @@ public class OfferResource {
         offer.setOwner(owner.get());
         offer.setTimestamp(Instant.now());
         Offer result = offerService.save(offer);
+        offer.setStatus(OfferStatus.PENDING);
         return ResponseEntity.created(new URI("/api/offers/" + result.getId()))
             .headers(HeaderUtil.createEntityCreationAlert(applicationName, false, ENTITY_NAME, result.getId().toString()))
             .body(result);
