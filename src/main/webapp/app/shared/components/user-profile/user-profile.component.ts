@@ -11,6 +11,7 @@ import { IUser } from 'app/core/user/user.model';
 })
 export class UserProfileComponent {
   @Input() user: IUser;
+  @Input() timestamp;
 
   constructor() {}
 

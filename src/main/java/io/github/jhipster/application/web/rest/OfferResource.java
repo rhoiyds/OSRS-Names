@@ -1,31 +1,41 @@
 package io.github.jhipster.application.web.rest;
 
-import io.github.jhipster.application.domain.Listing;
-import io.github.jhipster.application.domain.Offer;
-import io.github.jhipster.application.domain.User;
-import io.github.jhipster.application.domain.enumeration.OfferStatus;
-import io.github.jhipster.application.service.ListingService;
-import io.github.jhipster.application.service.OfferService;
-import io.github.jhipster.application.service.UserService;
-import io.github.jhipster.application.web.rest.errors.BadRequestAlertException;
-
-import io.github.jhipster.web.util.HeaderUtil;
-import io.github.jhipster.web.util.ResponseUtil;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Value;
-import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.*;
-
-import javax.validation.Valid;
 import java.net.URI;
 import java.net.URISyntaxException;
-
 import java.time.Instant;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
+
+import javax.validation.Valid;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RestController;
+
+import io.github.jhipster.application.domain.Listing;
+import io.github.jhipster.application.domain.Offer;
+import io.github.jhipster.application.domain.Comment;
+import io.github.jhipster.application.domain.User;
+import io.github.jhipster.application.domain.enumeration.OfferStatus;
+import io.github.jhipster.application.service.CommentService;
+import io.github.jhipster.application.service.ListingService;
+import io.github.jhipster.application.service.OfferService;
+import io.github.jhipster.application.service.UserService;
+import io.github.jhipster.application.web.rest.errors.BadRequestAlertException;
+import io.github.jhipster.web.util.HeaderUtil;
+import io.github.jhipster.web.util.ResponseUtil;
 
 /**
  * REST controller for managing {@link io.github.jhipster.application.domain.Offer}.
@@ -47,9 +57,12 @@ public class OfferResource {
 
     private final ListingService listingService;
 
-    public OfferResource(OfferService offerService, UserService userService, ListingService listingService) {
+    private final CommentService commentService;
+
+    public OfferResource(OfferService offerService, UserService userService, ListingService listingService, CommentService commentService) {
         this.offerService = offerService;
         this.userService = userService;
+        this.commentService = commentService;
         this.listingService = listingService;
     }
 
@@ -178,6 +191,37 @@ public class OfferResource {
     public List<Offer> searchOffers(@RequestParam String query) {
         log.debug("REST request to search Offers for query {}", query);
         return offerService.search(query);
+    }
+
+        /**
+     * {@code POST  /offers} : Create a new offer.
+     *
+     * @param offer the offer to create.
+     * @return the {@link ResponseEntity} with status {@code 201 (Created)} and with body the new offer, or with status {@code 400 (Bad Request)} if the offer has already an ID.
+     * @throws URISyntaxException if the Location URI syntax is incorrect.
+     */
+    @PostMapping("/offers/{id}/comments")
+    public ResponseEntity<Comment> createOfferComment(@Valid @RequestBody Comment comment, @PathVariable Long id) throws URISyntaxException {
+        log.debug("REST request to comment on Offer : {}", comment);
+        
+        if (comment.getId() != null) {
+            throw new BadRequestAlertException("A new comment cannot already have an ID", ENTITY_NAME, "idexists");
+        }
+        Optional<User> owner = this.userService.getUserWithAuthorities();
+        if (!owner.isPresent()) {
+            throw new BadRequestAlertException("You must create an entity as a logged user", ENTITY_NAME, "notloggeduser");
+        }
+        Optional<Offer> offer = this.offerService.findOne(id);
+        if (!offer.isPresent()) {
+            throw new BadRequestAlertException("You comment only on an existing offer", ENTITY_NAME, "notloggeduser");
+        }
+        comment.setOwner(owner.get());
+        comment.setTimestamp(Instant.now());
+        Comment savedComment = commentService.save(comment);
+        offerService.save(offer.get().addComments(savedComment));
+        return ResponseEntity.created(new URI("/api/comments/" + savedComment.getId()))
+            .headers(HeaderUtil.createEntityCreationAlert(applicationName, false, ENTITY_NAME, savedComment.getId().toString()))
+            .body(savedComment);
     }
 
 }

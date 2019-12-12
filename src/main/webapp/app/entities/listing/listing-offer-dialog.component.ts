@@ -15,7 +15,7 @@ import { Offer } from 'app/shared/model/offer.model';
 })
 export class ListingOfferDialogComponent {
   listing: IListing;
-  message: string = '';
+  message = '';
 
   constructor(public activeModal: NgbActiveModal, protected eventManager: JhiEventManager, protected offerService: OfferService) {}
 
