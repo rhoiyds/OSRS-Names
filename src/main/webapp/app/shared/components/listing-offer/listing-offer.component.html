@@ -1,8 +1,22 @@
 <div class="c-offer">
     <div class="card">
         <div class="card-body">
-            <h5 class="card-title"><jhi-user-profile [user]="offer.owner"></jhi-user-profile></h5>
+            <h5 class="card-title"><jhi-user-profile [user]="offer?.owner"></jhi-user-profile></h5>
             <p class="card-text">{{offer.description}}</p>
+            <div class="c-comment" *ngFor="let comment of offer?.comments">
+                <div class="pull-left">
+                    <jhi-user-profile [user]="comment.owner" [timestamp]="comment.timestamp"></jhi-user-profile>
+                </div>
+                <div class="pull-right">
+                    {{comment.text}}
+                </div> 
+            </div>
+            <div class="c-comment-container">
+                <textarea class="form-control" rows="3" [(ngModel)]="newCommentText" name="new-comment-text"></textarea>
+            </div>
+            <button type="button" (click)="onPostCommentClick()" [disabled]="newCommentText.length === 0" class="btn btn-success c-add-comment">
+                    <fa-icon [icon]="'comment-medical'"></fa-icon>&nbsp;<span>Comment</span>
+            </button>
             <ng-container *ngIf="offer.listing.owner.id === currentAccount.id && offer.status === 'PENDING'">
                 <button type="button" (click)="onAcceptOfferClick()" class="btn btn-success">
                     <fa-icon [icon]="'exchange-alt'"></fa-icon>&nbsp;<span>Accept</span>

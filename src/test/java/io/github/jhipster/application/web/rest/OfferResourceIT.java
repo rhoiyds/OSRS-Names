@@ -7,6 +7,7 @@ import io.github.jhipster.application.domain.Listing;
 import io.github.jhipster.application.repository.OfferRepository;
 import io.github.jhipster.application.repository.search.OfferSearchRepository;
 import io.github.jhipster.application.service.ListingService;
+import io.github.jhipster.application.service.CommentService;
 import io.github.jhipster.application.service.OfferService;
 import io.github.jhipster.application.service.UserService;
 import io.github.jhipster.application.web.rest.errors.ExceptionTranslator;
@@ -99,11 +100,17 @@ public class OfferResourceIT {
     @Autowired
     private ListingService listingService;
 
+    @Autowired
+    private CommentService CommentService;
+
     @Mock
     private UserService userServiceMock;
 
     @Mock
     private ListingService listingServiceMock;
+
+    @Mock
+    private CommentService commentServiceMock;
 
     private MockMvc restOfferMockMvc;
 
@@ -112,7 +119,7 @@ public class OfferResourceIT {
     @BeforeEach
     public void setup() {
         MockitoAnnotations.initMocks(this);
-        final OfferResource offerResource = new OfferResource(offerService, userService, listingService);
+        final OfferResource offerResource = new OfferResource(offerService, userService, listingService, commentService);
         this.restOfferMockMvc = MockMvcBuilders.standaloneSetup(offerResource)
             .setCustomArgumentResolvers(pageableArgumentResolver)
             .setControllerAdvice(exceptionTranslator)
@@ -265,7 +272,7 @@ public class OfferResourceIT {
     
     @SuppressWarnings({"unchecked"})
     public void getAllOffersWithEagerRelationshipsIsEnabled() throws Exception {
-        OfferResource offerResource = new OfferResource(offerServiceMock, userServiceMock, listingServiceMock);
+        OfferResource offerResource = new OfferResource(offerServiceMock, userServiceMock, listingServiceMock, commentServiceMock);
         when(offerServiceMock.findAllWithEagerRelationships(any())).thenReturn(new PageImpl(new ArrayList<>()));
 
         MockMvc restOfferMockMvc = MockMvcBuilders.standaloneSetup(offerResource)
@@ -282,7 +289,7 @@ public class OfferResourceIT {
 
     @SuppressWarnings({"unchecked"})
     public void getAllOffersWithEagerRelationshipsIsNotEnabled() throws Exception {
-        OfferResource offerResource = new OfferResource(offerServiceMock, userServiceMock, listingServiceMock);
+        OfferResource offerResource = new OfferResource(offerServiceMock, userServiceMock, listingServiceMock, commentServiceMock);
             when(offerServiceMock.findAllWithEagerRelationships(any())).thenReturn(new PageImpl(new ArrayList<>()));
             MockMvc restOfferMockMvc = MockMvcBuilders.standaloneSetup(offerResource)
             .setCustomArgumentResolvers(pageableArgumentResolver)
