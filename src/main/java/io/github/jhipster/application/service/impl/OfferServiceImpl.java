@@ -8,6 +8,8 @@ import io.github.jhipster.application.repository.search.OfferSearchRepository;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -59,9 +61,18 @@ public class OfferServiceImpl implements OfferService {
     @Transactional(readOnly = true)
     public List<Offer> findAll() {
         log.debug("Request to get all Offers");
-        return offerRepository.findAll();
+        return offerRepository.findAllWithEagerRelationships();
     }
 
+    /**
+     * Get all the offers with eager load of many-to-many relationships.
+     *
+     * @return the list of entities.
+     */
+    public Page<Offer> findAllWithEagerRelationships(Pageable pageable) {
+        return offerRepository.findAllWithEagerRelationships(pageable);
+    }
+    
 
     /**
      * Get one offer by id.
@@ -73,7 +84,7 @@ public class OfferServiceImpl implements OfferService {
     @Transactional(readOnly = true)
     public Optional<Offer> findOne(Long id) {
         log.debug("Request to get Offer : {}", id);
-        return offerRepository.findById(id);
+        return offerRepository.findOneWithEagerRelationships(id);
     }
 
     /**

@@ -29,9 +29,9 @@
                 </dd>
                 <dt><span>Comments</span></dt>
                 <dd>
-                    <div *ngIf="offer.comments">
-                        <a [routerLink]="['/comment', offer.comments?.id, 'view']">{{offer.comments?.text}}</a>
-                    </div>
+                    <span *ngFor="let comments of offer.comments; let last = last">
+                        <a [routerLink]="['/comment', comments?.id, 'view' ]">{{comments.text}}</a>{{last ? '' : ', '}}
+                    </span>
                 </dd>
             </dl>
 

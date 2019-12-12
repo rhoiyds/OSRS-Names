@@ -1,5 +1,5 @@
-id;timestamp;description;owner_id;listing_id
-1;2019-07-20T10:26:54;Please please please;6;1
-2;2019-07-21T01:05:19;No me too!;7;1
-3;2019-07-20T16:06:28;Okay, why not;5;3
+id;timestamp;description;status;owner_id;listing_id
+1;2019-07-20T10:26:54;Please please please;PENDING;6;1
+2;2019-07-21T01:05:19;No me too!;PENDING;7;1
+3;2019-07-20T16:06:28;Okay, why not;PENDING;5;3
 

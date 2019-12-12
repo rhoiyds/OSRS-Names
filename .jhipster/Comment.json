@@ -9,7 +9,7 @@
             "relationshipValidateRules": [
                 "required"
             ],
-            "otherEntityField": "login",
+            "otherEntityField": "username",
             "ownerSide": true,
             "useJPADerivedIdentifier": true,
             "otherEntityRelationshipName": "comment"
