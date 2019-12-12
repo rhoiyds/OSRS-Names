@@ -6,7 +6,8 @@ import { IComment } from 'app/shared/model/comment.model';
 export const enum OfferStatus {
   ACCEPTED = 'ACCEPTED',
   DECLINED = 'DECLINED',
-  CANCELLED = 'CANCELLED'
+  CANCELLED = 'CANCELLED',
+  PENDING = 'PENDING'
 }
 
 export interface IOffer {
