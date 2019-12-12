@@ -57,9 +57,9 @@
                     </div>
                 </td>
                 <td>
-                    <div *ngIf="offer.comments">
-                        <a [routerLink]="['../comment', offer.comments?.id, 'view' ]" >{{offer.comments?.text}}</a>
-                    </div>
+                    <span *ngFor="let comments of offer.comments; let last = last">
+                            <a class="form-control-static" [routerLink]="['../comment', comments?.id, 'view' ]">{{comments.text}}</a>{{last ? '' : ', '}}
+                        </span>
                 </td>
                 <td class="text-right">
                     <div class="btn-group">

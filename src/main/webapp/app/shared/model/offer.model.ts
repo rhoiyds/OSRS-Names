@@ -16,7 +16,7 @@ export interface IOffer {
   status?: OfferStatus;
   owner?: IUser;
   listing?: IListing;
-  comments?: IComment;
+  comments?: IComment[];
 }
 
 export class Offer implements IOffer {
@@ -27,6 +27,6 @@ export class Offer implements IOffer {
     public status?: OfferStatus,
     public owner?: IUser,
     public listing?: IListing,
-    public comments?: IComment
+    public comments?: IComment[]
   ) {}
 }

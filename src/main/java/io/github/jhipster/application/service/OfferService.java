@@ -3,6 +3,9 @@ package io.github.jhipster.application.service;
 import io.github.jhipster.application.domain.Listing;
 import io.github.jhipster.application.domain.Offer;
 
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+
 import java.util.List;
 import java.util.Optional;
 
@@ -26,7 +29,13 @@ public interface OfferService {
      */
     List<Offer> findAll();
 
-
+    /**
+     * Get all the offers with eager load of many-to-many relationships.
+     *
+     * @return the list of entities.
+     */
+    Page<Offer> findAllWithEagerRelationships(Pageable pageable);
+    
     /**
      * Get the "id" offer.
      *

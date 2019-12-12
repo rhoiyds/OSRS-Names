@@ -9,6 +9,8 @@ import javax.validation.constraints.*;
 import org.springframework.data.elasticsearch.annotations.FieldType;
 import java.io.Serializable;
 import java.time.Instant;
+import java.util.HashSet;
+import java.util.Set;
 
 import io.github.jhipster.application.domain.enumeration.OfferStatus;
 
@@ -49,9 +51,12 @@ public class Offer implements Serializable {
     @JsonIgnoreProperties("offers")
     private Listing listing;
 
-    @ManyToOne
-    @JsonIgnoreProperties("offers")
-    private Comment comments;
+    @ManyToMany(fetch = FetchType.EAGER)
+    @Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)
+    @JoinTable(name = "offer_comments",
+               joinColumns = @JoinColumn(name = "offer_id", referencedColumnName = "id"),
+               inverseJoinColumns = @JoinColumn(name = "comments_id", referencedColumnName = "id"))
+    private Set<Comment> comments = new HashSet<>();
 
     // jhipster-needle-entity-add-field - JHipster will add fields here, do not remove
     public Long getId() {
@@ -127,17 +132,29 @@ public class Offer implements Serializable {
         this.listing = listing;
     }
 
-    public Comment getComments() {
+    public Set<Comment> getComments() {
         return comments;
     }
 
-    public Offer comments(Comment comment) {
-        this.comments = comment;
+    public Offer comments(Set<Comment> comments) {
+        this.comments = comments;
         return this;
     }
 
-    public void setComments(Comment comment) {
-        this.comments = comment;
+    public Offer addComments(Comment comment) {
+        this.comments.add(comment);
+//        comment.getOffers().add(this);
+        return this;
+    }
+
+    public Offer removeComments(Comment comment) {
+        this.comments.remove(comment);
+//        comment.getOffers().remove(this);
+        return this;
+    }
+
+    public void setComments(Set<Comment> comments) {
+        this.comments = comments;
     }
     // jhipster-needle-entity-add-getters-setters - JHipster will add getters and setters here, do not remove
 

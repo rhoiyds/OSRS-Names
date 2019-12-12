@@ -111,10 +111,11 @@ public class OfferResource {
     /**
      * {@code GET  /offers} : get all the offers.
      *
+     * @param eagerload flag to eager load entities from relationships (This is applicable for many-to-many).
      * @return the {@link ResponseEntity} with status {@code 200 (OK)} and the list of offers in body.
      */
     @GetMapping("/offers")
-    public List<Offer> getAllOffers() {
+    public List<Offer> getAllOffers(@RequestParam(required = false, defaultValue = "false") boolean eagerload) {
         log.debug("REST request to get all Offers");
         return offerService.findAll();
     }

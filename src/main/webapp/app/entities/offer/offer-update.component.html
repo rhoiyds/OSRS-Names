@@ -66,10 +66,9 @@
                     </small>
                 </div>
                 <div class="form-group">
-                    <label class="form-control-label" for="field_comments">Comments</label>
-                    <select class="form-control" id="field_comments" name="comments" formControlName="comments">
-                        <option [ngValue]="null"></option>
-                        <option [ngValue]="commentOption.id === editForm.get('comments').value?.id ? editForm.get('comments').value : commentOption" *ngFor="let commentOption of comments; trackBy: trackCommentById">{{commentOption.text}}</option>
+                    <label for="field_comments">Comments</label>
+                    <select class="form-control" id="field_comments" multiple name="comments" formControlName="comments">
+                        <option [ngValue]="getSelected(editForm.get('comments').value, commentOption)" *ngFor="let commentOption of comments; trackBy: trackCommentById">{{commentOption.text}}</option>
                     </select>
                 </div>
             </div>

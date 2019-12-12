@@ -22,9 +22,10 @@
         {
             "relationshipName": "comments",
             "otherEntityName": "comment",
-            "relationshipType": "many-to-one",
+            "relationshipType": "many-to-many",
             "relationshipValidateRules": [],
             "otherEntityField": "text",
+            "ownerSide": true,
             "otherEntityRelationshipName": "offer"
         }
     ],

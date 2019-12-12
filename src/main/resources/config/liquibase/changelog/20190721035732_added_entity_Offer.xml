@@ -28,14 +28,10 @@
                 <constraints nullable="true" />
             </column>
             <column name="owner_id" type="bigint">
-                <constraints unique="true" nullable="false" uniqueConstraintName="ux_offer_owner_id" />
+                <constraints nullable="false" uniqueConstraintName="ux_offer_owner_id" />
             </column>
             <column name="listing_id" type="bigint">
                 <constraints nullable="false" />
-            </column>
-
-            <column name="comments_id" type="bigint">
-                <constraints nullable="true" />
             </column>
 
             <!-- jhipster-needle-liquibase-add-column - JHipster will add columns here, do not remove-->
@@ -46,6 +42,17 @@
 
     <changeSet id="20190721035732-1-relations" author="jhipster">
 
+        <createTable tableName="offer_comments">
+            <column name="comments_id" type="bigint">
+                <constraints nullable="false" unique="true"/>
+            </column>
+            <column name="offer_id" type="bigint">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+
+        <addPrimaryKey columnNames="offer_id, comments_id" tableName="offer_comments"/>
+        
     </changeSet>
     <!-- jhipster-needle-liquibase-add-changeset - JHipster will add changesets here, do not remove-->
 
