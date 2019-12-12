@@ -5,6 +5,7 @@ import { IListing } from 'app/shared/model/listing.model';
 import { IOffer } from 'app/shared/model/offer.model';
 import { OfferService } from 'app/entities/offer';
 import { AccountService, Account } from 'app/core';
+import { JhiEventManager } from 'ng-jhipster';
 
 @Component({
   selector: 'jhi-listing-detail',
@@ -15,20 +16,34 @@ export class ListingDetailComponent implements OnInit {
   offers: IOffer[];
   currentAccount: Account;
 
-  constructor(protected activatedRoute: ActivatedRoute, private offerService: OfferService, private accountService: AccountService) {}
+  constructor(
+    protected activatedRoute: ActivatedRoute,
+    private offerService: OfferService,
+    private accountService: AccountService,
+    private eventManager: JhiEventManager
+  ) {}
 
   ngOnInit() {
-    this.activatedRoute.data.subscribe(({ listing }) => {
-      this.listing = listing;
-      this.getOffersForListing();
-    });
     this.accountService.identity().then(account => {
       this.currentAccount = account;
+      this.activatedRoute.data.subscribe(({ listing }) => {
+        this.listing = listing;
+        this.loadAll();
+      });
     });
+    this.registerChangesInListing();
+  }
+
+  loadAll() {
+    this.getOffersForListing();
   }
 
   previousState() {
     window.history.back();
+  }
+
+  registerChangesInListing() {
+    this.eventManager.subscribe('listingModification', response => this.loadAll());
   }
 
   private getOffersForListing() {

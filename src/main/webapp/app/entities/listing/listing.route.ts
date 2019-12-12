@@ -11,6 +11,7 @@ import { ListingDetailComponent } from './listing-detail.component';
 import { ListingUpdateComponent } from './listing-update.component';
 import { ListingDeletePopupComponent } from './listing-delete-dialog.component';
 import { IListing } from 'app/shared/model/listing.model';
+import { ListingOfferPopupComponent } from './listing-offer-dialog.component';
 
 @Injectable({ providedIn: 'root' })
 export class ListingResolve implements Resolve<IListing> {
@@ -80,6 +81,19 @@ export const listingPopupRoute: Routes = [
   {
     path: ':id/delete',
     component: ListingDeletePopupComponent,
+    resolve: {
+      listing: ListingResolve
+    },
+    data: {
+      authorities: ['ROLE_USER'],
+      pageTitle: 'Listings'
+    },
+    canActivate: [UserRouteAccessService],
+    outlet: 'popup'
+  },
+  {
+    path: ':id/offer',
+    component: ListingOfferPopupComponent,
     resolve: {
       listing: ListingResolve
     },

@@ -3,12 +3,14 @@
         <div class="card-body">
             <h5 class="card-title"><jhi-user-profile [user]="offer.owner"></jhi-user-profile></h5>
             <p class="card-text">{{offer.description}}</p>
-            <button type="button" (click)="onAcceptOfferClick()" class="btn btn-success">
-                <fa-icon [icon]="'exchange-alt'"></fa-icon>&nbsp;<span>Accept</span>
-            </button>
-            <button type="button" (click)="onAcceptOfferClick()" class="btn btn-danger">
-                <fa-icon [icon]="'times'"></fa-icon>&nbsp;<span>Decline</span>
-            </button>
+            <ng-container *ngIf="offer.listing.owner.id === currentAccount.id && offer.status === 'PENDING'">
+                <button type="button" (click)="onAcceptOfferClick()" class="btn btn-success">
+                    <fa-icon [icon]="'exchange-alt'"></fa-icon>&nbsp;<span>Accept</span>
+                </button>
+                <button type="button" (click)="onDeclineOfferClick()" class="btn btn-danger">
+                    <fa-icon [icon]="'times'"></fa-icon>&nbsp;<span>Decline</span>
+                </button>
+            </ng-container>
         </div>
         <div class="card-footer">
             <small class="text-muted">Last updated {{offer.timestamp | date:'medium'}}</small>
