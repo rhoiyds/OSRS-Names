@@ -1,5 +1,6 @@
 package io.github.jhipster.application.service;
 
+import io.github.jhipster.application.domain.Comment;
 import io.github.jhipster.application.domain.User;
 import io.github.jhipster.application.domain.Offer;
 
@@ -32,6 +33,8 @@ public class MailService {
     private static final String USER = "user";
 
     private static final String OFFER = "offer";
+
+    private static final String COMMENT = "comment";
 
     private static final String BASE_URL = "baseUrl";
 
@@ -108,10 +111,30 @@ public class MailService {
 
     @Async
     public void sendNewOfferMail(Offer offer) {
-        log.debug("Sending password reset email to '{}'", offer.getListing().getOwner().getEmail());
+        log.debug("Sending new offer email to '{}'", offer.getListing().getOwner().getEmail());
         Context context = getNewContext(offer.getListing().getOwner());
         context.setVariable(OFFER, offer);
         sendEmailFromTemplate(context, "mail/newOfferEmail", "email.newOffer.title");
+    }
+
+    @Async
+    public void sendNewCommentMail(Comment comment) {
+        Long offerOwnerId = comment.getOffer().getOwner().getId();
+        Long commentOwnerId = comment.getOwner().getId();
+
+        User recipient = offerOwnerId.equals(commentOwnerId) ? comment.getOffer().getListing().getOwner() : comment.getOffer().getListing().getOwner();
+        log.debug("Sending new comment email to '{}'", recipient.getEmail());
+        Context context = getNewContext(recipient);
+        context.setVariable(COMMENT, comment);
+        sendEmailFromTemplate(context, "mail/commentEmail", "email.comment.title");
+    }
+
+    @Async
+    public void sendAnsweredOfferMail(Offer offer) {
+        log.debug("Sending new offer email to '{}'", offer.getOwner().getEmail());
+        Context context = getNewContext(offer.getOwner());
+        context.setVariable(OFFER, offer);
+        sendEmailFromTemplate(context, "mail/answeredOfferEmail", "email.answeredOffer.title");
     }
 
     public Context getNewContext(User user) {

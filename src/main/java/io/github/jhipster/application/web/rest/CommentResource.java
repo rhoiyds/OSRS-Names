@@ -3,6 +3,7 @@ package io.github.jhipster.application.web.rest;
 import io.github.jhipster.application.domain.Comment;
 import io.github.jhipster.application.domain.User;
 import io.github.jhipster.application.service.CommentService;
+import io.github.jhipster.application.service.MailService;
 import io.github.jhipster.application.service.UserService;
 import io.github.jhipster.application.web.rest.errors.BadRequestAlertException;
 import io.github.jhipster.application.service.dto.CommentCriteria;
@@ -54,10 +55,13 @@ public class CommentResource {
 
     private final UserService userService;
 
-    public CommentResource(CommentService commentService, CommentQueryService commentQueryService, UserService userService) {
+    private final MailService mailService;
+
+    public CommentResource(CommentService commentService, CommentQueryService commentQueryService, UserService userService, MailService mailService) {
         this.commentService = commentService;
         this.commentQueryService = commentQueryService;
         this.userService = userService;
+        this.mailService = mailService;
     }
 
     /**
@@ -80,6 +84,7 @@ public class CommentResource {
         comment.setOwner(owner.get());
         comment.setTimestamp(Instant.now());
         Comment result = commentService.save(comment);
+        this.mailService.sendNewCommentMail(comment);
         return ResponseEntity.created(new URI("/api/comments/" + result.getId()))
             .headers(HeaderUtil.createEntityCreationAlert(applicationName, false, ENTITY_NAME, result.getId().toString()))
             .body(result);
