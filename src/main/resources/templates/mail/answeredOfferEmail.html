@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+    <head>
+        <title th:text="#{email.answeredOffer.title(${offer.status.toString().toLowerCase()})}">Answered offer</title>
+        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+        <link rel="shortcut icon" th:href="@{|${baseUrl}/favicon.ico|}" />
+    </head>
+    <body>
+        <p th:text="#{email.answeredOffer.greeting(${user.username})}">
+            Dear
+        </p>
+        <p th:text="#{email.answeredOffer.text1(${offer.getListing().getRsn()}, ${offer.status.toString().toLowerCase()})}">
+            You have a new offer on your listing
+        </p>
+        <p>
+            <a th:with="url=(@{|${baseUrl}/listing/${offer.listing.id}|})" th:href="${url}"
+            th:text="${url}">Login link</a>
+        </p>
+        <p>
+            <span>Regards, </span>
+            <br/>
+            <em th:text="#{email.signature}">JHipster.</em>
+        </p>
+    </body>
+</html>

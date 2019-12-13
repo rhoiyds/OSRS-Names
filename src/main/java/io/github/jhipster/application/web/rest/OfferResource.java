@@ -118,6 +118,7 @@ public class OfferResource {
         offer.setOwner(owner.get());
         offer.setTimestamp(Instant.now());
         Offer result = offerService.save(offer);
+        this.mailService.sendAnsweredOfferMail(offer);
         return ResponseEntity.ok()
             .headers(HeaderUtil.createEntityUpdateAlert(applicationName, false, ENTITY_NAME, offer.getId().toString()))
             .body(result);
@@ -125,8 +126,6 @@ public class OfferResource {
 
     /**
      * {@code GET  /offers} : get all the offers.
-     *
-     * @param eagerload flag to eager load entities from relationships (This is applicable for many-to-many).
      * @return the {@link ResponseEntity} with status {@code 200 (OK)} and the list of offers in body.
      */
     @GetMapping("/offers")
