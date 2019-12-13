@@ -2,7 +2,7 @@ import { Component, OnInit, OnDestroy, Input } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { JhiEventManager, JhiAlertService } from 'ng-jhipster';
 
-import { IOffer } from 'app/shared/model/offer.model';
+import { IOffer, OfferStatus } from 'app/shared/model/offer.model';
 import { IComment } from 'app/shared/model/comment.model';
 
 import { AccountService } from 'app/core';
@@ -21,6 +21,7 @@ export class ListingOfferComponent implements OnInit, OnDestroy {
   newCommentText = '';
   currentAccount: any;
   eventSubscriber: Subscription;
+  offerStatus = OfferStatus;
 
   constructor(
     protected offerService: OfferService,
@@ -52,12 +53,11 @@ export class ListingOfferComponent implements OnInit, OnDestroy {
     });
   }
 
-  onAcceptOfferClick() {
-    console.log('Accept');
-  }
-
-  onDeclineOfferClick() {
-    console.log('Decline');
+  onChangeOfferClick(offerStatus: OfferStatus) {
+    this.offer.status = offerStatus;
+    this.offerService.update(this.offer).subscribe(response => {
+      this.offer = response.body;
+    });
   }
 
   registerChangeInOffer() {
