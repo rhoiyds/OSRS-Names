@@ -11,7 +11,7 @@ import java.util.List;
  */
 @SuppressWarnings("unused")
 @Repository
-public interface CommentRepository extends JpaRepository<Comment, Long> {
+public interface CommentRepository extends JpaRepository<Comment, Long>, JpaSpecificationExecutor<Comment> {
 
     @Query("select comment from Comment comment where comment.owner.username = ?#{principal.username}")
     List<Comment> findByOwnerIsCurrentUser();

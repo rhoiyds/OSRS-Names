@@ -4,8 +4,9 @@ import io.github.jhipster.application.domain.Comment;
 import io.github.jhipster.application.domain.User;
 import io.github.jhipster.application.service.CommentService;
 import io.github.jhipster.application.service.UserService;
-
 import io.github.jhipster.application.web.rest.errors.BadRequestAlertException;
+import io.github.jhipster.application.service.dto.CommentCriteria;
+import io.github.jhipster.application.service.CommentQueryService;
 
 import io.github.jhipster.web.util.HeaderUtil;
 import io.github.jhipster.web.util.PaginationUtil;
@@ -49,10 +50,13 @@ public class CommentResource {
 
     private final CommentService commentService;
 
+    private final CommentQueryService commentQueryService;
+
     private final UserService userService;
 
-    public CommentResource(CommentService commentService, UserService userService) {
+    public CommentResource(CommentService commentService, CommentQueryService commentQueryService, UserService userService) {
         this.commentService = commentService;
+        this.commentQueryService = commentQueryService;
         this.userService = userService;
     }
 
@@ -108,14 +112,27 @@ public class CommentResource {
      * @param pageable the pagination information.
      * @param queryParams a {@link MultiValueMap} query parameters.
      * @param uriBuilder a {@link UriComponentsBuilder} URI builder.
+     * @param criteria the criteria which the requested entities should match.
      * @return the {@link ResponseEntity} with status {@code 200 (OK)} and the list of comments in body.
      */
     @GetMapping("/comments")
-    public ResponseEntity<List<Comment>> getAllComments(Pageable pageable, @RequestParam MultiValueMap<String, String> queryParams, UriComponentsBuilder uriBuilder) {
-        log.debug("REST request to get a page of Comments");
-        Page<Comment> page = commentService.findAll(pageable);
+    public ResponseEntity<List<Comment>> getAllComments(CommentCriteria criteria, Pageable pageable, @RequestParam MultiValueMap<String, String> queryParams, UriComponentsBuilder uriBuilder) {
+        log.debug("REST request to get Comments by criteria: {}", criteria);
+        Page<Comment> page = commentQueryService.findByCriteria(criteria, pageable);
         HttpHeaders headers = PaginationUtil.generatePaginationHttpHeaders(uriBuilder.queryParams(queryParams), page);
         return ResponseEntity.ok().headers(headers).body(page.getContent());
+    }
+
+    /**
+    * {@code GET  /comments/count} : count all the comments.
+    *
+    * @param criteria the criteria which the requested entities should match.
+    * @return the {@link ResponseEntity} with status {@code 200 (OK)} and the count in body.
+    */
+    @GetMapping("/comments/count")
+    public ResponseEntity<Long> countComments(CommentCriteria criteria) {
+        log.debug("REST request to count Comments by criteria: {}", criteria);
+        return ResponseEntity.ok().body(commentQueryService.countByCriteria(criteria));
     }
 
     /**

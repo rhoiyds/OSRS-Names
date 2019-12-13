@@ -3,16 +3,17 @@
         <div class="card-body">
             <h5 class="card-title"><jhi-user-profile [user]="offer?.owner"></jhi-user-profile></h5>
             <p class="card-text">{{offer.description}}</p>
+            <hr />
             <div class="c-comment" *ngFor="let comment of comments">
-                <div class="pull-left">
+                <div>
                     <jhi-user-profile [user]="comment.owner" [timestamp]="comment.timestamp"></jhi-user-profile>
                 </div>
-                <div class="pull-right">
+                <div class="c-comment-text">
                     {{comment.text}}
                 </div> 
             </div>
             <div class="c-comment-container">
-                <textarea class="form-control c-comment-entry" rows="3" [(ngModel)]="newCommentText" name="new-comment-text"></textarea>
+                <textarea class="form-control c-comment-entry" rows="3" [(ngModel)]="newCommentText" name="new-comment-text" placeholder="Leave a message for the other person..."></textarea>
             </div>
             <button type="button" (click)="onPostCommentClick()" [disabled]="newCommentText.length === 0" class="btn btn-success">
                     <fa-icon [icon]="'comment-medical'"></fa-icon>&nbsp;<span>Comment</span>

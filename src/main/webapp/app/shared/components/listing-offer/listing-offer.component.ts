@@ -44,11 +44,11 @@ export class ListingOfferComponent implements OnInit, OnDestroy {
     this.accountService.identity().then(account => {
       this.currentAccount = account;
     });
-    let criteria = {
-      'offer.equals': this.offer
+    const criteria = {
+      'offerId.equals': this.offer.id
     };
     this.commentService.query(criteria).subscribe(response => {
-      console.log(response);
+      this.comments = response.body;
     });
   }
 
@@ -71,7 +71,8 @@ export class ListingOfferComponent implements OnInit, OnDestroy {
         offer: this.offer
       })
       .subscribe(response => {
-        this.comments.concat(response.body);
+        this.comments = this.comments.concat(response.body);
+        this.newCommentText = '';
       });
   }
 }
