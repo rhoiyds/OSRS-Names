@@ -44,6 +44,6 @@
     "service": "serviceClass",
     "entityTableName": "comment",
     "databaseType": "sql",
-    "jpaMetamodelFiltering": false,
+    "jpaMetamodelFiltering": true,
     "pagination": "pagination"
 }

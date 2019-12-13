@@ -28,7 +28,7 @@
                 <constraints nullable="true" />
             </column>
             <column name="owner_id" type="bigint">
-                <constraints unique="true" nullable="false" uniqueConstraintName="ux_offer_owner_id" />
+                <constraints nullable="false"/>
             </column>
             <column name="listing_id" type="bigint">
                 <constraints nullable="false" />

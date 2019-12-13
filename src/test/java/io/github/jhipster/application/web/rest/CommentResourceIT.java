@@ -2,11 +2,16 @@ package io.github.jhipster.application.web.rest;
 
 import io.github.jhipster.application.RsnsalesApp;
 import io.github.jhipster.application.domain.Comment;
+import io.github.jhipster.application.domain.Offer;
+import io.github.jhipster.application.domain.User;
 import io.github.jhipster.application.repository.CommentRepository;
 import io.github.jhipster.application.repository.search.CommentSearchRepository;
 import io.github.jhipster.application.service.CommentService;
-import io.github.jhipster.application.service.UserService;
 import io.github.jhipster.application.web.rest.errors.ExceptionTranslator;
+import io.github.jhipster.application.service.dto.CommentCriteria;
+import io.github.jhipster.application.service.CommentQueryService;
+import io.github.jhipster.application.service.UserService;
+
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -57,7 +62,6 @@ public class CommentResourceIT {
 
     @Autowired
     private UserService userService;
-
     /**
      * This repository is mocked in the io.github.jhipster.application.repository.search test package.
      *
@@ -65,6 +69,9 @@ public class CommentResourceIT {
      */
     @Autowired
     private CommentSearchRepository mockCommentSearchRepository;
+
+    @Autowired
+    private CommentQueryService commentQueryService;
 
     @Autowired
     private MappingJackson2HttpMessageConverter jacksonMessageConverter;
@@ -88,7 +95,7 @@ public class CommentResourceIT {
     @BeforeEach
     public void setup() {
         MockitoAnnotations.initMocks(this);
-        final CommentResource commentResource = new CommentResource(commentService, userService);
+        final CommentResource commentResource = new CommentResource(commentService, commentQueryService, userService);
         this.restCommentMockMvc = MockMvcBuilders.standaloneSetup(commentResource)
             .setCustomArgumentResolvers(pageableArgumentResolver)
             .setControllerAdvice(exceptionTranslator)
@@ -237,6 +244,157 @@ public class CommentResourceIT {
             .andExpect(jsonPath("$.timestamp").value(DEFAULT_TIMESTAMP.toString()))
             .andExpect(jsonPath("$.text").value(DEFAULT_TEXT.toString()));
     }
+
+    @Test
+    @Transactional
+    public void getAllCommentsByTimestampIsEqualToSomething() throws Exception {
+        // Initialize the database
+        commentRepository.saveAndFlush(comment);
+
+        // Get all the commentList where timestamp equals to DEFAULT_TIMESTAMP
+        defaultCommentShouldBeFound("timestamp.equals=" + DEFAULT_TIMESTAMP);
+
+        // Get all the commentList where timestamp equals to UPDATED_TIMESTAMP
+        defaultCommentShouldNotBeFound("timestamp.equals=" + UPDATED_TIMESTAMP);
+    }
+
+    @Test
+    @Transactional
+    public void getAllCommentsByTimestampIsInShouldWork() throws Exception {
+        // Initialize the database
+        commentRepository.saveAndFlush(comment);
+
+        // Get all the commentList where timestamp in DEFAULT_TIMESTAMP or UPDATED_TIMESTAMP
+        defaultCommentShouldBeFound("timestamp.in=" + DEFAULT_TIMESTAMP + "," + UPDATED_TIMESTAMP);
+
+        // Get all the commentList where timestamp equals to UPDATED_TIMESTAMP
+        defaultCommentShouldNotBeFound("timestamp.in=" + UPDATED_TIMESTAMP);
+    }
+
+    @Test
+    @Transactional
+    public void getAllCommentsByTimestampIsNullOrNotNull() throws Exception {
+        // Initialize the database
+        commentRepository.saveAndFlush(comment);
+
+        // Get all the commentList where timestamp is not null
+        defaultCommentShouldBeFound("timestamp.specified=true");
+
+        // Get all the commentList where timestamp is null
+        defaultCommentShouldNotBeFound("timestamp.specified=false");
+    }
+
+    @Test
+    @Transactional
+    public void getAllCommentsByTextIsEqualToSomething() throws Exception {
+        // Initialize the database
+        commentRepository.saveAndFlush(comment);
+
+        // Get all the commentList where text equals to DEFAULT_TEXT
+        defaultCommentShouldBeFound("text.equals=" + DEFAULT_TEXT);
+
+        // Get all the commentList where text equals to UPDATED_TEXT
+        defaultCommentShouldNotBeFound("text.equals=" + UPDATED_TEXT);
+    }
+
+    @Test
+    @Transactional
+    public void getAllCommentsByTextIsInShouldWork() throws Exception {
+        // Initialize the database
+        commentRepository.saveAndFlush(comment);
+
+        // Get all the commentList where text in DEFAULT_TEXT or UPDATED_TEXT
+        defaultCommentShouldBeFound("text.in=" + DEFAULT_TEXT + "," + UPDATED_TEXT);
+
+        // Get all the commentList where text equals to UPDATED_TEXT
+        defaultCommentShouldNotBeFound("text.in=" + UPDATED_TEXT);
+    }
+
+    @Test
+    @Transactional
+    public void getAllCommentsByTextIsNullOrNotNull() throws Exception {
+        // Initialize the database
+        commentRepository.saveAndFlush(comment);
+
+        // Get all the commentList where text is not null
+        defaultCommentShouldBeFound("text.specified=true");
+
+        // Get all the commentList where text is null
+        defaultCommentShouldNotBeFound("text.specified=false");
+    }
+
+    @Test
+    @Transactional
+    public void getAllCommentsByOfferIsEqualToSomething() throws Exception {
+        // Initialize the database
+        Offer offer = OfferResourceIT.createEntity(em);
+        em.persist(offer);
+        em.flush();
+        comment.setOffer(offer);
+        commentRepository.saveAndFlush(comment);
+        Long offerId = offer.getId();
+
+        // Get all the commentList where offer equals to offerId
+        defaultCommentShouldBeFound("offerId.equals=" + offerId);
+
+        // Get all the commentList where offer equals to offerId + 1
+        defaultCommentShouldNotBeFound("offerId.equals=" + (offerId + 1));
+    }
+
+
+    @Test
+    @Transactional
+    public void getAllCommentsByOwnerIsEqualToSomething() throws Exception {
+        // Initialize the database
+        User owner = UserResourceIT.createEntity(em);
+        em.persist(owner);
+        em.flush();
+        comment.setOwner(owner);
+        commentRepository.saveAndFlush(comment);
+        Long ownerId = owner.getId();
+
+        // Get all the commentList where owner equals to ownerId
+        defaultCommentShouldBeFound("ownerId.equals=" + ownerId);
+
+        // Get all the commentList where owner equals to ownerId + 1
+        defaultCommentShouldNotBeFound("ownerId.equals=" + (ownerId + 1));
+    }
+
+    /**
+     * Executes the search, and checks that the default entity is returned.
+     */
+    private void defaultCommentShouldBeFound(String filter) throws Exception {
+        restCommentMockMvc.perform(get("/api/comments?sort=id,desc&" + filter))
+            .andExpect(status().isOk())
+            .andExpect(content().contentType(MediaType.APPLICATION_JSON_UTF8_VALUE))
+            .andExpect(jsonPath("$.[*].id").value(hasItem(comment.getId().intValue())))
+            .andExpect(jsonPath("$.[*].timestamp").value(hasItem(DEFAULT_TIMESTAMP.toString())))
+            .andExpect(jsonPath("$.[*].text").value(hasItem(DEFAULT_TEXT)));
+
+        // Check, that the count call also returns 1
+        restCommentMockMvc.perform(get("/api/comments/count?sort=id,desc&" + filter))
+            .andExpect(status().isOk())
+            .andExpect(content().contentType(MediaType.APPLICATION_JSON_UTF8_VALUE))
+            .andExpect(content().string("1"));
+    }
+
+    /**
+     * Executes the search, and checks that the default entity is not returned.
+     */
+    private void defaultCommentShouldNotBeFound(String filter) throws Exception {
+        restCommentMockMvc.perform(get("/api/comments?sort=id,desc&" + filter))
+            .andExpect(status().isOk())
+            .andExpect(content().contentType(MediaType.APPLICATION_JSON_UTF8_VALUE))
+            .andExpect(jsonPath("$").isArray())
+            .andExpect(jsonPath("$").isEmpty());
+
+        // Check, that the count call also returns 0
+        restCommentMockMvc.perform(get("/api/comments/count?sort=id,desc&" + filter))
+            .andExpect(status().isOk())
+            .andExpect(content().contentType(MediaType.APPLICATION_JSON_UTF8_VALUE))
+            .andExpect(content().string("0"));
+    }
+
 
     @Test
     @Transactional
