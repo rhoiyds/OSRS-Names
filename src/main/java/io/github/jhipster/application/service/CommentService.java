@@ -2,7 +2,6 @@ package io.github.jhipster.application.service;
 
 import io.github.jhipster.application.domain.Comment;
 import io.github.jhipster.application.repository.CommentRepository;
-import io.github.jhipster.application.repository.UserRepository;
 import io.github.jhipster.application.repository.search.CommentSearchRepository;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -29,12 +28,9 @@ public class CommentService {
 
     private final CommentSearchRepository commentSearchRepository;
 
-    private final UserRepository userRepository;
-
-    public CommentService(CommentRepository commentRepository, CommentSearchRepository commentSearchRepository, UserRepository userRepository) {
+    public CommentService(CommentRepository commentRepository, CommentSearchRepository commentSearchRepository) {
         this.commentRepository = commentRepository;
         this.commentSearchRepository = commentSearchRepository;
-        this.userRepository = userRepository;
     }
 
     /**
@@ -45,8 +41,6 @@ public class CommentService {
      */
     public Comment save(Comment comment) {
         log.debug("Request to save Comment : {}", comment);
-        Long userId = comment.getOwner().getId();
-        userRepository.findById(userId).ifPresent(comment::owner);
         Comment result = commentRepository.save(comment);
         commentSearchRepository.save(result);
         return result;

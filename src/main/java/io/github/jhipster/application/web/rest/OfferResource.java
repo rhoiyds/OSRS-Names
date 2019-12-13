@@ -26,10 +26,8 @@ import org.springframework.web.bind.annotation.RestController;
 
 import io.github.jhipster.application.domain.Listing;
 import io.github.jhipster.application.domain.Offer;
-import io.github.jhipster.application.domain.Comment;
 import io.github.jhipster.application.domain.User;
 import io.github.jhipster.application.domain.enumeration.OfferStatus;
-import io.github.jhipster.application.service.CommentService;
 import io.github.jhipster.application.service.ListingService;
 import io.github.jhipster.application.service.OfferService;
 import io.github.jhipster.application.service.UserService;
@@ -57,12 +55,9 @@ public class OfferResource {
 
     private final ListingService listingService;
 
-    private final CommentService commentService;
-
-    public OfferResource(OfferService offerService, UserService userService, ListingService listingService, CommentService commentService) {
+    public OfferResource(OfferService offerService, UserService userService, ListingService listingService) {
         this.offerService = offerService;
         this.userService = userService;
-        this.commentService = commentService;
         this.listingService = listingService;
     }
 
@@ -130,7 +125,7 @@ public class OfferResource {
      * @return the {@link ResponseEntity} with status {@code 200 (OK)} and the list of offers in body.
      */
     @GetMapping("/offers")
-    public List<Offer> getAllOffers(@RequestParam(required = false, defaultValue = "false") boolean eagerload) {
+    public List<Offer> getAllOffers() {
         log.debug("REST request to get all Offers");
         return offerService.findAll();
     }
@@ -193,35 +188,5 @@ public class OfferResource {
         return offerService.search(query);
     }
 
-        /**
-     * {@code POST  /offers/{id}/comments} : Create a new offer.
-     *
-     * @param comment the comment to create.
-     * @return the {@link ResponseEntity} with status {@code 201 (Created)} and with body the new offer, or with status {@code 400 (Bad Request)} if the offer has already an ID.
-     * @throws URISyntaxException if the Location URI syntax is incorrect.
-     */
-    @PostMapping("/offers/{id}/comments")
-    public ResponseEntity<Comment> createOfferComment(@PathVariable Long id, @Valid @RequestBody Comment comment) throws URISyntaxException {
-        log.debug("REST request to comment on Offer : {}", comment);
-        
-        if (comment.getId() != null) {
-            throw new BadRequestAlertException("A new comment cannot already have an ID", ENTITY_NAME, "idexists");
-        }
-        Optional<User> owner = this.userService.getUserWithAuthorities();
-        if (!owner.isPresent()) {
-            throw new BadRequestAlertException("You must create an entity as a logged user", ENTITY_NAME, "notloggeduser");
-        }
-        Optional<Offer> offer = this.offerService.findOne(id);
-        if (!offer.isPresent()) {
-            throw new BadRequestAlertException("You comment only on an existing offer", ENTITY_NAME, "notloggeduser");
-        }
-        comment.setOwner(owner.get());
-        comment.setTimestamp(Instant.now());
-        Comment savedComment = commentService.save(comment);
-        offerService.save(offer.get().addComments(savedComment));
-        return ResponseEntity.created(new URI("/api/comments/" + savedComment.getId()))
-            .headers(HeaderUtil.createEntityCreationAlert(applicationName, false, ENTITY_NAME, savedComment.getId().toString()))
-            .body(savedComment);
-    }
 
 }

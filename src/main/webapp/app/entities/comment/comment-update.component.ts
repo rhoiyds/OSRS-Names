@@ -9,6 +9,8 @@ import { DATE_TIME_FORMAT } from 'app/shared/constants/input.constants';
 import { JhiAlertService } from 'ng-jhipster';
 import { IComment, Comment } from 'app/shared/model/comment.model';
 import { CommentService } from './comment.service';
+import { IOffer } from 'app/shared/model/offer.model';
+import { OfferService } from 'app/entities/offer';
 import { IUser, UserService } from 'app/core';
 
 @Component({
@@ -18,18 +20,22 @@ import { IUser, UserService } from 'app/core';
 export class CommentUpdateComponent implements OnInit {
   isSaving: boolean;
 
+  offers: IOffer[];
+
   users: IUser[];
 
   editForm = this.fb.group({
     id: [],
     timestamp: [null, [Validators.required]],
     text: [null, [Validators.required, Validators.minLength(1), Validators.maxLength(1024)]],
-    owner: [null, Validators.required]
+    offer: [],
+    owner: []
   });
 
   constructor(
     protected jhiAlertService: JhiAlertService,
     protected commentService: CommentService,
+    protected offerService: OfferService,
     protected userService: UserService,
     protected activatedRoute: ActivatedRoute,
     private fb: FormBuilder
@@ -40,6 +46,13 @@ export class CommentUpdateComponent implements OnInit {
     this.activatedRoute.data.subscribe(({ comment }) => {
       this.updateForm(comment);
     });
+    this.offerService
+      .query()
+      .pipe(
+        filter((mayBeOk: HttpResponse<IOffer[]>) => mayBeOk.ok),
+        map((response: HttpResponse<IOffer[]>) => response.body)
+      )
+      .subscribe((res: IOffer[]) => (this.offers = res), (res: HttpErrorResponse) => this.onError(res.message));
     this.userService
       .query()
       .pipe(
@@ -54,6 +67,7 @@ export class CommentUpdateComponent implements OnInit {
       id: comment.id,
       timestamp: comment.timestamp != null ? comment.timestamp.format(DATE_TIME_FORMAT) : null,
       text: comment.text,
+      offer: comment.offer,
       owner: comment.owner
     });
   }
@@ -79,6 +93,7 @@ export class CommentUpdateComponent implements OnInit {
       timestamp:
         this.editForm.get(['timestamp']).value != null ? moment(this.editForm.get(['timestamp']).value, DATE_TIME_FORMAT) : undefined,
       text: this.editForm.get(['text']).value,
+      offer: this.editForm.get(['offer']).value,
       owner: this.editForm.get(['owner']).value
     };
   }
@@ -97,6 +112,10 @@ export class CommentUpdateComponent implements OnInit {
   }
   protected onError(errorMessage: string) {
     this.jhiAlertService.error(errorMessage, null, null);
+  }
+
+  trackOfferById(index: number, item: IOffer) {
+    return item.id;
   }
 
   trackUserById(index: number, item: IUser) {

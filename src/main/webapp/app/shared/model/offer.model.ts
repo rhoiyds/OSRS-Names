@@ -1,7 +1,6 @@
 import { Moment } from 'moment';
 import { IUser } from 'app/core/user/user.model';
 import { IListing } from 'app/shared/model/listing.model';
-import { IComment } from 'app/shared/model/comment.model';
 
 export const enum OfferStatus {
   ACCEPTED = 'ACCEPTED',
@@ -17,7 +16,6 @@ export interface IOffer {
   status?: OfferStatus;
   owner?: IUser;
   listing?: IListing;
-  comments?: IComment[];
 }
 
 export class Offer implements IOffer {
@@ -27,7 +25,6 @@ export class Offer implements IOffer {
     public description?: string,
     public status?: OfferStatus,
     public owner?: IUser,
-    public listing?: IListing,
-    public comments?: IComment[]
+    public listing?: IListing
   ) {}
 }

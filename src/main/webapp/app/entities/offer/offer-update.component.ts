@@ -12,8 +12,6 @@ import { OfferService } from './offer.service';
 import { IUser, UserService } from 'app/core';
 import { IListing } from 'app/shared/model/listing.model';
 import { ListingService } from 'app/entities/listing';
-import { IComment } from 'app/shared/model/comment.model';
-import { CommentService } from 'app/entities/comment';
 
 @Component({
   selector: 'jhi-offer-update',
@@ -26,16 +24,13 @@ export class OfferUpdateComponent implements OnInit {
 
   listings: IListing[];
 
-  comments: IComment[];
-
   editForm = this.fb.group({
     id: [],
     timestamp: [null, [Validators.required]],
     description: [],
     status: [],
     owner: [null, Validators.required],
-    listing: [null, Validators.required],
-    comments: []
+    listing: [null, Validators.required]
   });
 
   constructor(
@@ -43,7 +38,6 @@ export class OfferUpdateComponent implements OnInit {
     protected offerService: OfferService,
     protected userService: UserService,
     protected listingService: ListingService,
-    protected commentService: CommentService,
     protected activatedRoute: ActivatedRoute,
     private fb: FormBuilder
   ) {}
@@ -67,13 +61,6 @@ export class OfferUpdateComponent implements OnInit {
         map((response: HttpResponse<IListing[]>) => response.body)
       )
       .subscribe((res: IListing[]) => (this.listings = res), (res: HttpErrorResponse) => this.onError(res.message));
-    this.commentService
-      .query()
-      .pipe(
-        filter((mayBeOk: HttpResponse<IComment[]>) => mayBeOk.ok),
-        map((response: HttpResponse<IComment[]>) => response.body)
-      )
-      .subscribe((res: IComment[]) => (this.comments = res), (res: HttpErrorResponse) => this.onError(res.message));
   }
 
   updateForm(offer: IOffer) {
@@ -83,8 +70,7 @@ export class OfferUpdateComponent implements OnInit {
       description: offer.description,
       status: offer.status,
       owner: offer.owner,
-      listing: offer.listing,
-      comments: offer.comments
+      listing: offer.listing
     });
   }
 
@@ -111,8 +97,7 @@ export class OfferUpdateComponent implements OnInit {
       description: this.editForm.get(['description']).value,
       status: this.editForm.get(['status']).value,
       owner: this.editForm.get(['owner']).value,
-      listing: this.editForm.get(['listing']).value,
-      comments: this.editForm.get(['comments']).value
+      listing: this.editForm.get(['listing']).value
     };
   }
 
@@ -138,20 +123,5 @@ export class OfferUpdateComponent implements OnInit {
 
   trackListingById(index: number, item: IListing) {
     return item.id;
-  }
-
-  trackCommentById(index: number, item: IComment) {
-    return item.id;
-  }
-
-  getSelected(selectedVals: Array<any>, option: any) {
-    if (selectedVals) {
-      for (let i = 0; i < selectedVals.length; i++) {
-        if (option.id === selectedVals[i].id) {
-          return selectedVals[i];
-        }
-      }
-    }
-    return option;
   }
 }

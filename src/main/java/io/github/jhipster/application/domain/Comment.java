@@ -1,4 +1,5 @@
 package io.github.jhipster.application.domain;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import org.hibernate.annotations.Cache;
 import org.hibernate.annotations.CacheConcurrencyStrategy;
 
@@ -33,11 +34,12 @@ public class Comment implements Serializable {
     @Column(name = "text", length = 1024, nullable = false)
     private String text;
 
-    @ManyToMany(fetch = FetchType.EAGER)
-    @Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)
-    @JoinTable(name = "offer_comments",
-        joinColumns = @JoinColumn(name = "offer_id", referencedColumnName = "id"),
-        inverseJoinColumns = @JoinColumn(name = "comment_id", referencedColumnName = "id"))
+    @ManyToOne
+    @JsonIgnoreProperties("comments")
+    private Offer offer;
+
+    @ManyToOne
+    @JsonIgnoreProperties("comments")
     private User owner;
 
     // jhipster-needle-entity-add-field - JHipster will add fields here, do not remove
@@ -73,6 +75,19 @@ public class Comment implements Serializable {
 
     public void setText(String text) {
         this.text = text;
+    }
+
+    public Offer getOffer() {
+        return offer;
+    }
+
+    public Comment offer(Offer offer) {
+        this.offer = offer;
+        return this;
+    }
+
+    public void setOffer(Offer offer) {
+        this.offer = offer;
     }
 
     public User getOwner() {

@@ -2,10 +2,10 @@ package io.github.jhipster.application.web.rest;
 
 import io.github.jhipster.application.RsnsalesApp;
 import io.github.jhipster.application.domain.Comment;
-import io.github.jhipster.application.domain.User;
 import io.github.jhipster.application.repository.CommentRepository;
 import io.github.jhipster.application.repository.search.CommentSearchRepository;
 import io.github.jhipster.application.service.CommentService;
+import io.github.jhipster.application.service.UserService;
 import io.github.jhipster.application.web.rest.errors.ExceptionTranslator;
 
 import org.junit.jupiter.api.BeforeEach;
@@ -55,6 +55,9 @@ public class CommentResourceIT {
     @Autowired
     private CommentService commentService;
 
+    @Autowired
+    private UserService userService;
+
     /**
      * This repository is mocked in the io.github.jhipster.application.repository.search test package.
      *
@@ -85,7 +88,7 @@ public class CommentResourceIT {
     @BeforeEach
     public void setup() {
         MockitoAnnotations.initMocks(this);
-        final CommentResource commentResource = new CommentResource(commentService);
+        final CommentResource commentResource = new CommentResource(commentService, userService);
         this.restCommentMockMvc = MockMvcBuilders.standaloneSetup(commentResource)
             .setCustomArgumentResolvers(pageableArgumentResolver)
             .setControllerAdvice(exceptionTranslator)
@@ -104,11 +107,6 @@ public class CommentResourceIT {
         Comment comment = new Comment()
             .timestamp(DEFAULT_TIMESTAMP)
             .text(DEFAULT_TEXT);
-        // Add required entity
-        User user = UserResourceIT.createEntity(em);
-        em.persist(user);
-        em.flush();
-        comment.setOwner(user);
         return comment;
     }
     /**
@@ -121,11 +119,6 @@ public class CommentResourceIT {
         Comment comment = new Comment()
             .timestamp(UPDATED_TIMESTAMP)
             .text(UPDATED_TEXT);
-        // Add required entity
-        User user = UserResourceIT.createEntity(em);
-        em.persist(user);
-        em.flush();
-        comment.setOwner(user);
         return comment;
     }
 
@@ -151,9 +144,6 @@ public class CommentResourceIT {
         Comment testComment = commentList.get(commentList.size() - 1);
         assertThat(testComment.getTimestamp()).isEqualTo(DEFAULT_TIMESTAMP);
         assertThat(testComment.getText()).isEqualTo(DEFAULT_TEXT);
-
-        // Validate the id for MapsId, the ids must be same
-        assertThat(testComment.getId()).isEqualTo(testComment.getOwner().getId());
 
         // Validate the Comment in Elasticsearch
         verify(mockCommentSearchRepository, times(1)).save(testComment);
@@ -181,45 +171,6 @@ public class CommentResourceIT {
         verify(mockCommentSearchRepository, times(0)).save(comment);
     }
 
-    @Test
-    @Transactional
-    public void updateCommentMapsIdAssociationWithNewId() throws Exception {
-        // Initialize the database
-        commentService.save(comment);
-        int databaseSizeBeforeCreate = commentRepository.findAll().size();
-
-        // Add a new parent entity
-        User user = UserResourceIT.createEntity(em);
-        em.persist(user);
-        em.flush();
-
-        // Load the comment
-        Comment updatedComment = commentRepository.findById(comment.getId()).get();
-        // Disconnect from session so that the updates on updatedComment are not directly saved in db
-        em.detach(updatedComment);
-
-        // Update the User with new association value
-        updatedComment.setOwner(user);
-
-        // Update the entity
-        restCommentMockMvc.perform(put("/api/comments")
-            .contentType(TestUtil.APPLICATION_JSON_UTF8)
-            .content(TestUtil.convertObjectToJsonBytes(updatedComment)))
-            .andExpect(status().isOk());
-
-        // Validate the Comment in the database
-        List<Comment> commentList = commentRepository.findAll();
-        assertThat(commentList).hasSize(databaseSizeBeforeCreate);
-        Comment testComment = commentList.get(commentList.size() - 1);
-
-        // Validate the id for MapsId, the ids must be same
-        // Uncomment the following line for assertion. However, please note that there is a known issue and uncommenting will fail the test.
-        // Please look at https://github.com/jhipster/generator-jhipster/issues/9100. You can modify this test as necessary.
-        // assertThat(testComment.getId()).isEqualTo(testComment.getUser().getId());
-
-        // Validate the Comment in Elasticsearch
-        verify(mockCommentSearchRepository, times(2)).save(comment);
-    }
 
     @Test
     @Transactional

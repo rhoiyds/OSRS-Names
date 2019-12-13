@@ -18,15 +18,6 @@
             "relationshipValidateRules": "required",
             "relationshipName": "listing",
             "otherEntityField": "description"
-        },
-        {
-            "relationshipName": "comments",
-            "otherEntityName": "comment",
-            "relationshipType": "many-to-many",
-            "relationshipValidateRules": [],
-            "otherEntityField": "text",
-            "ownerSide": true,
-            "otherEntityRelationshipName": "offer"
         }
     ],
     "fields": [

@@ -3,15 +3,18 @@
     "clientRootFolder": "",
     "relationships": [
         {
+            "relationshipName": "offer",
+            "otherEntityName": "offer",
+            "relationshipType": "many-to-one",
+            "otherEntityField": "description",
+            "otherEntityRelationshipName": "comment"
+        },
+        {
             "relationshipName": "owner",
             "otherEntityName": "user",
-            "relationshipType": "one-to-one",
-            "relationshipValidateRules": [
-                "required"
-            ],
-            "otherEntityField": "username",
+            "relationshipType": "many-to-one",
+            "otherEntityField": "login",
             "ownerSide": true,
-            "useJPADerivedIdentifier": true,
             "otherEntityRelationshipName": "comment"
         }
     ],
