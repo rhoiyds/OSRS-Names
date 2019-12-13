@@ -1,6 +1,7 @@
 package io.github.jhipster.application.service;
 
 import io.github.jhipster.application.domain.User;
+import io.github.jhipster.application.domain.Offer;
 
 import io.github.jhipster.config.JHipsterProperties;
 
@@ -29,6 +30,8 @@ public class MailService {
     private final Logger log = LoggerFactory.getLogger(MailService.class);
 
     private static final String USER = "user";
+
+    private static final String OFFER = "offer";
 
     private static final String BASE_URL = "baseUrl";
 
@@ -74,11 +77,9 @@ public class MailService {
     }
 
     @Async
-    public void sendEmailFromTemplate(User user, String templateName, String titleKey) {
+    public void sendEmailFromTemplate(Context context, String templateName, String titleKey) {
+        User user = (User)context.getVariable(USER);
         Locale locale = Locale.forLanguageTag(user.getLangKey());
-        Context context = new Context(locale);
-        context.setVariable(USER, user);
-        context.setVariable(BASE_URL, jHipsterProperties.getMail().getBaseUrl());
         String content = templateEngine.process(templateName, context);
         String subject = messageSource.getMessage(titleKey, null, locale);
         sendEmail(user.getEmail(), subject, content, false, true);
@@ -87,18 +88,37 @@ public class MailService {
     @Async
     public void sendActivationEmail(User user) {
         log.debug("Sending activation email to '{}'", user.getEmail());
-        sendEmailFromTemplate(user, "mail/activationEmail", "email.activation.title");
+        Context context = getNewContext(user);
+        sendEmailFromTemplate(context, "mail/activationEmail", "email.activation.title");
     }
 
     @Async
     public void sendCreationEmail(User user) {
         log.debug("Sending creation email to '{}'", user.getEmail());
-        sendEmailFromTemplate(user, "mail/creationEmail", "email.activation.title");
+        Context context = getNewContext(user);
+        sendEmailFromTemplate(context, "mail/creationEmail", "email.activation.title");
     }
 
     @Async
     public void sendPasswordResetMail(User user) {
         log.debug("Sending password reset email to '{}'", user.getEmail());
-        sendEmailFromTemplate(user, "mail/passwordResetEmail", "email.reset.title");
+        Context context = getNewContext(user);
+        sendEmailFromTemplate(context, "mail/passwordResetEmail", "email.reset.title");
+    }
+
+    @Async
+    public void sendNewOfferMail(Offer offer) {
+        log.debug("Sending password reset email to '{}'", offer.getListing().getOwner().getEmail());
+        Context context = getNewContext(offer.getListing().getOwner());
+        context.setVariable(OFFER, offer);
+        sendEmailFromTemplate(context, "mail/newOfferEmail", "email.newOffer.title");
+    }
+
+    public Context getNewContext(User user) {
+        Locale locale = Locale.forLanguageTag(user.getLangKey());
+        Context context = new Context(locale);
+        context.setVariable(USER, user);
+        context.setVariable(BASE_URL, jHipsterProperties.getMail().getBaseUrl());
+        return context;
     }
 }

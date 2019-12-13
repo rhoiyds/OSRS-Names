@@ -31,6 +31,7 @@ import io.github.jhipster.application.domain.enumeration.OfferStatus;
 import io.github.jhipster.application.service.ListingService;
 import io.github.jhipster.application.service.OfferService;
 import io.github.jhipster.application.service.UserService;
+import io.github.jhipster.application.service.MailService;
 import io.github.jhipster.application.web.rest.errors.BadRequestAlertException;
 import io.github.jhipster.web.util.HeaderUtil;
 import io.github.jhipster.web.util.ResponseUtil;
@@ -55,10 +56,13 @@ public class OfferResource {
 
     private final ListingService listingService;
 
-    public OfferResource(OfferService offerService, UserService userService, ListingService listingService) {
+    private final MailService mailService;
+
+    public OfferResource(OfferService offerService, UserService userService, ListingService listingService, MailService mailService) {
         this.offerService = offerService;
         this.userService = userService;
         this.listingService = listingService;
+        this.mailService = mailService;
     }
 
     /**
@@ -82,6 +86,7 @@ public class OfferResource {
         offer.setTimestamp(Instant.now());
         offer.setStatus(OfferStatus.PENDING);
         Offer result = offerService.save(offer);
+        this.mailService.sendNewOfferMail(offer);
         return ResponseEntity.created(new URI("/api/offers/" + result.getId()))
             .headers(HeaderUtil.createEntityCreationAlert(applicationName, false, ENTITY_NAME, result.getId().toString()))
             .body(result);
