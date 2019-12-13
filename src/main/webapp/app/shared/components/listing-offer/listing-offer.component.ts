@@ -59,11 +59,11 @@ export class ListingOfferComponent implements OnInit, OnDestroy {
 
   onPostCommentClick() {
     this.commentService
-      .create({
+      .createCommentOnOffer(this.offer.id, {
         text: this.newCommentText
       })
       .subscribe(response => {
-        console.log(response);
+        this.offer.comments.concat(response.body);
       });
   }
 }

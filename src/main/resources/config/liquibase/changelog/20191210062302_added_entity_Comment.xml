@@ -6,7 +6,7 @@
     xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.6.xsd
                         http://www.liquibase.org/xml/ns/dbchangelog-ext http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-ext.xsd">
 
-    <property name="autoIncrement" value="false"/>
+    <property name="autoIncrement" value="true"/>
 
     <!--
         Added the entity Comment.
@@ -19,8 +19,10 @@
             <column name="timestamp" type="datetime">
                 <constraints nullable="false" />
             </column>
-
             <column name="text" type="varchar(1024)">
+                <constraints nullable="false" />
+            </column>
+            <column name="owner_id" type="bigint">
                 <constraints nullable="false" />
             </column>
 

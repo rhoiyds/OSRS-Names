@@ -101,7 +101,7 @@ public class OfferResourceIT {
     private ListingService listingService;
 
     @Autowired
-    private CommentService CommentService;
+    private CommentService commentService;
 
     @Mock
     private UserService userServiceMock;

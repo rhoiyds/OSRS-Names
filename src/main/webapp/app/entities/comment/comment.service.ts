@@ -57,6 +57,12 @@ export class CommentService {
       .pipe(map((res: EntityArrayResponseType) => this.convertDateArrayFromServer(res)));
   }
 
+  createCommentOnOffer(offerId, comment: IComment) {
+    return this.http
+      .post<IComment>(`${SERVER_API_URL}api/offers/${offerId}/comments`, comment, { observe: 'response' })
+      .pipe(map((res: EntityResponseType) => this.convertDateFromServer(res)));
+  }
+
   protected convertDateFromClient(comment: IComment): IComment {
     const copy: IComment = Object.assign({}, comment, {
       timestamp: comment.timestamp != null && comment.timestamp.isValid() ? comment.timestamp.toJSON() : null
