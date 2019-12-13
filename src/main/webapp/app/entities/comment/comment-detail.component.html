@@ -13,9 +13,15 @@
                 <dd>
                     <span>{{comment.text}}</span>
                 </dd>
+                <dt><span>Offer</span></dt>
+                <dd>
+                    <div *ngIf="comment.offer">
+                        <a [routerLink]="['/offer', comment.offer?.id, 'view']">{{comment.offer?.description}}</a>
+                    </div>
+                </dd>
                 <dt><span>Owner</span></dt>
                 <dd>
-                    {{comment.owner?.login}}
+                    {{comment.owner?.username}}
                 </dd>
             </dl>
 

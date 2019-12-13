@@ -35,7 +35,8 @@
             <th jhiSortBy="id"><span>ID</span> <fa-icon [icon]="'sort'"></fa-icon></th>
             <th jhiSortBy="timestamp"><span>Timestamp</span> <fa-icon [icon]="'sort'"></fa-icon></th>
             <th jhiSortBy="text"><span>Text</span> <fa-icon [icon]="'sort'"></fa-icon></th>
-            <th jhiSortBy="owner.login"><span>Owner</span> <fa-icon [icon]="'sort'"></fa-icon></th>
+            <th jhiSortBy="offer.description"><span>Offer</span> <fa-icon [icon]="'sort'"></fa-icon></th>
+            <th jhiSortBy="owner.username"><span>Owner</span> <fa-icon [icon]="'sort'"></fa-icon></th>
             <th></th>
             </tr>
             </thead>
@@ -44,6 +45,11 @@
                 <td><a [routerLink]="['/comment', comment.id, 'view' ]">{{comment.id}}</a></td>
                 <td>{{comment.timestamp | date:'medium'}}</td>
                 <td>{{comment.text}}</td>
+                <td>
+                    <div *ngIf="comment.offer">
+                        <a [routerLink]="['../offer', comment.offer?.id, 'view' ]" >{{comment.offer?.description}}</a>
+                    </div>
+                </td>
                 <td>
                     {{comment.owner?.username}}
                 </td>

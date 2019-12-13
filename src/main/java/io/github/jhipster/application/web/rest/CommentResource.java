@@ -1,7 +1,10 @@
 package io.github.jhipster.application.web.rest;
 
 import io.github.jhipster.application.domain.Comment;
+import io.github.jhipster.application.domain.User;
 import io.github.jhipster.application.service.CommentService;
+import io.github.jhipster.application.service.UserService;
+
 import io.github.jhipster.application.web.rest.errors.BadRequestAlertException;
 
 import io.github.jhipster.web.util.HeaderUtil;
@@ -23,8 +26,8 @@ import javax.validation.Valid;
 import java.net.URI;
 import java.net.URISyntaxException;
 
+import java.time.Instant;
 import java.util.List;
-import java.util.Objects;
 import java.util.Optional;
 import java.util.stream.StreamSupport;
 
@@ -46,8 +49,11 @@ public class CommentResource {
 
     private final CommentService commentService;
 
-    public CommentResource(CommentService commentService) {
+    private final UserService userService;
+
+    public CommentResource(CommentService commentService, UserService userService) {
         this.commentService = commentService;
+        this.userService = userService;
     }
 
     /**
@@ -63,9 +69,12 @@ public class CommentResource {
         if (comment.getId() != null) {
             throw new BadRequestAlertException("A new comment cannot already have an ID", ENTITY_NAME, "idexists");
         }
-        if (Objects.isNull(comment.getOwner())) {
-            throw new BadRequestAlertException("Invalid association value provided", ENTITY_NAME, "null");
+        Optional<User> owner = this.userService.getUserWithAuthorities();
+        if (!owner.isPresent()) {
+            throw new BadRequestAlertException("You must create an entity as a logged user", ENTITY_NAME, "notloggeduser");
         }
+        comment.setOwner(owner.get());
+        comment.setTimestamp(Instant.now());
         Comment result = commentService.save(comment);
         return ResponseEntity.created(new URI("/api/comments/" + result.getId()))
             .headers(HeaderUtil.createEntityCreationAlert(applicationName, false, ENTITY_NAME, result.getId().toString()))

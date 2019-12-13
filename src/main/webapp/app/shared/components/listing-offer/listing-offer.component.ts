@@ -17,6 +17,7 @@ import { CommentService } from 'app/entities/comment';
 })
 export class ListingOfferComponent implements OnInit, OnDestroy {
   @Input() offer: IOffer;
+  comments: IComment[] = [];
   newCommentText = '';
   currentAccount: any;
   eventSubscriber: Subscription;
@@ -43,6 +44,12 @@ export class ListingOfferComponent implements OnInit, OnDestroy {
     this.accountService.identity().then(account => {
       this.currentAccount = account;
     });
+    let criteria = {
+      'offer.equals': this.offer
+    };
+    this.commentService.query(criteria).subscribe(response => {
+      console.log(response);
+    });
   }
 
   onAcceptOfferClick() {
@@ -59,11 +66,12 @@ export class ListingOfferComponent implements OnInit, OnDestroy {
 
   onPostCommentClick() {
     this.commentService
-      .createCommentOnOffer(this.offer.id, {
-        text: this.newCommentText
+      .create({
+        text: this.newCommentText,
+        offer: this.offer
       })
       .subscribe(response => {
-        this.offer.comments.concat(response.body);
+        this.comments.concat(response.body);
       });
   }
 }

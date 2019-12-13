@@ -27,12 +27,6 @@
                         <a [routerLink]="['/listing', offer.listing?.id, 'view']">{{offer.listing?.description}}</a>
                     </div>
                 </dd>
-                <dt><span>Comments</span></dt>
-                <dd>
-                    <span *ngFor="let comments of offer.comments; let last = last">
-                        <a [routerLink]="['/comment', comments?.id, 'view' ]">{{comments.text}}</a>{{last ? '' : ', '}}
-                    </span>
-                </dd>
             </dl>
 
             <button type="submit"
