@@ -194,14 +194,14 @@ public class OfferResource {
     }
 
         /**
-     * {@code POST  /offers} : Create a new offer.
+     * {@code POST  /offers/{id}/comments} : Create a new offer.
      *
-     * @param offer the offer to create.
+     * @param comment the comment to create.
      * @return the {@link ResponseEntity} with status {@code 201 (Created)} and with body the new offer, or with status {@code 400 (Bad Request)} if the offer has already an ID.
      * @throws URISyntaxException if the Location URI syntax is incorrect.
      */
     @PostMapping("/offers/{id}/comments")
-    public ResponseEntity<Comment> createOfferComment(@Valid @RequestBody Comment comment, @PathVariable Long id) throws URISyntaxException {
+    public ResponseEntity<Comment> createOfferComment(@PathVariable Long id, @Valid @RequestBody Comment comment) throws URISyntaxException {
         log.debug("REST request to comment on Offer : {}", comment);
         
         if (comment.getId() != null) {

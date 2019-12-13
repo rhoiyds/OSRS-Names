@@ -21,6 +21,7 @@ public class Comment implements Serializable {
     private static final long serialVersionUID = 1L;
 
     @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @org.springframework.data.elasticsearch.annotations.Field(type = FieldType.Keyword)
     private Long id;
 
@@ -32,9 +33,11 @@ public class Comment implements Serializable {
     @Column(name = "text", length = 1024, nullable = false)
     private String text;
 
-    @ManyToOne(optional = false)
-    @MapsId
-    @JoinColumn(name = "id")
+    @ManyToMany(fetch = FetchType.EAGER)
+    @Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)
+    @JoinTable(name = "offer_comments",
+        joinColumns = @JoinColumn(name = "offer_id", referencedColumnName = "id"),
+        inverseJoinColumns = @JoinColumn(name = "comment_id", referencedColumnName = "id"))
     private User owner;
 
     // jhipster-needle-entity-add-field - JHipster will add fields here, do not remove
