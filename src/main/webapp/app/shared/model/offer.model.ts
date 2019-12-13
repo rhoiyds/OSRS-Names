@@ -2,7 +2,7 @@ import { Moment } from 'moment';
 import { IUser } from 'app/core/user/user.model';
 import { IListing } from 'app/shared/model/listing.model';
 
-export const enum OfferStatus {
+export enum OfferStatus {
   ACCEPTED = 'ACCEPTED',
   DECLINED = 'DECLINED',
   CANCELLED = 'CANCELLED',

@@ -80,8 +80,8 @@ public class OfferResource {
         }
         offer.setOwner(owner.get());
         offer.setTimestamp(Instant.now());
-        Offer result = offerService.save(offer);
         offer.setStatus(OfferStatus.PENDING);
+        Offer result = offerService.save(offer);
         return ResponseEntity.created(new URI("/api/offers/" + result.getId()))
             .headers(HeaderUtil.createEntityCreationAlert(applicationName, false, ENTITY_NAME, result.getId().toString()))
             .body(result);
@@ -106,10 +106,10 @@ public class OfferResource {
         if (!owner.isPresent()) {
             throw new BadRequestAlertException("You must create an entity as a logged user", ENTITY_NAME, "notloggeduser");
         }
-        Optional<Offer> existingEntity = offerService.findOne(offer.getId());
-        if (!existingEntity.isPresent() || !existingEntity.get().getOwner().getId().equals(owner.get().getId())) {
-            throw new BadRequestAlertException("Only the owner of an entity can update the entity", ENTITY_NAME, "owner not updating");
-        }
+        // Optional<Offer> existingEntity = offerService.findOne(offer.getId());
+        // if (!existingEntity.isPresent() || !existingEntity.get().getOwner().getId().equals(owner.get().getId())) {
+        //     throw new BadRequestAlertException("Only the owner of an entity can update the entity", ENTITY_NAME, "owner not updating");
+        // }
         offer.setOwner(owner.get());
         offer.setTimestamp(Instant.now());
         Offer result = offerService.save(offer);

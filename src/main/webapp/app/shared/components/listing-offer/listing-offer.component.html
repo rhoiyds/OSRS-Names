@@ -1,7 +1,14 @@
 <div class="c-offer">
     <div class="card">
         <div class="card-body">
-            <h5 class="card-title"><jhi-user-profile [user]="offer?.owner"></jhi-user-profile></h5>
+            <span class="c-status" 
+            [ngClass]="{'text-success': offer.status == offerStatus.ACCEPTED, 
+                        'text-danger': offer.status == offerStatus.DECLINED}"
+            *ngIf="offer.status !== offerStatusPending"
+            >{{offer.status}}</span>
+            <h5 class="card-title">
+                <jhi-user-profile [user]="offer?.owner"></jhi-user-profile>
+            </h5>
             <p class="card-text">{{offer.description}}</p>
             <hr />
             <div class="c-comment" *ngFor="let comment of comments">
@@ -18,11 +25,11 @@
             <button type="button" (click)="onPostCommentClick()" [disabled]="newCommentText.length === 0" class="btn btn-success">
                     <fa-icon [icon]="'comment-medical'"></fa-icon>&nbsp;<span>Comment</span>
             </button>
-            <ng-container *ngIf="offer.listing.owner.id === currentAccount?.id && offer.status === 'PENDING'">
-                <button type="button" (click)="onAcceptOfferClick()" class="btn btn-success">
+            <ng-container *ngIf="offer.listing.owner.id === currentAccount?.id && offer.status == offerStatus.PENDING">
+                <button type="button" (click)="onChangeOfferClick(offerStatus.ACCEPTED)" class="btn btn-success">
                     <fa-icon [icon]="'exchange-alt'"></fa-icon>&nbsp;<span>Accept</span>
                 </button>
-                <button type="button" (click)="onDeclineOfferClick()" class="btn btn-danger">
+                <button type="button" (click)="onChangeOfferClick(offerStatus.DECLINED)" class="btn btn-danger">
                     <fa-icon [icon]="'times'"></fa-icon>&nbsp;<span>Decline</span>
                 </button>
             </ng-container>
