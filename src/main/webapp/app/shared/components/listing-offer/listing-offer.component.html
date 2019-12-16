@@ -26,7 +26,7 @@
                     <fa-icon [icon]="'comment-medical'"></fa-icon>&nbsp;<span>Comment</span>
             </button>
             <ng-container *ngIf="offer.listing.owner.id === currentAccount?.id && offer.status == offerStatus.PENDING">
-                <button type="button" (click)="onChangeOfferClick(offerStatus.ACCEPTED)" class="btn btn-success">
+                <button type="button" (click)="onChangeOfferClick(offerStatus.ACCEPTED)" class="btn btn-success" *ngIf="canAccept">
                     <fa-icon [icon]="'exchange-alt'"></fa-icon>&nbsp;<span>Accept</span>
                 </button>
                 <button type="button" (click)="onChangeOfferClick(offerStatus.DECLINED)" class="btn btn-danger">

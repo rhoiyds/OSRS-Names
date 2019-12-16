@@ -17,6 +17,7 @@ import { CommentService } from 'app/entities/comment';
 })
 export class ListingOfferComponent implements OnInit, OnDestroy {
   @Input() offer: IOffer;
+  @Input() canAccept: boolean;
   comments: IComment[] = [];
   newCommentText = '';
   currentAccount: any;
