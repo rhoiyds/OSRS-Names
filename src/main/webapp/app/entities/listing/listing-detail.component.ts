@@ -2,7 +2,7 @@ import { Component, OnInit, IterableDiffers } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 
 import { IListing } from 'app/shared/model/listing.model';
-import { IOffer } from 'app/shared/model/offer.model';
+import { IOffer, OfferStatus } from 'app/shared/model/offer.model';
 import { OfferService } from 'app/entities/offer';
 import { AccountService, Account } from 'app/core';
 import { JhiEventManager } from 'ng-jhipster';
@@ -44,6 +44,10 @@ export class ListingDetailComponent implements OnInit {
 
   registerChangesInListing() {
     this.eventManager.subscribe('listingModification', response => this.loadAll());
+  }
+
+  canAccept() {
+    return this.offers.filter(offer => offer.status === OfferStatus.ACCEPTED).length === 0;
   }
 
   private getOffersForListing() {

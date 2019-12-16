@@ -107,15 +107,18 @@ public class OfferResource {
         if (offer.getId() == null) {
             throw new BadRequestAlertException("Invalid id", ENTITY_NAME, "idnull");
         }
-        Optional<User> owner = this.userService.getUserWithAuthorities();
-        if (!owner.isPresent()) {
+        Optional<User> currentUser = this.userService.getUserWithAuthorities();
+        if (!currentUser.isPresent()) {
             throw new BadRequestAlertException("You must create an entity as a logged user", ENTITY_NAME, "notloggeduser");
         }
-        // Optional<Offer> existingEntity = offerService.findOne(offer.getId());
-        // if (!existingEntity.isPresent() || !existingEntity.get().getOwner().getId().equals(owner.get().getId())) {
-        //     throw new BadRequestAlertException("Only the owner of an entity can update the entity", ENTITY_NAME, "owner not updating");
-        // }
-        offer.setOwner(owner.get());
+        Optional<Offer> existingEntity = offerService.findOne(offer.getId());
+        if (!existingEntity.get().getOwner().equals(currentUser.get()) && 
+        !existingEntity.get().getListing().getOwner().equals(currentUser.get())) {
+            throw new BadRequestAlertException("Only the owner of the offer or listing can update the offer", ENTITY_NAME, "owner not updating");
+        }
+        if (!offer.getStatus().equals(offer.getStatus()) && !currentUser.get().equals(offer.getListing().getOwner())) {
+            throw new BadRequestAlertException("Only the listing owner can change offer status", ENTITY_NAME, "listing owner not updating");
+        }
         offer.setTimestamp(Instant.now());
         Offer result = offerService.save(offer);
         this.mailService.sendAnsweredOfferMail(offer);

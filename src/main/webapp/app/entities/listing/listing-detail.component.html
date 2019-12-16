@@ -33,6 +33,6 @@
     </div>
     <div class="col-8">
         <h1>Offers</h1>
-        <jhi-listing-offer *ngFor="let offer of offers" [offer]="offer"></jhi-listing-offer>
+        <jhi-listing-offer *ngFor="let offer of offers" [offer]="offer" [canAccept]="canAccept()"></jhi-listing-offer>
     </div>
 </div>
