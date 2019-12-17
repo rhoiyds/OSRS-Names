@@ -37,6 +37,9 @@ import static org.assertj.core.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.*;
 
+import org.thymeleaf.context.Context;
+import java.util.Locale;
+
 /**
  * Integration tests for {@link MailService}.
  */
@@ -139,7 +142,10 @@ public class MailServiceIT {
         user.setUsername("john");
         user.setEmail("john.doe@example.com");
         user.setLangKey("en");
-        mailService.sendEmailFromTemplate(user, "mail/testEmail", "email.test.title");
+        Locale locale = Locale.forLanguageTag(user.getLangKey());
+        Context context = new Context(locale);
+        context.setVariable("USER", user);
+        mailService.sendEmailFromTemplate(context, "mail/testEmail", "email.test.title");
         verify(javaMailSender).send(messageCaptor.capture());
         MimeMessage message = messageCaptor.getValue();
         assertThat(message.getSubject()).isEqualTo("test title");
@@ -207,7 +213,10 @@ public class MailServiceIT {
         user.setEmail("john.doe@example.com");
         for (String langKey : languages) {
             user.setLangKey(langKey);
-            mailService.sendEmailFromTemplate(user, "mail/testEmail", "email.test.title");
+            Locale locale = Locale.forLanguageTag(user.getLangKey());
+            Context context = new Context(locale);
+            context.setVariable("USER", user);
+            mailService.sendEmailFromTemplate(context, "mail/testEmail", "email.test.title");
             verify(javaMailSender, atLeastOnce()).send(messageCaptor.capture());
             MimeMessage message = messageCaptor.getValue();
 
