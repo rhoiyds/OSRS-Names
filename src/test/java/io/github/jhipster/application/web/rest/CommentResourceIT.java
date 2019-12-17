@@ -7,6 +7,7 @@ import io.github.jhipster.application.domain.User;
 import io.github.jhipster.application.repository.CommentRepository;
 import io.github.jhipster.application.repository.search.CommentSearchRepository;
 import io.github.jhipster.application.service.CommentService;
+import io.github.jhipster.application.service.MailService;
 import io.github.jhipster.application.web.rest.errors.ExceptionTranslator;
 import io.github.jhipster.application.service.dto.CommentCriteria;
 import io.github.jhipster.application.service.CommentQueryService;
@@ -61,6 +62,9 @@ public class CommentResourceIT {
     private CommentService commentService;
 
     @Autowired
+    private MailService mailService;
+
+    @Autowired
     private UserService userService;
     /**
      * This repository is mocked in the io.github.jhipster.application.repository.search test package.
@@ -95,7 +99,7 @@ public class CommentResourceIT {
     @BeforeEach
     public void setup() {
         MockitoAnnotations.initMocks(this);
-        final CommentResource commentResource = new CommentResource(commentService, commentQueryService, userService);
+        final CommentResource commentResource = new CommentResource(commentService, commentQueryService, userService, mailService);
         this.restCommentMockMvc = MockMvcBuilders.standaloneSetup(commentResource)
             .setCustomArgumentResolvers(pageableArgumentResolver)
             .setControllerAdvice(exceptionTranslator)

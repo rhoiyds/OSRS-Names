@@ -1,0 +1,35 @@
+{
+    "fluentMethods": true,
+    "clientRootFolder": "",
+    "relationships": [
+        {
+            "relationshipName": "offer",
+            "otherEntityName": "offer",
+            "relationshipType": "one-to-one",
+            "otherEntityField": "description",
+            "ownerSide": true,
+            "useJPADerivedIdentifier": true,
+            "otherEntityRelationshipName": "trade"
+        }
+    ],
+    "fields": [
+        {
+            "fieldName": "listingOwnerStatus",
+            "fieldType": "TradeStatus",
+            "fieldValues": "PENDING,CONFIRMED,DECLINED"
+        },
+        {
+            "fieldName": "offerOwnerStatus",
+            "fieldType": "TradeStatus",
+            "fieldValues": "PENDING,CONFIRMED,DECLINED"
+        }
+    ],
+    "changelogDate": "20191217033848",
+    "dto": "no",
+    "searchEngine": "elasticsearch",
+    "service": "no",
+    "entityTableName": "trade",
+    "databaseType": "sql",
+    "jpaMetamodelFiltering": false,
+    "pagination": "pagination"
+}
