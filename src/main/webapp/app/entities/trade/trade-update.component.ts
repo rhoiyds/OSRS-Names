@@ -40,7 +40,7 @@ export class TradeUpdateComponent implements OnInit {
       this.updateForm(trade);
     });
     this.offerService
-      .query({ filter: 'trade-is-null' })
+      .query({ 'tradeId.specified': 'false' })
       .pipe(
         filter((mayBeOk: HttpResponse<IOffer[]>) => mayBeOk.ok),
         map((response: HttpResponse<IOffer[]>) => response.body)

@@ -1,10 +1,10 @@
 package io.github.jhipster.application.web.rest;
 
 import io.github.jhipster.application.domain.Trade;
-import io.github.jhipster.application.repository.TradeRepository;
-import io.github.jhipster.application.repository.OfferRepository;
-import io.github.jhipster.application.repository.search.TradeSearchRepository;
+import io.github.jhipster.application.service.TradeService;
 import io.github.jhipster.application.web.rest.errors.BadRequestAlertException;
+import io.github.jhipster.application.service.dto.TradeCriteria;
+import io.github.jhipster.application.service.TradeQueryService;
 
 import io.github.jhipster.web.util.HeaderUtil;
 import io.github.jhipster.web.util.PaginationUtil;
@@ -19,7 +19,6 @@ import org.springframework.http.HttpStatus;
 import org.springframework.util.MultiValueMap;
 import org.springframework.web.util.UriComponentsBuilder;
 import org.springframework.http.ResponseEntity;
-import org.springframework.transaction.annotation.Transactional; 
 import org.springframework.web.bind.annotation.*;
 
 import java.net.URI;
@@ -28,7 +27,6 @@ import java.net.URISyntaxException;
 import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
-import java.util.stream.Collectors;
 import java.util.stream.StreamSupport;
 
 import static org.elasticsearch.index.query.QueryBuilders.*;
@@ -38,7 +36,6 @@ import static org.elasticsearch.index.query.QueryBuilders.*;
  */
 @RestController
 @RequestMapping("/api")
-@Transactional
 public class TradeResource {
 
     private final Logger log = LoggerFactory.getLogger(TradeResource.class);
@@ -48,16 +45,13 @@ public class TradeResource {
     @Value("${jhipster.clientApp.name}")
     private String applicationName;
 
-    private final TradeRepository tradeRepository;
+    private final TradeService tradeService;
 
-    private final TradeSearchRepository tradeSearchRepository;
+    private final TradeQueryService tradeQueryService;
 
-    private final OfferRepository offerRepository;
-
-    public TradeResource(TradeRepository tradeRepository, TradeSearchRepository tradeSearchRepository, OfferRepository offerRepository) {
-        this.tradeRepository = tradeRepository;
-        this.tradeSearchRepository = tradeSearchRepository;
-        this.offerRepository = offerRepository;
+    public TradeResource(TradeService tradeService, TradeQueryService tradeQueryService) {
+        this.tradeService = tradeService;
+        this.tradeQueryService = tradeQueryService;
     }
 
     /**
@@ -76,10 +70,7 @@ public class TradeResource {
         if (Objects.isNull(trade.getOffer())) {
             throw new BadRequestAlertException("Invalid association value provided", ENTITY_NAME, "null");
         }
-        Long offerId = trade.getOffer().getId();
-        offerRepository.findById(offerId).ifPresent(trade::offer);
-        Trade result = tradeRepository.save(trade);
-        tradeSearchRepository.save(result);
+        Trade result = tradeService.save(trade);
         return ResponseEntity.created(new URI("/api/trades/" + result.getId()))
             .headers(HeaderUtil.createEntityCreationAlert(applicationName, false, ENTITY_NAME, result.getId().toString()))
             .body(result);
@@ -100,8 +91,7 @@ public class TradeResource {
         if (trade.getId() == null) {
             throw new BadRequestAlertException("Invalid id", ENTITY_NAME, "idnull");
         }
-        Trade result = tradeRepository.save(trade);
-        tradeSearchRepository.save(result);
+        Trade result = tradeService.save(trade);
         return ResponseEntity.ok()
             .headers(HeaderUtil.createEntityUpdateAlert(applicationName, false, ENTITY_NAME, trade.getId().toString()))
             .body(result);
@@ -113,15 +103,27 @@ public class TradeResource {
      * @param pageable the pagination information.
      * @param queryParams a {@link MultiValueMap} query parameters.
      * @param uriBuilder a {@link UriComponentsBuilder} URI builder.
+     * @param criteria the criteria which the requested entities should match.
      * @return the {@link ResponseEntity} with status {@code 200 (OK)} and the list of trades in body.
      */
     @GetMapping("/trades")
-    @Transactional(readOnly = true)
-    public ResponseEntity<List<Trade>> getAllTrades(Pageable pageable, @RequestParam MultiValueMap<String, String> queryParams, UriComponentsBuilder uriBuilder) {
-        log.debug("REST request to get a page of Trades");
-        Page<Trade> page = tradeRepository.findAll(pageable);
+    public ResponseEntity<List<Trade>> getAllTrades(TradeCriteria criteria, Pageable pageable, @RequestParam MultiValueMap<String, String> queryParams, UriComponentsBuilder uriBuilder) {
+        log.debug("REST request to get Trades by criteria: {}", criteria);
+        Page<Trade> page = tradeQueryService.findByCriteria(criteria, pageable);
         HttpHeaders headers = PaginationUtil.generatePaginationHttpHeaders(uriBuilder.queryParams(queryParams), page);
         return ResponseEntity.ok().headers(headers).body(page.getContent());
+    }
+
+    /**
+    * {@code GET  /trades/count} : count all the trades.
+    *
+    * @param criteria the criteria which the requested entities should match.
+    * @return the {@link ResponseEntity} with status {@code 200 (OK)} and the count in body.
+    */
+    @GetMapping("/trades/count")
+    public ResponseEntity<Long> countTrades(TradeCriteria criteria) {
+        log.debug("REST request to count Trades by criteria: {}", criteria);
+        return ResponseEntity.ok().body(tradeQueryService.countByCriteria(criteria));
     }
 
     /**
@@ -131,10 +133,9 @@ public class TradeResource {
      * @return the {@link ResponseEntity} with status {@code 200 (OK)} and with body the trade, or with status {@code 404 (Not Found)}.
      */
     @GetMapping("/trades/{id}")
-    @Transactional(readOnly = true)
     public ResponseEntity<Trade> getTrade(@PathVariable Long id) {
         log.debug("REST request to get Trade : {}", id);
-        Optional<Trade> trade = tradeRepository.findById(id);
+        Optional<Trade> trade = tradeService.findOne(id);
         return ResponseUtil.wrapOrNotFound(trade);
     }
 
@@ -147,8 +148,7 @@ public class TradeResource {
     @DeleteMapping("/trades/{id}")
     public ResponseEntity<Void> deleteTrade(@PathVariable Long id) {
         log.debug("REST request to delete Trade : {}", id);
-        tradeRepository.deleteById(id);
-        tradeSearchRepository.deleteById(id);
+        tradeService.delete(id);
         return ResponseEntity.noContent().headers(HeaderUtil.createEntityDeletionAlert(applicationName, false, ENTITY_NAME, id.toString())).build();
     }
 
@@ -165,7 +165,7 @@ public class TradeResource {
     @GetMapping("/_search/trades")
     public ResponseEntity<List<Trade>> searchTrades(@RequestParam String query, Pageable pageable, @RequestParam MultiValueMap<String, String> queryParams, UriComponentsBuilder uriBuilder) {
         log.debug("REST request to search for a page of Trades for query {}", query);
-        Page<Trade> page = tradeSearchRepository.search(queryStringQuery(query), pageable);
+        Page<Trade> page = tradeService.search(query, pageable);
         HttpHeaders headers = PaginationUtil.generatePaginationHttpHeaders(uriBuilder.queryParams(queryParams), page);
         return ResponseEntity.ok().headers(headers).body(page.getContent());
     }

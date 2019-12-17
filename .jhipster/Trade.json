@@ -27,9 +27,9 @@
     "changelogDate": "20191217033848",
     "dto": "no",
     "searchEngine": "elasticsearch",
-    "service": "no",
+    "service": "serviceImpl",
     "entityTableName": "trade",
     "databaseType": "sql",
-    "jpaMetamodelFiltering": false,
+    "jpaMetamodelFiltering": true,
     "pagination": "pagination"
 }

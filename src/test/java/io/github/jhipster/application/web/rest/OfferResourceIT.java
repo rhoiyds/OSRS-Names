@@ -10,6 +10,8 @@ import io.github.jhipster.application.service.OfferService;
 import io.github.jhipster.application.service.ListingService;
 import io.github.jhipster.application.service.UserService;
 import io.github.jhipster.application.service.MailService;
+import io.github.jhipster.application.service.TradeService;
+
 import io.github.jhipster.application.web.rest.errors.ExceptionTranslator;
 
 import org.junit.jupiter.api.BeforeEach;
@@ -68,6 +70,9 @@ public class OfferResourceIT {
     private MailService mailService;
 
     @Autowired
+    private TradeService tradeService;
+
+    @Autowired
     private ListingService listingService;
 
     /**
@@ -100,7 +105,7 @@ public class OfferResourceIT {
     @BeforeEach
     public void setup() {
         MockitoAnnotations.initMocks(this);
-        final OfferResource offerResource = new OfferResource(offerService, userService, listingService, mailService);
+        final OfferResource offerResource = new OfferResource(offerService, userService, listingService, mailService, tradeService);
         this.restOfferMockMvc = MockMvcBuilders.standaloneSetup(offerResource)
             .setCustomArgumentResolvers(pageableArgumentResolver)
             .setControllerAdvice(exceptionTranslator)

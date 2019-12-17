@@ -9,6 +9,8 @@ import { AccountService } from 'app/core';
 import { Subscription } from 'rxjs';
 import { OfferService } from 'app/entities/offer';
 import { CommentService } from 'app/entities/comment';
+import { TradeService } from 'app/entities/trade';
+import { ITrade, TradeStatus } from 'app/shared/model/trade.model';
 
 @Component({
   selector: 'jhi-listing-offer',
@@ -19,10 +21,12 @@ export class ListingOfferComponent implements OnInit, OnDestroy {
   @Input() offer: IOffer;
   @Input() canAccept: boolean;
   comments: IComment[] = [];
+  trade: ITrade;
   newCommentText = '';
   currentAccount: any;
   eventSubscriber: Subscription;
   offerStatus = OfferStatus;
+  tradeStatus = TradeStatus;
 
   constructor(
     protected offerService: OfferService,
@@ -30,7 +34,8 @@ export class ListingOfferComponent implements OnInit, OnDestroy {
     protected jhiAlertService: JhiAlertService,
     protected eventManager: JhiEventManager,
     protected activatedRoute: ActivatedRoute,
-    protected accountService: AccountService
+    protected accountService: AccountService,
+    protected tradeService: TradeService
   ) {}
 
   ngOnInit() {
@@ -52,12 +57,17 @@ export class ListingOfferComponent implements OnInit, OnDestroy {
     this.commentService.query(criteria).subscribe(response => {
       this.comments = response.body;
     });
+    if (this.offer.status === OfferStatus.ACCEPTED) {
+      this.tradeService.query(criteria).subscribe(response => {
+        this.trade = response.body[0];
+      });
+    }
   }
 
   onChangeOfferClick(offerStatus: OfferStatus) {
     this.offer.status = offerStatus;
     this.offerService.update(this.offer).subscribe(response => {
-      this.offer = response.body;
+      this.loadAll();
     });
   }
 
@@ -75,5 +85,16 @@ export class ListingOfferComponent implements OnInit, OnDestroy {
         this.comments = this.comments.concat(response.body);
         this.newCommentText = '';
       });
+  }
+
+  isNotYetConfirmed() {
+    return (
+      (this.trade && (this.trade.listingOwnerStatus === TradeStatus.PENDING && this.currentAccount.id === this.offer.listing.owner.id)) ||
+      (this.trade.offerOwnerStatus === TradeStatus.PENDING && this.currentAccount.id === this.offer.owner.id)
+    );
+  }
+
+  onChangeTradeStatusClick(tradeStatus: TradeStatus) {
+    console.log(tradeStatus);
   }
 }
