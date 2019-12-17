@@ -1,6 +1,6 @@
 import { IOffer } from 'app/shared/model/offer.model';
 
-export const enum TradeStatus {
+export enum TradeStatus {
   PENDING = 'PENDING',
   CONFIRMED = 'CONFIRMED',
   DECLINED = 'DECLINED'

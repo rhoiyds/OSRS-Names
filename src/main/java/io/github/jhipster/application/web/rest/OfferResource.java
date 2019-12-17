@@ -26,12 +26,16 @@ import org.springframework.web.bind.annotation.RestController;
 
 import io.github.jhipster.application.domain.Listing;
 import io.github.jhipster.application.domain.Offer;
+import io.github.jhipster.application.domain.Trade;
 import io.github.jhipster.application.domain.User;
 import io.github.jhipster.application.domain.enumeration.OfferStatus;
+import io.github.jhipster.application.domain.enumeration.TradeStatus;
 import io.github.jhipster.application.service.ListingService;
 import io.github.jhipster.application.service.OfferService;
 import io.github.jhipster.application.service.UserService;
 import io.github.jhipster.application.service.MailService;
+import io.github.jhipster.application.service.TradeService;
+
 import io.github.jhipster.application.web.rest.errors.BadRequestAlertException;
 import io.github.jhipster.web.util.HeaderUtil;
 import io.github.jhipster.web.util.ResponseUtil;
@@ -54,15 +58,18 @@ public class OfferResource {
 
     private final UserService userService;
 
+    private final TradeService tradeService;
+
     private final ListingService listingService;
 
     private final MailService mailService;
 
-    public OfferResource(OfferService offerService, UserService userService, ListingService listingService, MailService mailService) {
+    public OfferResource(OfferService offerService, UserService userService, ListingService listingService, MailService mailService, TradeService tradeService) {
         this.offerService = offerService;
         this.userService = userService;
         this.listingService = listingService;
         this.mailService = mailService;
+        this.tradeService = tradeService;
     }
 
     /**
@@ -116,11 +123,19 @@ public class OfferResource {
         !existingEntity.get().getListing().getOwner().equals(currentUser.get())) {
             throw new BadRequestAlertException("Only the owner of the offer or listing can update the offer", ENTITY_NAME, "owner not updating");
         }
+        OfferStatus currentOfferStatus = existingEntity.get().getStatus(); 
         if (!offer.getStatus().equals(offer.getStatus()) && !currentUser.get().equals(offer.getListing().getOwner())) {
             throw new BadRequestAlertException("Only the listing owner can change offer status", ENTITY_NAME, "listing owner not updating");
         }
         offer.setTimestamp(Instant.now());
         Offer result = offerService.save(offer);
+        if (result.getStatus().equals(OfferStatus.ACCEPTED) && currentOfferStatus.equals(OfferStatus.PENDING)) {
+            Trade trade = new Trade();
+            trade.setOffer(result);
+            trade.setListingOwnerStatus(TradeStatus.PENDING);
+            trade.setOfferOwnerStatus(TradeStatus.PENDING);
+            this.tradeService.save(trade);
+        }
         this.mailService.sendAnsweredOfferMail(offer);
         return ResponseEntity.ok()
             .headers(HeaderUtil.createEntityUpdateAlert(applicationName, false, ENTITY_NAME, offer.getId().toString()))

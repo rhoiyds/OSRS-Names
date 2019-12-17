@@ -43,7 +43,8 @@ import {
   faHandHoldingUsd,
   faExchangeAlt,
   faStar,
-  faCommentMedical
+  faCommentMedical,
+  faCheck
 } from '@fortawesome/free-solid-svg-icons';
 
 // Adds the SVG icon to the library so you can use it in your page
@@ -85,5 +86,5 @@ library.add(faHandHoldingUsd);
 library.add(faExchangeAlt);
 library.add(faStar);
 library.add(faCommentMedical);
-
+library.add(faCheck);
 // jhipster-needle-add-element-to-vendor - JHipster will add new menu items here

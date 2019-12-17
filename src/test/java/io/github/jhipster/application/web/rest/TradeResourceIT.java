@@ -4,9 +4,11 @@ import io.github.jhipster.application.RsnsalesApp;
 import io.github.jhipster.application.domain.Trade;
 import io.github.jhipster.application.domain.Offer;
 import io.github.jhipster.application.repository.TradeRepository;
-import io.github.jhipster.application.repository.OfferRepository;
 import io.github.jhipster.application.repository.search.TradeSearchRepository;
+import io.github.jhipster.application.service.TradeService;
 import io.github.jhipster.application.web.rest.errors.ExceptionTranslator;
+import io.github.jhipster.application.service.dto.TradeCriteria;
+import io.github.jhipster.application.service.TradeQueryService;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -51,8 +53,9 @@ public class TradeResourceIT {
 
     @Autowired
     private TradeRepository tradeRepository;
+
     @Autowired
-    private OfferRepository offerRepository;
+    private TradeService tradeService;
 
     /**
      * This repository is mocked in the io.github.jhipster.application.repository.search test package.
@@ -61,6 +64,9 @@ public class TradeResourceIT {
      */
     @Autowired
     private TradeSearchRepository mockTradeSearchRepository;
+
+    @Autowired
+    private TradeQueryService tradeQueryService;
 
     @Autowired
     private MappingJackson2HttpMessageConverter jacksonMessageConverter;
@@ -84,7 +90,7 @@ public class TradeResourceIT {
     @BeforeEach
     public void setup() {
         MockitoAnnotations.initMocks(this);
-        final TradeResource tradeResource = new TradeResource(tradeRepository, mockTradeSearchRepository, offerRepository);
+        final TradeResource tradeResource = new TradeResource(tradeService, tradeQueryService);
         this.restTradeMockMvc = MockMvcBuilders.standaloneSetup(tradeResource)
             .setCustomArgumentResolvers(pageableArgumentResolver)
             .setControllerAdvice(exceptionTranslator)
@@ -194,7 +200,7 @@ public class TradeResourceIT {
     @Transactional
     public void updateTradeMapsIdAssociationWithNewId() throws Exception {
         // Initialize the database
-        tradeRepository.saveAndFlush(trade);
+        tradeService.save(trade);
         int databaseSizeBeforeCreate = tradeRepository.findAll().size();
 
         // Add a new parent entity
@@ -227,7 +233,7 @@ public class TradeResourceIT {
         // assertThat(testTrade.getId()).isEqualTo(testTrade.getOffer().getId());
 
         // Validate the Trade in Elasticsearch
-        verify(mockTradeSearchRepository, times(1)).save(trade);
+        verify(mockTradeSearchRepository, times(2)).save(trade);
     }
 
     @Test
@@ -262,6 +268,135 @@ public class TradeResourceIT {
 
     @Test
     @Transactional
+    public void getAllTradesByListingOwnerStatusIsEqualToSomething() throws Exception {
+        // Initialize the database
+        tradeRepository.saveAndFlush(trade);
+
+        // Get all the tradeList where listingOwnerStatus equals to DEFAULT_LISTING_OWNER_STATUS
+        defaultTradeShouldBeFound("listingOwnerStatus.equals=" + DEFAULT_LISTING_OWNER_STATUS);
+
+        // Get all the tradeList where listingOwnerStatus equals to UPDATED_LISTING_OWNER_STATUS
+        defaultTradeShouldNotBeFound("listingOwnerStatus.equals=" + UPDATED_LISTING_OWNER_STATUS);
+    }
+
+    @Test
+    @Transactional
+    public void getAllTradesByListingOwnerStatusIsInShouldWork() throws Exception {
+        // Initialize the database
+        tradeRepository.saveAndFlush(trade);
+
+        // Get all the tradeList where listingOwnerStatus in DEFAULT_LISTING_OWNER_STATUS or UPDATED_LISTING_OWNER_STATUS
+        defaultTradeShouldBeFound("listingOwnerStatus.in=" + DEFAULT_LISTING_OWNER_STATUS + "," + UPDATED_LISTING_OWNER_STATUS);
+
+        // Get all the tradeList where listingOwnerStatus equals to UPDATED_LISTING_OWNER_STATUS
+        defaultTradeShouldNotBeFound("listingOwnerStatus.in=" + UPDATED_LISTING_OWNER_STATUS);
+    }
+
+    @Test
+    @Transactional
+    public void getAllTradesByListingOwnerStatusIsNullOrNotNull() throws Exception {
+        // Initialize the database
+        tradeRepository.saveAndFlush(trade);
+
+        // Get all the tradeList where listingOwnerStatus is not null
+        defaultTradeShouldBeFound("listingOwnerStatus.specified=true");
+
+        // Get all the tradeList where listingOwnerStatus is null
+        defaultTradeShouldNotBeFound("listingOwnerStatus.specified=false");
+    }
+
+    @Test
+    @Transactional
+    public void getAllTradesByOfferOwnerStatusIsEqualToSomething() throws Exception {
+        // Initialize the database
+        tradeRepository.saveAndFlush(trade);
+
+        // Get all the tradeList where offerOwnerStatus equals to DEFAULT_OFFER_OWNER_STATUS
+        defaultTradeShouldBeFound("offerOwnerStatus.equals=" + DEFAULT_OFFER_OWNER_STATUS);
+
+        // Get all the tradeList where offerOwnerStatus equals to UPDATED_OFFER_OWNER_STATUS
+        defaultTradeShouldNotBeFound("offerOwnerStatus.equals=" + UPDATED_OFFER_OWNER_STATUS);
+    }
+
+    @Test
+    @Transactional
+    public void getAllTradesByOfferOwnerStatusIsInShouldWork() throws Exception {
+        // Initialize the database
+        tradeRepository.saveAndFlush(trade);
+
+        // Get all the tradeList where offerOwnerStatus in DEFAULT_OFFER_OWNER_STATUS or UPDATED_OFFER_OWNER_STATUS
+        defaultTradeShouldBeFound("offerOwnerStatus.in=" + DEFAULT_OFFER_OWNER_STATUS + "," + UPDATED_OFFER_OWNER_STATUS);
+
+        // Get all the tradeList where offerOwnerStatus equals to UPDATED_OFFER_OWNER_STATUS
+        defaultTradeShouldNotBeFound("offerOwnerStatus.in=" + UPDATED_OFFER_OWNER_STATUS);
+    }
+
+    @Test
+    @Transactional
+    public void getAllTradesByOfferOwnerStatusIsNullOrNotNull() throws Exception {
+        // Initialize the database
+        tradeRepository.saveAndFlush(trade);
+
+        // Get all the tradeList where offerOwnerStatus is not null
+        defaultTradeShouldBeFound("offerOwnerStatus.specified=true");
+
+        // Get all the tradeList where offerOwnerStatus is null
+        defaultTradeShouldNotBeFound("offerOwnerStatus.specified=false");
+    }
+
+    @Test
+    @Transactional
+    public void getAllTradesByOfferIsEqualToSomething() throws Exception {
+        // Get already existing entity
+        Offer offer = trade.getOffer();
+        tradeRepository.saveAndFlush(trade);
+        Long offerId = offer.getId();
+
+        // Get all the tradeList where offer equals to offerId
+        defaultTradeShouldBeFound("offerId.equals=" + offerId);
+
+        // Get all the tradeList where offer equals to offerId + 1
+        defaultTradeShouldNotBeFound("offerId.equals=" + (offerId + 1));
+    }
+
+    /**
+     * Executes the search, and checks that the default entity is returned.
+     */
+    private void defaultTradeShouldBeFound(String filter) throws Exception {
+        restTradeMockMvc.perform(get("/api/trades?sort=id,desc&" + filter))
+            .andExpect(status().isOk())
+            .andExpect(content().contentType(MediaType.APPLICATION_JSON_UTF8_VALUE))
+            .andExpect(jsonPath("$.[*].id").value(hasItem(trade.getId().intValue())))
+            .andExpect(jsonPath("$.[*].listingOwnerStatus").value(hasItem(DEFAULT_LISTING_OWNER_STATUS.toString())))
+            .andExpect(jsonPath("$.[*].offerOwnerStatus").value(hasItem(DEFAULT_OFFER_OWNER_STATUS.toString())));
+
+        // Check, that the count call also returns 1
+        restTradeMockMvc.perform(get("/api/trades/count?sort=id,desc&" + filter))
+            .andExpect(status().isOk())
+            .andExpect(content().contentType(MediaType.APPLICATION_JSON_UTF8_VALUE))
+            .andExpect(content().string("1"));
+    }
+
+    /**
+     * Executes the search, and checks that the default entity is not returned.
+     */
+    private void defaultTradeShouldNotBeFound(String filter) throws Exception {
+        restTradeMockMvc.perform(get("/api/trades?sort=id,desc&" + filter))
+            .andExpect(status().isOk())
+            .andExpect(content().contentType(MediaType.APPLICATION_JSON_UTF8_VALUE))
+            .andExpect(jsonPath("$").isArray())
+            .andExpect(jsonPath("$").isEmpty());
+
+        // Check, that the count call also returns 0
+        restTradeMockMvc.perform(get("/api/trades/count?sort=id,desc&" + filter))
+            .andExpect(status().isOk())
+            .andExpect(content().contentType(MediaType.APPLICATION_JSON_UTF8_VALUE))
+            .andExpect(content().string("0"));
+    }
+
+
+    @Test
+    @Transactional
     public void getNonExistingTrade() throws Exception {
         // Get the trade
         restTradeMockMvc.perform(get("/api/trades/{id}", Long.MAX_VALUE))
@@ -272,7 +407,9 @@ public class TradeResourceIT {
     @Transactional
     public void updateTrade() throws Exception {
         // Initialize the database
-        tradeRepository.saveAndFlush(trade);
+        tradeService.save(trade);
+        // As the test used the service layer, reset the Elasticsearch mock repository
+        reset(mockTradeSearchRepository);
 
         int databaseSizeBeforeUpdate = tradeRepository.findAll().size();
 
@@ -325,7 +462,7 @@ public class TradeResourceIT {
     @Transactional
     public void deleteTrade() throws Exception {
         // Initialize the database
-        tradeRepository.saveAndFlush(trade);
+        tradeService.save(trade);
 
         int databaseSizeBeforeDelete = tradeRepository.findAll().size();
 
@@ -346,7 +483,7 @@ public class TradeResourceIT {
     @Transactional
     public void searchTrade() throws Exception {
         // Initialize the database
-        tradeRepository.saveAndFlush(trade);
+        tradeService.save(trade);
         when(mockTradeSearchRepository.search(queryStringQuery("id:" + trade.getId()), PageRequest.of(0, 20)))
             .thenReturn(new PageImpl<>(Collections.singletonList(trade), PageRequest.of(0, 1), 1));
         // Search the trade

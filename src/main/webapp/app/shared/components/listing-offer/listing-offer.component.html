@@ -25,6 +25,14 @@
             <button type="button" (click)="onPostCommentClick()" [disabled]="newCommentText.length === 0" class="btn btn-success">
                     <fa-icon [icon]="'comment-medical'"></fa-icon>&nbsp;<span>Comment</span>
             </button>
+            <ng-container *ngIf="trade != null && isNotYetConfirmed()" >
+                <button type="button" (click)="onChangeTradeStatusClick(tradeStatus.CONFIRMED)" class="btn btn-success">
+                    <fa-icon [icon]="'check'"></fa-icon>&nbsp;<span>Confirm</span>
+                </button>
+                <button type="button" (click)="onChangeTradeStatusClick(tradeStatus.DECLINED)" class="btn btn-danger">
+                    <fa-icon [icon]="'times'"></fa-icon>&nbsp;<span>There was a problem</span>
+                </button>
+            </ng-container>
             <ng-container *ngIf="offer.listing.owner.id === currentAccount?.id && offer.status == offerStatus.PENDING">
                 <button type="button" (click)="onChangeOfferClick(offerStatus.ACCEPTED)" class="btn btn-success" *ngIf="canAccept">
                     <fa-icon [icon]="'exchange-alt'"></fa-icon>&nbsp;<span>Accept</span>
