@@ -1,0 +1,29 @@
+<form name="deleteForm" (ngSubmit)="confirmTrade()">
+    <div class="modal-header">
+        <h4 class="modal-title">Rate the trade</h4>
+        <button type="button" class="close" data-dismiss="modal" aria-hidden="true"
+                (click)="clear()">&times;</button>
+    </div>
+    <div class="modal-body">
+        <jhi-alert-error></jhi-alert-error>
+        <p>In order to keep the community informed and scam free, please give an accurate
+        rating of how professional and trusted you believe the other party to be. Perhaps make their day and even leave a nice compliment.</p>
+        <div class="c-star-rating">
+            <fa-icon [icon]="'star'" [ngClass]="{'c-star-selected': rating > 1, 'c-star-unselected': !rating}" (click)="setRating(1)"></fa-icon>
+            <fa-icon [icon]="'star'" [ngClass]="{'c-star-selected': rating >= 2, 'c-star-unselected': !rating}" (click)="setRating(2)"></fa-icon>
+            <fa-icon [icon]="'star'" [ngClass]="{'c-star-selected': rating >= 3, 'c-star-unselected': !rating}" (click)="setRating(3)"></fa-icon>
+            <fa-icon [icon]="'star'" [ngClass]="{'c-star-selected': rating >= 4, 'c-star-unselected': !rating}" (click)="setRating(4)"></fa-icon>
+            <fa-icon [icon]="'star'" [ngClass]="{'c-star-selected': rating == 5, 'c-star-unselected': !rating}" (click)="setRating(5)"></fa-icon>
+        </div>
+        <textarea class="form-control" [(ngModel)]="message" rows="3" name="message" placeholder=""></textarea>
+    </div>
+    <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-dismiss="modal" (click)="clear()">
+            <fa-icon [icon]="'ban'"></fa-icon>&nbsp;<span>Cancel</span>
+        </button>
+        <button id="jhi-confirm-delete-listing" type="submit" class="btn btn-success"
+                [disabled]="message.length === 0 || !rating">
+            <fa-icon [icon]="'check'"></fa-icon>&nbsp;<span> Finish trade</span>
+        </button>
+    </div>
+</form>

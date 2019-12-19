@@ -11,6 +11,8 @@ import { OfferService } from 'app/entities/offer';
 import { CommentService } from 'app/entities/comment';
 import { TradeService } from 'app/entities/trade';
 import { ITrade, TradeStatus } from 'app/shared/model/trade.model';
+import { RatingSelectionDialogComponent } from 'app/shared/components/rating-selection/rating-selection-dialog.component';
+import { NgbModal, NgbModalRef } from '@ng-bootstrap/ng-bootstrap';
 
 @Component({
   selector: 'jhi-listing-offer',
@@ -27,6 +29,7 @@ export class ListingOfferComponent implements OnInit, OnDestroy {
   eventSubscriber: Subscription;
   offerStatus = OfferStatus;
   tradeStatus = TradeStatus;
+  ngbModalRef: NgbModalRef;
 
   constructor(
     protected offerService: OfferService,
@@ -35,7 +38,8 @@ export class ListingOfferComponent implements OnInit, OnDestroy {
     protected eventManager: JhiEventManager,
     protected activatedRoute: ActivatedRoute,
     protected accountService: AccountService,
-    protected tradeService: TradeService
+    protected tradeService: TradeService,
+    protected modalService: NgbModal
   ) {}
 
   ngOnInit() {
@@ -95,6 +99,17 @@ export class ListingOfferComponent implements OnInit, OnDestroy {
   }
 
   onChangeTradeStatusClick(tradeStatus: TradeStatus) {
-    console.log(tradeStatus);
+    this.ngbModalRef = this.modalService.open(RatingSelectionDialogComponent as Component, { size: 'lg', backdrop: 'static' });
+    this.ngbModalRef.componentInstance.trade = this.trade;
+    // this.ngbModalRef.result.then(
+    //   result => {
+    //     this.router.navigate(['/listing', { outlets: { popup: null } }]);
+    //     this.ngbModalRef = null;
+    //   },
+    //   reason => {
+    //     this.router.navigate(['/listing', { outlets: { popup: null } }]);
+    //     this.ngbModalRef = null;
+    //   }
+    // );
   }
 }
