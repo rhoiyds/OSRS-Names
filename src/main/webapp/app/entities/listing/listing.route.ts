@@ -12,6 +12,7 @@ import { ListingUpdateComponent } from './listing-update.component';
 import { ListingDeletePopupComponent } from './listing-delete-dialog.component';
 import { IListing } from 'app/shared/model/listing.model';
 import { ListingOfferPopupComponent } from './listing-offer-dialog.component';
+import { TradeRatingPopupComponent } from './trade-rating-dialog.component';
 
 @Injectable({ providedIn: 'root' })
 export class ListingResolve implements Resolve<IListing> {
@@ -100,6 +101,19 @@ export const listingPopupRoute: Routes = [
     data: {
       authorities: ['ROLE_USER'],
       pageTitle: 'Listings'
+    },
+    canActivate: [UserRouteAccessService],
+    outlet: 'popup'
+  },
+  {
+    path: ':id/rate',
+    component: TradeRatingPopupComponent,
+    resolve: {
+      listing: ListingResolve
+    },
+    data: {
+      authorities: ['ROLE_USER'],
+      pageTitle: 'Trades'
     },
     canActivate: [UserRouteAccessService],
     outlet: 'popup'
