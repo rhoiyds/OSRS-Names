@@ -12,7 +12,6 @@ import { TradeDetailComponent } from './trade-detail.component';
 import { TradeUpdateComponent } from './trade-update.component';
 import { TradeDeletePopupComponent } from './trade-delete-dialog.component';
 import { ITrade } from 'app/shared/model/trade.model';
-import { TradeRatingPopupComponent } from '../listing/trade-rating-dialog.component';
 
 @Injectable({ providedIn: 'root' })
 export class TradeResolve implements Resolve<ITrade> {
