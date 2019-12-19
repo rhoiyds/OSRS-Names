@@ -11,7 +11,9 @@ import {
   ListingOfferDialogComponent,
   ListingOfferPopupComponent,
   listingRoute,
-  listingPopupRoute
+  listingPopupRoute,
+  TradeRatingPopupComponent,
+  TradeRatingDialogComponent
 } from './';
 
 const ENTITY_STATES = [...listingRoute, ...listingPopupRoute];
@@ -25,7 +27,9 @@ const ENTITY_STATES = [...listingRoute, ...listingPopupRoute];
     ListingDeleteDialogComponent,
     ListingDeletePopupComponent,
     ListingOfferDialogComponent,
-    ListingOfferPopupComponent
+    ListingOfferPopupComponent,
+    TradeRatingPopupComponent,
+    TradeRatingDialogComponent
   ],
   entryComponents: [
     ListingComponent,
@@ -33,7 +37,9 @@ const ENTITY_STATES = [...listingRoute, ...listingPopupRoute];
     ListingDeleteDialogComponent,
     ListingDeletePopupComponent,
     ListingOfferDialogComponent,
-    ListingOfferPopupComponent
+    ListingOfferPopupComponent,
+    TradeRatingPopupComponent,
+    TradeRatingDialogComponent
   ],
   schemas: [CUSTOM_ELEMENTS_SCHEMA]
 })

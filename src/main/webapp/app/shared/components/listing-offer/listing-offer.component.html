@@ -26,10 +26,14 @@
                     <fa-icon [icon]="'comment-medical'"></fa-icon>&nbsp;<span>Comment</span>
             </button>
             <ng-container *ngIf="trade != null && isNotYetConfirmed()" >
-                <button type="button" (click)="onChangeTradeStatusClick(tradeStatus.CONFIRMED)" class="btn btn-success">
+                <button type="button" [routerLink]="['/', 'listing', { outlets: { popup: listing.id + '/rate'} }]"
+                replaceUrl="true" 
+                queryParamsHandling="merge"  class="btn btn-success">
                     <fa-icon [icon]="'check'"></fa-icon>&nbsp;<span>Confirm</span>
                 </button>
-                <button type="button" (click)="onChangeTradeStatusClick(tradeStatus.DECLINED)" class="btn btn-danger">
+                <button type="button" [routerLink]="['/', 'listing', { outlets: { popup: listing.id + '/rate'} }]"
+                replaceUrl="true" 
+                queryParamsHandling="merge"  class="btn btn-danger">
                     <fa-icon [icon]="'times'"></fa-icon>&nbsp;<span>There was a problem</span>
                 </button>
             </ng-container>
