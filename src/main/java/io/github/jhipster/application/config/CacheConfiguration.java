@@ -50,6 +50,7 @@ public class CacheConfiguration {
             createCache(cm, io.github.jhipster.application.domain.Comment.class.getName());
             createCache(cm, io.github.jhipster.application.domain.Offer.class.getName() + ".comments");
             createCache(cm, io.github.jhipster.application.domain.Trade.class.getName());
+            createCache(cm, io.github.jhipster.application.domain.Rating.class.getName());
             // jhipster-needle-ehcache-add-entry
         };
     }
