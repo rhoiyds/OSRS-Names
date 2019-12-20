@@ -101,15 +101,6 @@ export class ListingOfferComponent implements OnInit, OnDestroy {
   onChangeTradeStatusClick(tradeStatus: TradeStatus) {
     this.ngbModalRef = this.modalService.open(RatingSelectionDialogComponent as Component, { size: 'lg', backdrop: 'static' });
     this.ngbModalRef.componentInstance.trade = this.trade;
-    // this.ngbModalRef.result.then(
-    //   result => {
-    //     this.router.navigate(['/listing', { outlets: { popup: null } }]);
-    //     this.ngbModalRef = null;
-    //   },
-    //   reason => {
-    //     this.router.navigate(['/listing', { outlets: { popup: null } }]);
-    //     this.ngbModalRef = null;
-    //   }
-    // );
+    this.ngbModalRef.componentInstance.tradeStatus = tradeStatus;
   }
 }

@@ -4,7 +4,8 @@ import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
 import { JhiEventManager } from 'ng-jhipster';
 
 import { OfferService } from 'app/entities/offer';
-import { ITrade } from 'app/shared/model/trade.model';
+import { ITrade, TradeStatus } from 'app/shared/model/trade.model';
+import { TradeService } from 'app/entities/trade';
 
 @Component({
   selector: 'jhi-trade-rating-dialog',
@@ -14,31 +15,37 @@ import { ITrade } from 'app/shared/model/trade.model';
 export class RatingSelectionDialogComponent {
   trade: ITrade;
   message = '';
-  rating: number;
+  tradeStatus: TradeStatus;
+  score: number;
 
-  constructor(public activeModal: NgbActiveModal, protected eventManager: JhiEventManager, protected offerService: OfferService) {}
+  constructor(
+    public activeModal: NgbActiveModal,
+    protected eventManager: JhiEventManager,
+    protected offerService: OfferService,
+    protected tradeService: TradeService
+  ) {}
 
   clear() {
     this.activeModal.dismiss('cancel');
   }
 
-  setRating(rating) {
-    this.rating = rating;
+  setScore(score) {
+    this.score = score;
   }
 
   confirmTrade() {
-    // this.offerService
-    //   .create({
-    //     ...new Offer(),
-    //     description: this.message,
-    //     listing: this.listing
-    //   })
-    //   .subscribe(response => {
-    //     this.eventManager.broadcast({
-    //       name: 'listingModification',
-    //       content: 'Created an offer'
-    //     });
-    //     this.activeModal.dismiss(true);
-    //   });
+    this.tradeService
+      .rate(this.trade.id, {
+        message: this.message,
+        score: this.score,
+        tradeStatus: this.tradeStatus
+      })
+      .subscribe(response => {
+        this.eventManager.broadcast({
+          name: 'listingModification',
+          content: 'Provided rating'
+        });
+        this.activeModal.dismiss(true);
+      });
   }
 }

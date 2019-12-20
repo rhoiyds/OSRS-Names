@@ -9,11 +9,11 @@
         <p>In order to keep the community informed and scam free, please give an accurate
         rating of how professional and trusted you believe the other party to be. Perhaps make their day and even leave a nice compliment.</p>
         <div class="c-star-rating">
-            <fa-icon [icon]="'star'" [ngClass]="{'c-star-selected': rating > 1, 'c-star-unselected': !rating}" (click)="setRating(1)"></fa-icon>
-            <fa-icon [icon]="'star'" [ngClass]="{'c-star-selected': rating >= 2, 'c-star-unselected': !rating}" (click)="setRating(2)"></fa-icon>
-            <fa-icon [icon]="'star'" [ngClass]="{'c-star-selected': rating >= 3, 'c-star-unselected': !rating}" (click)="setRating(3)"></fa-icon>
-            <fa-icon [icon]="'star'" [ngClass]="{'c-star-selected': rating >= 4, 'c-star-unselected': !rating}" (click)="setRating(4)"></fa-icon>
-            <fa-icon [icon]="'star'" [ngClass]="{'c-star-selected': rating == 5, 'c-star-unselected': !rating}" (click)="setRating(5)"></fa-icon>
+            <fa-icon [icon]="'star'" [ngClass]="{'c-star-selected': score> 1, 'c-star-unselected': !score}" (click)="setScore(1)"></fa-icon>
+            <fa-icon [icon]="'star'" [ngClass]="{'c-star-selected': score>= 2, 'c-star-unselected': !score}" (click)="setScore(2)"></fa-icon>
+            <fa-icon [icon]="'star'" [ngClass]="{'c-star-selected': score>= 3, 'c-star-unselected': !score}" (click)="setScore(3)"></fa-icon>
+            <fa-icon [icon]="'star'" [ngClass]="{'c-star-selected': score>= 4, 'c-star-unselected': !score}" (click)="setScore(4)"></fa-icon>
+            <fa-icon [icon]="'star'" [ngClass]="{'c-star-selected': score== 5, 'c-star-unselected': !score}" (click)="setScore(5)"></fa-icon>
         </div>
         <textarea class="form-control" [(ngModel)]="message" rows="3" name="message" placeholder=""></textarea>
     </div>
@@ -22,7 +22,7 @@
             <fa-icon [icon]="'ban'"></fa-icon>&nbsp;<span>Cancel</span>
         </button>
         <button id="jhi-confirm-delete-listing" type="submit" class="btn btn-success"
-                [disabled]="message.length === 0 || !rating">
+                [disabled]="message.length === 0 || !score">
             <fa-icon [icon]="'check'"></fa-icon>&nbsp;<span> Finish trade</span>
         </button>
     </div>
