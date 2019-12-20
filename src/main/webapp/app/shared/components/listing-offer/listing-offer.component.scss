@@ -14,8 +14,15 @@
   margin: 8px 0px;
 }
 
-.c-status {
-  float: right;
+.c-offer-status {
   text-transform: capitalize !important;
   font-size: smaller;
+}
+
+.card-title {
+  display: flex;
+}
+
+.c-offer-profile {
+  flex-grow: 1;
 }

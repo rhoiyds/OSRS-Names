@@ -1,14 +1,38 @@
 <div class="c-offer">
     <div class="card">
         <div class="card-body">
-            <span class="c-status" 
-            [ngClass]="{'text-success': offer.status == offerStatus.ACCEPTED, 
+            <div class="card-title">
+                <div class="c-offer-profile">
+                    <jhi-user-profile [user]="offer?.owner"></jhi-user-profile>
+                </div>
+                <div class="c-statuses">
+                     <div class="alert" class="c-offer-status"
+                           [ngClass]="{'text-success': offer.status == offerStatus.ACCEPTED,
                         'text-danger': offer.status == offerStatus.DECLINED}"
-            *ngIf="offer.status !== offerStatus.PENDING"
-            >{{offer.status}}</span>
-            <h5 class="card-title">
-                <jhi-user-profile [user]="offer?.owner"></jhi-user-profile>
-            </h5>
+                           *ngIf="offer.status !== offerStatus.PENDING"
+                     >{{offer.status}}</div>
+                    <div class="c-trade-status">
+                        <div class="alert" [ngClass]="{'alert-success': trade.listingOwnerStatus === tradeStatus.CONFIRMED,
+                                        'alert-danger': trade.listingOwnerStatus === tradeStatus.DECLINED,
+                                        'alert-secondary': trade.listingOwnerStatus === tradeStatus.CONFIRMED}">
+                            <img [src]="getGravatarImageURL(trade.offer.listing.owner.email)" width="25" height="25" class="rounded-circle">
+                            {{trade.offer.listing.owner.username}}
+                            <span *ngIf="trade.listingOwnerStatus === tradeStatus.DECLINED"> indicated there was a problem with the trade.</span>
+                            <span *ngIf="trade.listingOwnerStatus === tradeStatus.CONFIRMED"> marked the trade as a success.</span>
+                            <span *ngIf="trade.listingOwnerStatus === tradeStatus.PENDING"> has yet to indicate whether the trade was successful or not.</span>
+                        </div>
+                        <div class="alert" [ngClass]="{'alert-success': trade.offerOwnerStatus === tradeStatus.CONFIRMED,
+                                        'alert-danger': trade.offerOwnerStatus === tradeStatus.DECLINED,
+                                        'alert-secondary': trade.offerOwnerStatus === tradeStatus.CONFIRMED}">
+                            <img [src]="getGravatarImageURL(trade.offer.owner.email)" width="25" height="25" class="rounded-circle">
+                            {{trade.offer.owner.username}}
+                            <span *ngIf="trade.offerOwnerStatus === tradeStatus.DECLINED"> indicated there was a problem with the trade.</span>
+                            <span *ngIf="trade.offerOwnerStatus === tradeStatus.CONFIRMED"> marked the trade as a success.</span>
+                            <span *ngIf="trade.offerOwnerStatus === tradeStatus.PENDING"> has yet to indicate whether the trade was successful or not.</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
             <p class="card-text">{{offer.description}}</p>
             <hr />
             <div class="c-comment" *ngFor="let comment of comments">
