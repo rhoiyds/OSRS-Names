@@ -19,7 +19,7 @@ import { RsnsalesAccountModule } from './account/account.module';
 import { RsnsalesEntityModule } from './entities/entity.module';
 import * as moment from 'moment';
 // jhipster-needle-angular-add-module-import JHipster will add new module here
-import { JhiMainComponent, NavbarComponent, FooterComponent, PageRibbonComponent, ErrorComponent } from './layouts';
+import { JhiMainComponent, NavbarComponent, FooterComponent, PageRibbonComponent, ErrorComponent, PricingComponent } from './layouts';
 
 @NgModule({
   imports: [
@@ -38,7 +38,7 @@ import { JhiMainComponent, NavbarComponent, FooterComponent, PageRibbonComponent
     // jhipster-needle-angular-add-module JHipster will add new module here
     RsnsalesAppRoutingModule
   ],
-  declarations: [JhiMainComponent, NavbarComponent, ErrorComponent, PageRibbonComponent, FooterComponent],
+  declarations: [JhiMainComponent, NavbarComponent, ErrorComponent, PageRibbonComponent, FooterComponent, PricingComponent],
   providers: [
     {
       provide: HTTP_INTERCEPTORS,
