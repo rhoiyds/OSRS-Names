@@ -1,10 +1,14 @@
 package io.github.jhipster.application.web.rest;
 
+import io.github.jhipster.application.domain.Listing;
+import io.github.jhipster.application.domain.Rating;
 import io.github.jhipster.application.domain.Trade;
-import io.github.jhipster.application.service.TradeService;
+import io.github.jhipster.application.domain.User;
+import io.github.jhipster.application.domain.enumeration.TradeStatus;
+import io.github.jhipster.application.service.*;
+import io.github.jhipster.application.service.dto.TradeConfirmDTO;
 import io.github.jhipster.application.web.rest.errors.BadRequestAlertException;
 import io.github.jhipster.application.service.dto.TradeCriteria;
-import io.github.jhipster.application.service.TradeQueryService;
 
 import io.github.jhipster.web.util.HeaderUtil;
 import io.github.jhipster.web.util.PaginationUtil;
@@ -24,6 +28,7 @@ import org.springframework.web.bind.annotation.*;
 import java.net.URI;
 import java.net.URISyntaxException;
 
+import java.time.Instant;
 import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
@@ -49,9 +54,18 @@ public class TradeResource {
 
     private final TradeQueryService tradeQueryService;
 
-    public TradeResource(TradeService tradeService, TradeQueryService tradeQueryService) {
+    private final UserService userService;
+
+    private final RatingService ratingService;
+
+    private final ListingService listingService;
+
+    public TradeResource(TradeService tradeService, TradeQueryService tradeQueryService, UserService userService, RatingService ratingService, ListingService listingService) {
         this.tradeService = tradeService;
         this.tradeQueryService = tradeQueryService;
+        this.userService = userService;
+        this.ratingService = ratingService;
+        this.listingService = listingService;
     }
 
     /**
@@ -168,6 +182,53 @@ public class TradeResource {
         Page<Trade> page = tradeService.search(query, pageable);
         HttpHeaders headers = PaginationUtil.generatePaginationHttpHeaders(uriBuilder.queryParams(queryParams), page);
         return ResponseEntity.ok().headers(headers).body(page.getContent());
+    }
+
+    /**
+     * {@code PUT  /trades/:id/rate} : Finalises a trade and/or listing by providing rating and confirmation.
+     *
+     * @param id the id of the trade to rate.
+     * @param tradeConfirmDTO contains rating information.
+     * @return the {@link ResponseEntity} with status {@code 200 (OK)} and with body the updated trade,
+     * or with status {@code 400 (Bad Request)} if the trade is not valid,
+     * or with status {@code 500 (Internal Server Error)} if the trade couldn't be updated.
+     * @throws URISyntaxException if the Location URI syntax is incorrect.
+     */
+    @PutMapping("/trades/{id}/rate")
+    public ResponseEntity<Rating> rateTrade(@PathVariable Long id, @RequestBody TradeConfirmDTO tradeConfirmDTO) throws URISyntaxException {
+        log.debug("REST request to rate Trade with ID: {}", id);
+        Optional<Trade> tradeOptional = tradeService.findOne(id);
+        if (!tradeOptional.isPresent()) {
+            throw new BadRequestAlertException("Invalid id", ENTITY_NAME, "idnull");
+        }
+        Trade trade = tradeOptional.get();
+        Optional<User> owner = this.userService.getUserWithAuthorities();
+        if (!owner.isPresent()) {
+            throw new BadRequestAlertException("You must create an entity as a logged user", ENTITY_NAME, "notloggeduser");
+        }
+        User recipient = owner.get().equals(trade.getOffer().getOwner()) ? trade.getOffer().getListing().getOwner() : trade.getOffer().getOwner();
+
+        Rating rating = new Rating();
+        rating.setMessage(tradeConfirmDTO.getMessage());
+        rating.setScore(tradeConfirmDTO.getScore());
+        rating.setTimestamp(Instant.now());
+        rating.setOwner(owner.get());
+        rating.setRecipient(recipient);
+        if (owner.get().equals(trade.getOffer().getOwner())) {
+            trade.setOfferOwnerStatus(tradeConfirmDTO.getTradeStatus());
+        } else {
+            trade.setListingOwnerStatus(tradeConfirmDTO.getTradeStatus());
+        }
+        Trade tradeEntity = tradeService.save(trade);
+        Rating result = ratingService.save(rating);
+        if (tradeEntity.getListingOwnerStatus().equals(TradeStatus.CONFIRMED) && tradeEntity.getOfferOwnerStatus().equals(TradeStatus.CONFIRMED)) {
+            Listing listing = trade.getOffer().getListing();
+            listing.setActive(false);
+            listingService.save(listing);
+        }
+        return ResponseEntity.ok()
+            .headers(HeaderUtil.createEntityUpdateAlert(applicationName, false, ENTITY_NAME, trade.getId().toString()))
+            .body(result);
     }
 
 }

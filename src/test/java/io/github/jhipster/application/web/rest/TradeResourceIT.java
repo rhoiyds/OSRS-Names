@@ -5,10 +5,9 @@ import io.github.jhipster.application.domain.Trade;
 import io.github.jhipster.application.domain.Offer;
 import io.github.jhipster.application.repository.TradeRepository;
 import io.github.jhipster.application.repository.search.TradeSearchRepository;
-import io.github.jhipster.application.service.TradeService;
+import io.github.jhipster.application.service.*;
 import io.github.jhipster.application.web.rest.errors.ExceptionTranslator;
 import io.github.jhipster.application.service.dto.TradeCriteria;
-import io.github.jhipster.application.service.TradeQueryService;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -57,6 +56,16 @@ public class TradeResourceIT {
     @Autowired
     private TradeService tradeService;
 
+    @Autowired
+    private UserService userService;
+
+    @Autowired
+    private ListingService listingService;
+
+    @Autowired
+    private RatingService ratingService;
+
+
     /**
      * This repository is mocked in the io.github.jhipster.application.repository.search test package.
      *
@@ -90,7 +99,7 @@ public class TradeResourceIT {
     @BeforeEach
     public void setup() {
         MockitoAnnotations.initMocks(this);
-        final TradeResource tradeResource = new TradeResource(tradeService, tradeQueryService);
+        final TradeResource tradeResource = new TradeResource(tradeService, tradeQueryService, userService, ratingService, listingService);
         this.restTradeMockMvc = MockMvcBuilders.standaloneSetup(tradeResource)
             .setCustomArgumentResolvers(pageableArgumentResolver)
             .setControllerAdvice(exceptionTranslator)

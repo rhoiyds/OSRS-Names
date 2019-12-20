@@ -5,8 +5,12 @@ import { Observable } from 'rxjs';
 import { SERVER_API_URL } from 'app/app.constants';
 import { createRequestOption } from 'app/shared';
 import { ITrade } from 'app/shared/model/trade.model';
+import { IRating } from 'app/shared/model/rating.model';
+import { map } from 'rxjs/operators';
+import * as moment from 'moment';
 
 type EntityResponseType = HttpResponse<ITrade>;
+type RatingResponseType = HttpResponse<IRating>;
 type EntityArrayResponseType = HttpResponse<ITrade[]>;
 
 @Injectable({ providedIn: 'root' })
@@ -40,5 +44,18 @@ export class TradeService {
   search(req?: any): Observable<EntityArrayResponseType> {
     const options = createRequestOption(req);
     return this.http.get<ITrade[]>(this.resourceSearchUrl, { params: options, observe: 'response' });
+  }
+
+  rate(id, rating): Observable<EntityResponseType> {
+    return this.http
+      .put<IRating>(`${this.resourceUrl}/${id}/rate`, rating, { observe: 'response' })
+      .pipe(map((res: RatingResponseType) => this.convertDateFromServer(res)));
+  }
+
+  protected convertDateFromServer(res: RatingResponseType): RatingResponseType {
+    if (res.body) {
+      res.body.timestamp = res.body.timestamp != null ? moment(res.body.timestamp) : null;
+    }
+    return res;
   }
 }
