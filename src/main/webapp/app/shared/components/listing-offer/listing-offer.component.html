@@ -1,34 +1,26 @@
 <div class="c-offer">
-    <div class="card">
+    <div class="card" [ngClass]="{'c-accepted': offer.status === offerStatus.ACCEPTED, 'c-declined': offer.status === offerStatus.DECLINED}">
         <div class="card-body">
             <div class="card-title">
                 <div class="c-offer-profile">
                     <jhi-user-profile [user]="offer?.owner"></jhi-user-profile>
                 </div>
                 <div class="c-statuses">
-                     <div class="alert" class="c-offer-status"
-                           [ngClass]="{'text-success': offer.status == offerStatus.ACCEPTED,
-                        'text-danger': offer.status == offerStatus.DECLINED}"
-                           *ngIf="offer.status !== offerStatus.PENDING"
-                     >{{offer.status}}</div>
-                    <div class="c-trade-status">
-                        <div class="alert" [ngClass]="{'alert-success': trade.listingOwnerStatus === tradeStatus.CONFIRMED,
-                                        'alert-danger': trade.listingOwnerStatus === tradeStatus.DECLINED,
-                                        'alert-secondary': trade.listingOwnerStatus === tradeStatus.CONFIRMED}">
+                    <div class="c-trade-status" *ngIf="trade">
+                        <button class="btn btn-primary" *ngIf="isNotYetConfirmed()" (click)="onChangeTradeStatusClick()">Confirm</button>
+                        <span class="badge badge-pill" [ngClass]="{'badge-success': trade.listingOwnerStatus === tradeStatus.CONFIRMED,
+                                        'badge-danger': trade.listingOwnerStatus === tradeStatus.DECLINED,
+                                        'badge-secondary': trade.listingOwnerStatus === tradeStatus.PENDING}"
+                                        data-toggle="tooltip" data-placement="top" title="{{trade.offer.listing.owner.username}} {{getFromStatus(trade.listingOwnerStatus)}}}">
                             <img [src]="getGravatarImageURL(trade.offer.listing.owner.email)" width="25" height="25" class="rounded-circle">
                             {{trade.offer.listing.owner.username}}
-                            <span *ngIf="trade.listingOwnerStatus === tradeStatus.DECLINED"> indicated there was a problem with the trade.</span>
-                            <span *ngIf="trade.listingOwnerStatus === tradeStatus.CONFIRMED"> marked the trade as a success.</span>
-                            <span *ngIf="trade.listingOwnerStatus === tradeStatus.PENDING"> has yet to indicate whether the trade was successful or not.</span>
-                        </div>
-                        <div class="alert" [ngClass]="{'alert-success': trade.offerOwnerStatus === tradeStatus.CONFIRMED,
-                                        'alert-danger': trade.offerOwnerStatus === tradeStatus.DECLINED,
-                                        'alert-secondary': trade.offerOwnerStatus === tradeStatus.CONFIRMED}">
+                        </span>
+                        <div class="badge badge-pill" [ngClass]="{'badge-success': trade.offerOwnerStatus === tradeStatus.CONFIRMED,
+                                        'badge-danger': trade.offerOwnerStatus === tradeStatus.DECLINED,
+                                        'badge-secondary': trade.offerOwnerStatus === tradeStatus.PENDING}"
+                                        data-toggle="tooltip" data-placement="top" title="{{trade.offer.owner.username}} {{getFromStatus(trade.offerOwnerStatus)}}">
                             <img [src]="getGravatarImageURL(trade.offer.owner.email)" width="25" height="25" class="rounded-circle">
                             {{trade.offer.owner.username}}
-                            <span *ngIf="trade.offerOwnerStatus === tradeStatus.DECLINED"> indicated there was a problem with the trade.</span>
-                            <span *ngIf="trade.offerOwnerStatus === tradeStatus.CONFIRMED"> marked the trade as a success.</span>
-                            <span *ngIf="trade.offerOwnerStatus === tradeStatus.PENDING"> has yet to indicate whether the trade was successful or not.</span>
                         </div>
                     </div>
                 </div>
@@ -49,14 +41,6 @@
             <button type="button" (click)="onPostCommentClick()" [disabled]="newCommentText.length === 0" class="btn btn-success">
                     <fa-icon [icon]="'comment-medical'"></fa-icon>&nbsp;<span>Comment</span>
             </button>
-            <ng-container *ngIf="trade != null && isNotYetConfirmed()" >
-                <button type="button" (click)="onChangeTradeStatusClick(tradeStatus.CONFIRMED)"  class="btn btn-success">
-                    <fa-icon [icon]="'check'"></fa-icon>&nbsp;<span>Confirm</span>
-                </button>
-                <button type="button" (click)="onChangeTradeStatusClick(tradeStatus.DECLINED)" class="btn btn-danger">
-                    <fa-icon [icon]="'times'"></fa-icon>&nbsp;<span>There was a problem</span>
-                </button>
-            </ng-container>
             <ng-container *ngIf="offer.listing.owner.id === currentAccount?.id && offer.status == offerStatus.PENDING">
                 <button type="button" (click)="onChangeOfferClick(offerStatus.ACCEPTED)" class="btn btn-success" *ngIf="canAccept">
                     <fa-icon [icon]="'exchange-alt'"></fa-icon>&nbsp;<span>Accept</span>

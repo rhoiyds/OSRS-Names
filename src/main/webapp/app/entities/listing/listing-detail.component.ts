@@ -52,7 +52,12 @@ export class ListingDetailComponent implements OnInit {
 
   private getOffersForListing() {
     this.offerService.getOffersForListing(this.listing.id).subscribe(offers => {
-      this.offers = offers.body;
+      this.offers = this.sortedOffers(offers.body);
     });
+  }
+
+  private sortedOffers(offers: IOffer[]) {
+    const offerOrder = Object.entries(OfferStatus).map(([key, value]) => value);
+    return offers.sort((a, b) => offerOrder.indexOf(a) - offerOrder.indexOf(b));
   }
 }

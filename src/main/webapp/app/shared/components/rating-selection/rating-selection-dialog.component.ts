@@ -15,8 +15,8 @@ import { TradeService } from 'app/entities/trade';
 export class RatingSelectionDialogComponent {
   trade: ITrade;
   message = '';
-  tradeStatus: TradeStatus;
   score: number;
+  tradeStatus = TradeStatus;
 
   constructor(
     public activeModal: NgbActiveModal,
@@ -33,12 +33,12 @@ export class RatingSelectionDialogComponent {
     this.score = score;
   }
 
-  confirmTrade() {
+  confirmTrade(tradeStatus: TradeStatus) {
     this.tradeService
       .rate(this.trade.id, {
         message: this.message,
         score: this.score,
-        tradeStatus: this.tradeStatus
+        tradeStatus: tradeStatus
       })
       .subscribe(response => {
         this.eventManager.broadcast({
