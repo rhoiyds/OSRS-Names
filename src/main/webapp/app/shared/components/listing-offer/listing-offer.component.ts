@@ -1,6 +1,6 @@
-import { Component, OnInit, OnDestroy, Input } from '@angular/core';
+import { Component, Input, OnDestroy, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
-import { JhiEventManager, JhiAlertService } from 'ng-jhipster';
+import { JhiAlertService, JhiEventManager } from 'ng-jhipster';
 
 import { IOffer, OfferStatus } from 'app/shared/model/offer.model';
 import { IComment } from 'app/shared/model/comment.model';
@@ -22,6 +22,10 @@ import { GRAVATAR_AVATAR_PATH, GRAVATAR_BASE_URL, GRAVATAR_PARAMETERS } from 'ap
   styleUrls: ['./listing-offer.component.scss']
 })
 export class ListingOfferComponent implements OnInit, OnDestroy {
+  DECLINED_STATUS = 'indicated there was a problem with the trade';
+  CONFIRMED_STATUS = 'indicated it was a successful trade';
+  PENDING_STATUS = 'has yet to confirm the results of the trade';
+
   @Input() offer: IOffer;
   @Input() canAccept: boolean;
   comments: IComment[] = [];
@@ -100,14 +104,27 @@ export class ListingOfferComponent implements OnInit, OnDestroy {
     );
   }
 
-  onChangeTradeStatusClick(tradeStatus: TradeStatus) {
-    this.ngbModalRef = this.modalService.open(RatingSelectionDialogComponent as Component, { size: 'lg', backdrop: 'static' });
-    this.ngbModalRef.componentInstance.trade = this.trade;
-    this.ngbModalRef.componentInstance.tradeStatus = tradeStatus;
+  onChangeTradeStatusClick() {
+    if (this.isNotYetConfirmed()) {
+      this.ngbModalRef = this.modalService.open(RatingSelectionDialogComponent as Component, { size: 'lg', backdrop: 'static' });
+      this.ngbModalRef.componentInstance.trade = this.trade;
+    }
   }
 
   getGravatarImageURL(email) {
     const hash = Md5.hashStr(email.trim().toLowerCase());
     return GRAVATAR_BASE_URL + GRAVATAR_AVATAR_PATH + hash + GRAVATAR_PARAMETERS;
+  }
+
+  private getFromStatus(tradeStatus: TradeStatus) {
+    if (tradeStatus === TradeStatus.CONFIRMED) {
+      return this.CONFIRMED_STATUS;
+    }
+    if (tradeStatus === TradeStatus.DECLINED) {
+      return this.DECLINED_STATUS;
+    }
+    if (tradeStatus === TradeStatus.PENDING) {
+      return this.PENDING_STATUS;
+    }
   }
 }

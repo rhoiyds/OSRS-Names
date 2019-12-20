@@ -4,9 +4,9 @@ import { IListing } from 'app/shared/model/listing.model';
 
 export enum OfferStatus {
   ACCEPTED = 'ACCEPTED',
+  PENDING = 'PENDING',
   DECLINED = 'DECLINED',
-  CANCELLED = 'CANCELLED',
-  PENDING = 'PENDING'
+  CANCELLED = 'CANCELLED'
 }
 
 export interface IOffer {
