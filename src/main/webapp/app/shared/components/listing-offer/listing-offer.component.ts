@@ -13,6 +13,8 @@ import { TradeService } from 'app/entities/trade';
 import { ITrade, TradeStatus } from 'app/shared/model/trade.model';
 import { RatingSelectionDialogComponent } from 'app/shared/components/rating-selection/rating-selection-dialog.component';
 import { NgbModal, NgbModalRef } from '@ng-bootstrap/ng-bootstrap';
+import { Md5 } from 'ts-md5';
+import { GRAVATAR_AVATAR_PATH, GRAVATAR_BASE_URL, GRAVATAR_PARAMETERS } from 'app/shared/constants/gravatar.constants';
 
 @Component({
   selector: 'jhi-listing-offer',
@@ -93,7 +95,7 @@ export class ListingOfferComponent implements OnInit, OnDestroy {
 
   isNotYetConfirmed() {
     return (
-      (this.trade && (this.trade.listingOwnerStatus === TradeStatus.PENDING && this.currentAccount.id === this.offer.listing.owner.id)) ||
+      (this.trade.listingOwnerStatus === TradeStatus.PENDING && this.currentAccount.id === this.offer.listing.owner.id) ||
       (this.trade.offerOwnerStatus === TradeStatus.PENDING && this.currentAccount.id === this.offer.owner.id)
     );
   }
@@ -102,5 +104,10 @@ export class ListingOfferComponent implements OnInit, OnDestroy {
     this.ngbModalRef = this.modalService.open(RatingSelectionDialogComponent as Component, { size: 'lg', backdrop: 'static' });
     this.ngbModalRef.componentInstance.trade = this.trade;
     this.ngbModalRef.componentInstance.tradeStatus = tradeStatus;
+  }
+
+  getGravatarImageURL(email) {
+    const hash = Md5.hashStr(email.trim().toLowerCase());
+    return GRAVATAR_BASE_URL + GRAVATAR_AVATAR_PATH + hash + GRAVATAR_PARAMETERS;
   }
 }
