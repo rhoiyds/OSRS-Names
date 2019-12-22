@@ -2,7 +2,7 @@ import { Moment } from 'moment';
 import { IUser } from 'app/core/user/user.model';
 import { ITag } from 'app/shared/model/tag.model';
 
-export const enum ListingType {
+export enum ListingType {
   WANT = 'WANT',
   HAVE = 'HAVE'
 }

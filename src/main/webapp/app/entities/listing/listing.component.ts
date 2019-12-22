@@ -5,7 +5,7 @@ import { Subscription } from 'rxjs';
 import { filter, map } from 'rxjs/operators';
 import { JhiEventManager, JhiParseLinks, JhiAlertService } from 'ng-jhipster';
 
-import { IListing } from 'app/shared/model/listing.model';
+import { IListing, ListingType } from 'app/shared/model/listing.model';
 import { AccountService } from 'app/core';
 
 import { ITEMS_PER_PAGE } from 'app/shared';
@@ -26,6 +26,7 @@ export class ListingComponent implements OnInit, OnDestroy {
   reverse: any;
   totalItems: number;
   currentSearch: string;
+  listingType = ListingType;
 
   constructor(
     protected listingService: ListingService,
