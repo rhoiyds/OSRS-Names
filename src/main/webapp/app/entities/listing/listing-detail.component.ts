@@ -1,7 +1,7 @@
 import { Component, OnInit, IterableDiffers } from '@angular/core';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 
-import { IListing } from 'app/shared/model/listing.model';
+import { IListing, ListingType } from 'app/shared/model/listing.model';
 import { IOffer, OfferStatus } from 'app/shared/model/offer.model';
 import { OfferService } from 'app/entities/offer';
 import { AccountService, Account } from 'app/core';
@@ -15,9 +15,11 @@ export class ListingDetailComponent implements OnInit {
   listing: IListing;
   offers: IOffer[];
   currentAccount: Account;
+  listingType = ListingType;
 
   constructor(
     protected activatedRoute: ActivatedRoute,
+    private router: Router,
     private offerService: OfferService,
     private accountService: AccountService,
     private eventManager: JhiEventManager

@@ -14,7 +14,12 @@ import { ListingService } from './listing.service';
 export class ListingDeleteDialogComponent {
   listing: IListing;
 
-  constructor(protected listingService: ListingService, public activeModal: NgbActiveModal, protected eventManager: JhiEventManager) {}
+  constructor(
+    protected listingService: ListingService,
+    public activeModal: NgbActiveModal,
+    protected eventManager: JhiEventManager,
+    private router: Router
+  ) {}
 
   clear() {
     this.activeModal.dismiss('cancel');
@@ -24,7 +29,7 @@ export class ListingDeleteDialogComponent {
     this.listingService.delete(id).subscribe(response => {
       this.eventManager.broadcast({
         name: 'listingListModification',
-        content: 'Deleted an listing'
+        content: 'Deleted a listing'
       });
       this.activeModal.dismiss(true);
     });
@@ -47,11 +52,11 @@ export class ListingDeletePopupComponent implements OnInit, OnDestroy {
         this.ngbModalRef.componentInstance.listing = listing;
         this.ngbModalRef.result.then(
           result => {
-            this.router.navigate(['/listing', { outlets: { popup: null } }]);
+            this.router.navigate(['/']);
             this.ngbModalRef = null;
           },
           reason => {
-            this.router.navigate(['/listing', { outlets: { popup: null } }]);
+            this.router.navigate(['/']);
             this.ngbModalRef = null;
           }
         );
