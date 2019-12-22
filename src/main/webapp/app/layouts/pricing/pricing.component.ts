@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { ActivatedRoute } from '@angular/router';
 
 @Component({
   selector: 'jhi-pricing',
@@ -6,7 +7,12 @@ import { Component, OnInit } from '@angular/core';
   styleUrls: ['pricing.component.scss']
 })
 export class PricingComponent implements OnInit {
-  constructor() {}
+  constructor(protected activatedRoute: ActivatedRoute) {}
 
-  ngOnInit() {}
+  ngOnInit() {
+    this.activatedRoute.fragment.subscribe(f => {
+      const element = document.querySelector('#' + f);
+      if (element) element.scrollIntoView();
+    });
+  }
 }
