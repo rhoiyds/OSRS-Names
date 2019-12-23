@@ -1,6 +1,5 @@
 package io.github.jhipster.application.web.rest;
 
-
 import io.github.jhipster.application.domain.User;
 import io.github.jhipster.application.repository.UserRepository;
 import io.github.jhipster.application.security.SecurityUtils;
@@ -12,6 +11,7 @@ import io.github.jhipster.application.web.rest.errors.*;
 import io.github.jhipster.application.web.rest.vm.KeyAndPasswordVM;
 import io.github.jhipster.application.web.rest.vm.ManagedUserVM;
 
+import org.apache.commons.codec.digest.DigestUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -64,6 +64,8 @@ public class AccountResource {
         if (!checkPasswordLength(managedUserVM.getPassword())) {
             throw new InvalidPasswordException();
         }
+        String md5Hex = DigestUtils.md5Hex(managedUserVM.getEmail()).toLowerCase();
+        managedUserVM.setImageUrl(md5Hex);
         User user = userService.registerUser(managedUserVM, managedUserVM.getPassword());
         mailService.sendActivationEmail(user);
     }
@@ -117,15 +119,15 @@ public class AccountResource {
     @PostMapping("/account")
     public void saveAccount(@Valid @RequestBody UserDTO userDTO) {
         String userLogin = SecurityUtils.getCurrentUserUsername().orElseThrow(() -> new AccountResourceException("Current user username not found"));
-        Optional<User> existingUser = userRepository.findOneByEmailIgnoreCase(userDTO.getEmail());
-        if (existingUser.isPresent() && (!existingUser.get().getUsername().equalsIgnoreCase(userLogin))) {
-            throw new EmailAlreadyUsedException();
-        }
+        // Optional<User> existingUser = userRepository.findOneByEmailIgnoreCase(userDTO.getEmail());
+        // if (existingUser.isPresent() && (!existingUser.get().getUsername().equalsIgnoreCase(userLogin))) {
+        //     throw new EmailAlreadyUsedException();
+        // }
         Optional<User> user = userRepository.findOneByUsername(userLogin);
         if (!user.isPresent()) {
             throw new AccountResourceException("User could not be found");
         }
-        userService.updateUser(userDTO.getFirstName(), userDTO.getLastName(), userDTO.getEmail(),
+        userService.updateUser(userDTO.getFirstName(), userDTO.getLastName(), user.get().getEmail(),
             userDTO.getLangKey(), userDTO.getImageUrl());
     }
 

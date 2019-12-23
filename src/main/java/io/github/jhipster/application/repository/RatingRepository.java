@@ -1,7 +1,9 @@
 package io.github.jhipster.application.repository;
 
 import io.github.jhipster.application.domain.Rating;
+import io.github.jhipster.application.domain.User;
 import org.springframework.data.jpa.repository.*;
+import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
@@ -18,5 +20,9 @@ public interface RatingRepository extends JpaRepository<Rating, Long>, JpaSpecif
 
     @Query("select rating from Rating rating where rating.recipient.username = ?#{principal.username}")
     List<Rating> findByRecipientIsCurrentUser();
+
+    @Query("select avg(rating.score as double) from Rating rating where rating.recipient = :recipient")
+    Long getAverageRatingForUser(@Param("recipient") User recipient);
+    
 
 }

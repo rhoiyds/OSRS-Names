@@ -1,7 +1,9 @@
 package io.github.jhipster.application.web.rest;
 
 import io.github.jhipster.application.domain.Rating;
+import io.github.jhipster.application.domain.User;
 import io.github.jhipster.application.service.RatingService;
+import io.github.jhipster.application.service.UserService;
 import io.github.jhipster.application.web.rest.errors.BadRequestAlertException;
 import io.github.jhipster.application.service.dto.RatingCriteria;
 import io.github.jhipster.application.service.RatingQueryService;
@@ -47,11 +49,14 @@ public class RatingResource {
 
     private final RatingService ratingService;
 
+    private final UserService userService;
+
     private final RatingQueryService ratingQueryService;
 
-    public RatingResource(RatingService ratingService, RatingQueryService ratingQueryService) {
+    public RatingResource(RatingService ratingService, RatingQueryService ratingQueryService, UserService userService) {
         this.ratingService = ratingService;
         this.ratingQueryService = ratingQueryService;
+        this.userService = userService;
     }
 
     /**
@@ -165,6 +170,19 @@ public class RatingResource {
         Page<Rating> page = ratingService.search(query, pageable);
         HttpHeaders headers = PaginationUtil.generatePaginationHttpHeaders(uriBuilder.queryParams(queryParams), page);
         return ResponseEntity.ok().headers(headers).body(page.getContent());
+    }
+
+    /**
+     * {@code GET  /ratings/average} : get average score for a specific user.
+     *
+     * @param id the id of the rating to retrieve.
+     * @return the {@link ResponseEntity} with status {@code 200 (OK)} and with body the rating, or with status {@code 404 (Not Found)}.
+     */
+    @GetMapping("/ratings/average")
+    public ResponseEntity<Long> getTotalRatingForUser(@RequestParam(name = "id") Long userId) {
+        log.debug("REST request to get average rating : {}", userId);
+        Optional<User> user = userService.getUserWithAuthorities(userId);
+        return ResponseEntity.ok().body(ratingService.getAverageRatingForUser(user.get()));
     }
 
 }

@@ -1,6 +1,8 @@
 package io.github.jhipster.application.service;
 
 import io.github.jhipster.application.domain.Rating;
+import io.github.jhipster.application.domain.User;
+
 import io.github.jhipster.application.repository.RatingRepository;
 import io.github.jhipster.application.repository.search.RatingSearchRepository;
 import org.slf4j.Logger;
@@ -93,4 +95,16 @@ public class RatingService {
     public Page<Rating> search(String query, Pageable pageable) {
         log.debug("Request to search for a page of Ratings for query {}", query);
         return ratingSearchRepository.search(queryStringQuery(query), pageable);    }
+
+    /**
+     * Get the average rating for a user.
+     *
+     * @param user the user for whom to search ratings for.
+     * @return the the average rating.
+     */
+    @Transactional(readOnly = true)
+    public Long getAverageRatingForUser(User user) {
+        log.debug("Request to get average rating for user {}", user);
+        return ratingRepository.getAverageRatingForUser(user);    
+    }
 }
