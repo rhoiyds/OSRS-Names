@@ -38,7 +38,7 @@ export class RatingSelectionDialogComponent {
       .rate(this.trade.id, {
         message: this.message,
         score: this.score,
-        tradeStatus: tradeStatus
+        tradeStatus
       })
       .subscribe(response => {
         this.eventManager.broadcast({

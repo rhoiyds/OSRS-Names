@@ -9,10 +9,5 @@ import { ActivatedRoute } from '@angular/router';
 export class PricingComponent implements OnInit {
   constructor(protected activatedRoute: ActivatedRoute) {}
 
-  ngOnInit() {
-    this.activatedRoute.fragment.subscribe(f => {
-      const element = document.querySelector('#' + f);
-      if (element) element.scrollIntoView();
-    });
-  }
+  ngOnInit() {}
 }
