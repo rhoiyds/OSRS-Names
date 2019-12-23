@@ -37,16 +37,16 @@
                     <tr jhiSort [(predicate)]="predicate" [(ascending)]="reverse" [callback]="reset.bind(this)">
                         <th>
                         </th>
-                        <th jhiSortBy="owner.username"><span>Owner</span>
+                        <th jhiSortBy="owner.username" class="text-nowrap"><span>Owner</span>
                             <fa-icon [icon]="'sort'"></fa-icon>
                         </th>
-                        <th jhiSortBy="rsn"><span>Name</span>
+                        <th jhiSortBy="rsn" class="text-nowrap"><span>Name</span>
                             <fa-icon [icon]="'sort'"></fa-icon>
                         </th>
-                        <th jhiSortBy="amount"><span>GP</span>
+                        <th jhiSortBy="amount" class="text-nowrap"><span>GP</span>
                             <fa-icon [icon]="'sort'"></fa-icon>
                         </th>
-                        <th jhiSortBy="timestamp"><span>Posted</span>
+                        <th jhiSortBy="timestamp" class="text-nowrap"><span>Posted</span>
                             <fa-icon [icon]="'sort'"></fa-icon>
                         </th>
                     </tr>
@@ -65,7 +65,7 @@
                         </td>
                         <td>{{listing.rsn}}</td>
                         <td>{{listing.amount | osrsCurrency}}</td>
-                        <td>{{listing.timestamp | date:'medium'}}</td>
+                        <td>{{listing.timestamp | timeAgo}}</td>
                     </tr>
                 </tbody>
             </table>

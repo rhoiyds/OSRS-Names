@@ -4,6 +4,7 @@ import { ListingOfferComponent } from './components/listing-offer/listing-offer.
 import { UserProfileComponent } from './components/user-profile/user-profile.component';
 import { OsrsCurrencyPipe } from './osrs-currency.pipe';
 import { RatingSelectionDialogComponent } from 'app/shared/components/rating-selection/rating-selection-dialog.component';
+import { TimeAgoPipe } from 'time-ago-pipe';
 
 @NgModule({
   imports: [RsnsalesSharedCommonModule],
@@ -13,7 +14,8 @@ import { RatingSelectionDialogComponent } from 'app/shared/components/rating-sel
     ListingOfferComponent,
     UserProfileComponent,
     OsrsCurrencyPipe,
-    RatingSelectionDialogComponent
+    RatingSelectionDialogComponent,
+    TimeAgoPipe
   ],
   entryComponents: [JhiLoginModalComponent, RatingSelectionDialogComponent],
   exports: [
@@ -23,7 +25,8 @@ import { RatingSelectionDialogComponent } from 'app/shared/components/rating-sel
     ListingOfferComponent,
     UserProfileComponent,
     OsrsCurrencyPipe,
-    RatingSelectionDialogComponent
+    RatingSelectionDialogComponent,
+    TimeAgoPipe
   ],
   schemas: [CUSTOM_ELEMENTS_SCHEMA]
 })

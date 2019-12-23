@@ -38,20 +38,23 @@
             <div class="c-comment-container">
                 <textarea class="form-control c-comment-entry" rows="3" [(ngModel)]="newCommentText" name="new-comment-text" placeholder="Leave a message for the other person..."></textarea>
             </div>
-            <button type="button" (click)="onPostCommentClick()" [disabled]="newCommentText.length === 0" class="btn btn-success">
-                    <fa-icon [icon]="'comment-medical'"></fa-icon>&nbsp;<span>Comment</span>
-            </button>
             <ng-container *ngIf="offer.listing.owner.id === currentAccount?.id && offer.status == offerStatus.PENDING">
                 <button type="button" (click)="onChangeOfferClick(offerStatus.ACCEPTED)" class="btn btn-success" *ngIf="canAccept">
-                    <fa-icon [icon]="'exchange-alt'"></fa-icon>&nbsp;<span>Accept</span>
+                    <fa-icon [icon]="'check'"></fa-icon>
+                    <span class="d-none d-md-inline">Accept</span>
                 </button>
                 <button type="button" (click)="onChangeOfferClick(offerStatus.DECLINED)" class="btn btn-danger">
-                    <fa-icon [icon]="'times'"></fa-icon>&nbsp;<span>Decline</span>
+                    <fa-icon [icon]="'times'"></fa-icon>
+                    <span class="d-none d-md-inline">Decline</span>
                 </button>
             </ng-container>
+            <button type="button" (click)="onPostCommentClick()" [disabled]="newCommentText.length === 0" class="btn btn-success comment-btn">
+                    <fa-icon [icon]="'comment-medical'"></fa-icon>
+                    <span class="d-none d-md-inline">Comment</span>
+            </button>
         </div>
         <div class="card-footer">
-            <small class="text-muted">Last updated {{offer.timestamp | date:'medium'}}</small>
+            <small class="text-muted">Last updated {{offer.timestamp | timeAgo}}</small>
         </div>
     </div>
 </div>
