@@ -8,6 +8,9 @@ import io.github.jhipster.application.domain.User;
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotBlank;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.annotation.JsonProperty.Access;
+
 import javax.validation.constraints.*;
 import java.time.Instant;
 import java.util.Set;
@@ -32,6 +35,7 @@ public class UserDTO {
     private String lastName;
 
     @Email
+    @JsonProperty(access = Access.WRITE_ONLY)
     @Size(min = 5, max = 254)
     private String email;
 

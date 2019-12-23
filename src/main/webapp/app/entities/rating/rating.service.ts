@@ -57,6 +57,10 @@ export class RatingService {
       .pipe(map((res: EntityArrayResponseType) => this.convertDateArrayFromServer(res)));
   }
 
+  getAverageRatingForUser(userId: string) {
+    return this.http.get<number>(`${this.resourceUrl}/average?id=${userId}`, { observe: 'response' });
+  }
+
   protected convertDateFromClient(rating: IRating): IRating {
     const copy: IRating = Object.assign({}, rating, {
       timestamp: rating.timestamp != null && rating.timestamp.isValid() ? rating.timestamp.toJSON() : null

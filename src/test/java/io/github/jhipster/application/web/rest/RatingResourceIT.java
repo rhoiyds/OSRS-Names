@@ -6,6 +6,7 @@ import io.github.jhipster.application.domain.User;
 import io.github.jhipster.application.domain.Trade;
 import io.github.jhipster.application.repository.RatingRepository;
 import io.github.jhipster.application.repository.search.RatingSearchRepository;
+import io.github.jhipster.application.service.UserService;
 import io.github.jhipster.application.service.RatingService;
 import io.github.jhipster.application.web.rest.errors.ExceptionTranslator;
 import io.github.jhipster.application.service.dto.RatingCriteria;
@@ -73,6 +74,9 @@ public class RatingResourceIT {
     private RatingQueryService ratingQueryService;
 
     @Autowired
+    private UserService userService;
+
+    @Autowired
     private MappingJackson2HttpMessageConverter jacksonMessageConverter;
 
     @Autowired
@@ -94,7 +98,7 @@ public class RatingResourceIT {
     @BeforeEach
     public void setup() {
         MockitoAnnotations.initMocks(this);
-        final RatingResource ratingResource = new RatingResource(ratingService, ratingQueryService);
+        final RatingResource ratingResource = new RatingResource(ratingService, ratingQueryService, userService);
         this.restRatingMockMvc = MockMvcBuilders.standaloneSetup(ratingResource)
             .setCustomArgumentResolvers(pageableArgumentResolver)
             .setControllerAdvice(exceptionTranslator)

@@ -7,4 +7,5 @@ import org.springframework.data.elasticsearch.repository.ElasticsearchRepository
  * Spring Data Elasticsearch repository for the {@link Rating} entity.
  */
 public interface RatingSearchRepository extends ElasticsearchRepository<Rating, Long> {
+    
 }

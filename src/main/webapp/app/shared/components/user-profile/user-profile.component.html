@@ -8,7 +8,7 @@
         </div>
         <div class="profile-time text-left text-muted text-nowrap">
             <ng-container *ngIf="!timestamp">
-                4.5 <fa-icon class="star" [icon]="'star'"></fa-icon>
+                {{rating}} <fa-icon class="star" [icon]="'star'"></fa-icon>
             </ng-container>
             <ng-container *ngIf="timestamp">
                 {{timestamp | timeAgo}}
