@@ -7,8 +7,8 @@
                 <div class="form-group">
                     <label class="form-control-label" for="field_type">Type</label>
                     <select class="form-control" name="type" formControlName="type" id="field_type">
-                        <option value="WANT">WANT</option>
-                        <option value="HAVE">HAVE</option>
+                        <option value="WANT">Selling</option>
+                        <option value="HAVE">Buying</option>
                     </select>
                     <div *ngIf="editForm.get('type').invalid && (editForm.get('type').dirty || editForm.get('type').touched)">
                         <small class="form-text text-danger"
