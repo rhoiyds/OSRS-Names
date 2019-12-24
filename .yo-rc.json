@@ -24,9 +24,7 @@
     "testFrameworks": [],
     "enableTranslation": false,
     "nativeLanguage": "en",
-    "languages": [
-      "en"
-    ],
+    "languages": ["en"],
     "clientFramework": "angularX",
     "jhiPrefix": "jhi",
     "jhipsterVersion": "6.1.2",
@@ -34,7 +32,9 @@
     "clientTheme": "none",
     "entitySuffix": "",
     "dtoSuffix": "DTO",
-    "otherModules": []
+    "otherModules": [],
+    "herokuAppName": "osrsnames",
+    "herokuDeployType": "git"
   },
   "git-provider": "GitHub",
   "git-company": "rhoiyds",
