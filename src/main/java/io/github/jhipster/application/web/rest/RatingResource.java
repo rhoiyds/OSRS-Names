@@ -31,6 +31,9 @@ import java.util.List;
 import java.util.Optional;
 import java.util.stream.StreamSupport;
 
+import java.math.RoundingMode;
+import java.text.DecimalFormat;
+
 import static org.elasticsearch.index.query.QueryBuilders.*;
 
 /**
@@ -52,6 +55,8 @@ public class RatingResource {
     private final UserService userService;
 
     private final RatingQueryService ratingQueryService;
+
+    private static DecimalFormat df = new DecimalFormat("0.0");
 
     public RatingResource(RatingService ratingService, RatingQueryService ratingQueryService, UserService userService) {
         this.ratingService = ratingService;
@@ -179,10 +184,12 @@ public class RatingResource {
      * @return the {@link ResponseEntity} with status {@code 200 (OK)} and with body the rating, or with status {@code 404 (Not Found)}.
      */
     @GetMapping("/ratings/average")
-    public ResponseEntity<Long> getTotalRatingForUser(@RequestParam(name = "id") Long userId) {
+    public ResponseEntity<String> getTotalRatingForUser(@RequestParam(name = "id") Long userId) {
         log.debug("REST request to get average rating : {}", userId);
         Optional<User> user = userService.getUserWithAuthorities(userId);
-        return ResponseEntity.ok().body(ratingService.getAverageRatingForUser(user.get()));
+        df.setRoundingMode(RoundingMode.FLOOR);
+        Double average = ratingService.getAverageRatingForUser(user.get());
+        return ResponseEntity.ok().body(df.format(average));
     }
 
 }

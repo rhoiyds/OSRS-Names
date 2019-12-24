@@ -21,8 +21,8 @@ public interface RatingRepository extends JpaRepository<Rating, Long>, JpaSpecif
     @Query("select rating from Rating rating where rating.recipient.username = ?#{principal.username}")
     List<Rating> findByRecipientIsCurrentUser();
 
-    @Query("select avg(rating.score as double) from Rating rating where rating.recipient = :recipient")
-    Long getAverageRatingForUser(@Param("recipient") User recipient);
+    @Query("select avg(CAST(rating.score as double)) from Rating rating where rating.recipient = :recipient")
+    Double getAverageRatingForUser(@Param("recipient") User recipient);
     
 
 }

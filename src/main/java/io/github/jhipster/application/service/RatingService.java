@@ -103,7 +103,7 @@ public class RatingService {
      * @return the the average rating.
      */
     @Transactional(readOnly = true)
-    public Long getAverageRatingForUser(User user) {
+    public Double getAverageRatingForUser(User user) {
         log.debug("Request to get average rating for user {}", user);
         return ratingRepository.getAverageRatingForUser(user);    
     }
