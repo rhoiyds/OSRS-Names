@@ -15,7 +15,7 @@ const LAYOUT_ROUTES = [navbarRoute, ...pricingRoute, ...errorRoute];
         },
         ...LAYOUT_ROUTES
       ],
-      { enableTracing: DEBUG_INFO_ENABLED }
+      { enableTracing: DEBUG_INFO_ENABLED, anchorScrolling: 'enabled', onSameUrlNavigation: 'reload', scrollPositionRestoration: 'enabled' }
     )
   ],
   exports: [RouterModule]
