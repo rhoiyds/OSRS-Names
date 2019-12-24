@@ -12,14 +12,14 @@
                                         'badge-danger': trade.listingOwnerStatus === tradeStatus.DECLINED,
                                         'badge-secondary': trade.listingOwnerStatus === tradeStatus.PENDING}"
                                         data-toggle="tooltip" data-placement="top" title="{{trade.offer.listing.owner.username}} {{getFromStatus(trade.listingOwnerStatus)}}}">
-                            <img [src]="getGravatarImageURL(trade.offer.listing.owner.email)" width="25" height="25" class="rounded-circle">
+                            <img [src]="getGravatarImageURL(trade.offer.listing.owner.imageUrl)" width="25" height="25" class="rounded-circle">
                             {{trade.offer.listing.owner.username}}
                         </span>
                         <div class="badge badge-pill" [ngClass]="{'badge-success': trade.offerOwnerStatus === tradeStatus.CONFIRMED,
                                         'badge-danger': trade.offerOwnerStatus === tradeStatus.DECLINED,
                                         'badge-secondary': trade.offerOwnerStatus === tradeStatus.PENDING}"
                                         data-toggle="tooltip" data-placement="top" title="{{trade.offer.owner.username}} {{getFromStatus(trade.offerOwnerStatus)}}">
-                            <img [src]="getGravatarImageURL(trade.offer.owner.email)" width="25" height="25" class="rounded-circle">
+                            <img [src]="getGravatarImageURL(trade.offer.owner.imageUrl)" width="25" height="25" class="rounded-circle">
                             {{trade.offer.owner.username}}
                         </div>
                     </div>
@@ -54,7 +54,7 @@
             </button>
         </div>
         <div class="card-footer">
-            <small class="text-muted">Last updated {{offer.timestamp | timeAgo}}</small>
+            <small class="text-muted">Last updated {{offer.timestamp.toDate().toString() | timeAgo}}</small>
         </div>
     </div>
 </div>

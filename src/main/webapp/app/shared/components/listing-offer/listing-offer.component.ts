@@ -13,7 +13,6 @@ import { TradeService } from 'app/entities/trade';
 import { ITrade, TradeStatus } from 'app/shared/model/trade.model';
 import { RatingSelectionDialogComponent } from 'app/shared/components/rating-selection/rating-selection-dialog.component';
 import { NgbModal, NgbModalRef } from '@ng-bootstrap/ng-bootstrap';
-import { Md5 } from 'ts-md5';
 import { GRAVATAR_AVATAR_PATH, GRAVATAR_BASE_URL, GRAVATAR_PARAMETERS } from 'app/shared/constants/gravatar.constants';
 
 @Component({
@@ -111,9 +110,8 @@ export class ListingOfferComponent implements OnInit, OnDestroy {
     }
   }
 
-  getGravatarImageURL(email) {
-    const hash = Md5.hashStr(email.trim().toLowerCase());
-    return GRAVATAR_BASE_URL + GRAVATAR_AVATAR_PATH + hash + GRAVATAR_PARAMETERS;
+  getGravatarImageURL(imageUrl) {
+    return GRAVATAR_BASE_URL + GRAVATAR_AVATAR_PATH + imageUrl + GRAVATAR_PARAMETERS;
   }
 
   getFromStatus(tradeStatus: TradeStatus) {
