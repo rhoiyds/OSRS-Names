@@ -21,7 +21,7 @@ import { NgbDateMomentAdapter } from 'app/shared/util/datepicker-adapter';
     DatePipe
   ]
 })
-export class RsnsalesCoreModule {
+export class OsrsnamesCoreModule {
   constructor() {
     registerLocaleData(locale);
   }

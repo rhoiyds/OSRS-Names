@@ -55,7 +55,7 @@
     ],
     "changelogDate": "20191219075421",
     "dto": "no",
-    "searchEngine": "elasticsearch",
+    "searchEngine": false,
     "service": "serviceClass",
     "entityTableName": "rating",
     "databaseType": "sql",

@@ -5,7 +5,6 @@ import { NgbModalRef } from '@ng-bootstrap/ng-bootstrap';
 import { VERSION } from 'app/app.constants';
 import { AccountService, LoginModalService, LoginService } from 'app/core';
 import { ProfileService } from 'app/layouts/profiles/profile.service';
-import { GRAVATAR_AVATAR_PATH, GRAVATAR_BASE_URL, GRAVATAR_PARAMETERS } from 'app/shared/constants/gravatar.constants';
 
 @Component({
   selector: 'jhi-navbar',
@@ -61,8 +60,6 @@ export class NavbarComponent implements OnInit {
   }
 
   getImageUrl() {
-    return this.isAuthenticated()
-      ? `${GRAVATAR_BASE_URL}${GRAVATAR_AVATAR_PATH}${this.accountService.getImageUrl()}${GRAVATAR_PARAMETERS}`
-      : null;
+    return this.isAuthenticated() ? this.accountService.getImageUrl() : null;
   }
 }

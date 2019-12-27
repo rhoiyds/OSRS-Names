@@ -1,5 +1,6 @@
 package io.github.jhipster.application.web.rest;
 
+
 import io.github.jhipster.application.domain.User;
 import io.github.jhipster.application.repository.UserRepository;
 import io.github.jhipster.application.security.SecurityUtils;
@@ -11,7 +12,6 @@ import io.github.jhipster.application.web.rest.errors.*;
 import io.github.jhipster.application.web.rest.vm.KeyAndPasswordVM;
 import io.github.jhipster.application.web.rest.vm.ManagedUserVM;
 
-import org.apache.commons.codec.digest.DigestUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -56,7 +56,7 @@ public class AccountResource {
      * @param managedUserVM the managed user View Model.
      * @throws InvalidPasswordException {@code 400 (Bad Request)} if the password is incorrect.
      * @throws EmailAlreadyUsedException {@code 400 (Bad Request)} if the email is already used.
-     * @throws LoginAlreadyUsedException {@code 400 (Bad Request)} if the username is already used.
+     * @throws LoginAlreadyUsedException {@code 400 (Bad Request)} if the login is already used.
      */
     @PostMapping("/register")
     @ResponseStatus(HttpStatus.CREATED)
@@ -64,8 +64,6 @@ public class AccountResource {
         if (!checkPasswordLength(managedUserVM.getPassword())) {
             throw new InvalidPasswordException();
         }
-        String md5Hex = DigestUtils.md5Hex(managedUserVM.getEmail()).toLowerCase();
-        managedUserVM.setImageUrl(md5Hex);
         User user = userService.registerUser(managedUserVM, managedUserVM.getPassword());
         mailService.sendActivationEmail(user);
     }
@@ -85,10 +83,10 @@ public class AccountResource {
     }
 
     /**
-     * {@code GET  /authenticate} : check if the user is authenticated, and return its username.
+     * {@code GET  /authenticate} : check if the user is authenticated, and return its login.
      *
      * @param request the HTTP request.
-     * @return the username if the user is authenticated.
+     * @return the login if the user is authenticated.
      */
     @GetMapping("/authenticate")
     public String isAuthenticated(HttpServletRequest request) {
@@ -114,20 +112,20 @@ public class AccountResource {
      *
      * @param userDTO the current user information.
      * @throws EmailAlreadyUsedException {@code 400 (Bad Request)} if the email is already used.
-     * @throws RuntimeException {@code 500 (Internal Server Error)} if the user username wasn't found.
+     * @throws RuntimeException {@code 500 (Internal Server Error)} if the user login wasn't found.
      */
     @PostMapping("/account")
     public void saveAccount(@Valid @RequestBody UserDTO userDTO) {
-        String userLogin = SecurityUtils.getCurrentUserUsername().orElseThrow(() -> new AccountResourceException("Current user username not found"));
-        // Optional<User> existingUser = userRepository.findOneByEmailIgnoreCase(userDTO.getEmail());
-        // if (existingUser.isPresent() && (!existingUser.get().getUsername().equalsIgnoreCase(userLogin))) {
-        //     throw new EmailAlreadyUsedException();
-        // }
-        Optional<User> user = userRepository.findOneByUsername(userLogin);
+        String userLogin = SecurityUtils.getCurrentUserLogin().orElseThrow(() -> new AccountResourceException("Current user login not found"));
+        Optional<User> existingUser = userRepository.findOneByEmailIgnoreCase(userDTO.getEmail());
+        if (existingUser.isPresent() && (!existingUser.get().getLogin().equalsIgnoreCase(userLogin))) {
+            throw new EmailAlreadyUsedException();
+        }
+        Optional<User> user = userRepository.findOneByLogin(userLogin);
         if (!user.isPresent()) {
             throw new AccountResourceException("User could not be found");
         }
-        userService.updateUser(userDTO.getFirstName(), userDTO.getLastName(), user.get().getEmail(),
+        userService.updateUser(userDTO.getFirstName(), userDTO.getLastName(), userDTO.getEmail(),
             userDTO.getLangKey(), userDTO.getImageUrl());
     }
 

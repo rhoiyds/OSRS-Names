@@ -1,6 +1,6 @@
 import { NgModule, CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
 import { RouterModule } from '@angular/router';
-import { RsnsalesSharedModule } from 'app/shared';
+import { OsrsnamesSharedModule } from 'app/shared';
 /* jhipster-needle-add-admin-module-import - JHipster will add admin modules imports here */
 
 import {
@@ -15,13 +15,12 @@ import {
   JhiHealthModalComponent,
   JhiHealthCheckComponent,
   JhiConfigurationComponent,
-  JhiDocsComponent,
-  JhiTrackerComponent
+  JhiDocsComponent
 } from './';
 
 @NgModule({
   imports: [
-    RsnsalesSharedModule,
+    OsrsnamesSharedModule,
     /* jhipster-needle-add-admin-module - JHipster will add admin modules here */
     RouterModule.forChild(adminState)
   ],
@@ -36,10 +35,9 @@ import {
     JhiHealthCheckComponent,
     JhiHealthModalComponent,
     JhiDocsComponent,
-    JhiTrackerComponent,
     JhiMetricsMonitoringComponent
   ],
   entryComponents: [UserMgmtDeleteDialogComponent, JhiHealthModalComponent],
   schemas: [CUSTOM_ELEMENTS_SCHEMA]
 })
-export class RsnsalesAdminModule {}
+export class OsrsnamesAdminModule {}

@@ -1,7 +1,7 @@
 <div>
     <div class="row justify-content-center">
         <div class="col-md-8">
-            <h2  *ngIf="settingsForm.get('username').value">Settings for <b>{{settingsForm.get('username').value}}</b></h2>
+            <h2  *ngIf="settingsForm.get('login').value">User settings for [<b>{{settingsForm.get('login').value}}</b>]</h2>
 
             <div class="alert alert-success" *ngIf="success">
                 <strong>Settings saved!</strong>
@@ -9,12 +9,7 @@
 
             <jhi-alert-error></jhi-alert-error>
 
-            <p class="form-control-label">Profile picture</p>
-            <a href="https://gravatar.com" target="_blank">
-                <img src="{{getGravatarImageURL()}}" class="rounded-circle" style="margin-bottom: 16px; margin-top: -8px;"/>
-            </a>
-
-            <form name="form" role="form" (ngSubmit)="save()" [formGroup]="settingsForm" *ngIf="settingsForm.get('username').value" novalidate>
+            <form name="form" role="form" (ngSubmit)="save()" [formGroup]="settingsForm" *ngIf="settingsForm.get('login').value" novalidate>
 
                 <div class="form-group">
                     <label class="form-control-label" for="firstName">First Name</label>
@@ -51,6 +46,29 @@
                         <small class="form-text text-danger"
                            *ngIf="settingsForm.get('lastName').errors.maxlength">
                             Your last name cannot be longer than 50 characters.
+                        </small>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="form-control-label" for="email">Email</label>
+                    <input type="email" class="form-control" id="email" name="email" placeholder="Your email"
+                           formControlName="email">
+                    <div *ngIf="settingsForm.get('email').invalid && (settingsForm.get('email').dirty || settingsForm.get('email').touched)">
+                        <small class="form-text text-danger"
+                           *ngIf="settingsForm.get('email').errors.required">
+                            Your email is required.
+                        </small>
+                        <small class="form-text text-danger"
+                           *ngIf="settingsForm.get('email').errors.email">
+                            Your email is invalid.
+                        </small>
+                        <small class="form-text text-danger"
+                           *ngIf="settingsForm.get('email').errors.minlength">
+                            Your email is required to be at least 5 characters.
+                        </small>
+                        <small class="form-text text-danger"
+                           *ngIf="settingsForm.get('email').errors.maxlength">
+                            Your email cannot be longer than 100 characters.
                         </small>
                     </div>
                 </div>

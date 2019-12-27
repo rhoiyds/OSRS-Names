@@ -2,7 +2,7 @@ import { ComponentFixture, TestBed, async } from '@angular/core/testing';
 import { ActivatedRoute } from '@angular/router';
 import { of } from 'rxjs';
 
-import { RsnsalesTestModule } from '../../../test.module';
+import { OsrsnamesTestModule } from '../../../test.module';
 import { UserMgmtDetailComponent } from 'app/admin/user-management/user-management-detail.component';
 import { User } from 'app/core';
 
@@ -16,7 +16,7 @@ describe('Component Tests', () => {
 
     beforeEach(async(() => {
       TestBed.configureTestingModule({
-        imports: [RsnsalesTestModule],
+        imports: [OsrsnamesTestModule],
         declarations: [UserMgmtDetailComponent],
         providers: [
           {
@@ -45,7 +45,7 @@ describe('Component Tests', () => {
         expect(comp.user).toEqual(
           jasmine.objectContaining({
             id: 1,
-            username: 'user',
+            login: 'user',
             firstName: 'first',
             lastName: 'last',
             email: 'first@last.com',

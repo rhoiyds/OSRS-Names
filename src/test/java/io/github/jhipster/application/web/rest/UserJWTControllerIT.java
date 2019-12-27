@@ -1,6 +1,6 @@
 package io.github.jhipster.application.web.rest;
 
-import io.github.jhipster.application.RsnsalesApp;
+import io.github.jhipster.application.OsrsnamesApp;
 import io.github.jhipster.application.domain.User;
 import io.github.jhipster.application.repository.UserRepository;
 import io.github.jhipster.application.security.jwt.TokenProvider;
@@ -27,7 +27,7 @@ import static org.hamcrest.Matchers.not;
 /**
  * Integration tests for the {@link UserJWTController} REST controller.
  */
-@SpringBootTest(classes = RsnsalesApp.class)
+@SpringBootTest(classes = OsrsnamesApp.class)
 public class UserJWTControllerIT {
 
     @Autowired
@@ -59,7 +59,7 @@ public class UserJWTControllerIT {
     @Transactional
     public void testAuthorize() throws Exception {
         User user = new User();
-        user.setUsername("user-jwt-controller");
+        user.setLogin("user-jwt-controller");
         user.setEmail("user-jwt-controller@example.com");
         user.setActivated(true);
         user.setPassword(passwordEncoder.encode("test"));
@@ -83,7 +83,7 @@ public class UserJWTControllerIT {
     @Transactional
     public void testAuthorizeWithRememberMe() throws Exception {
         User user = new User();
-        user.setUsername("user-jwt-controller-remember-me");
+        user.setLogin("user-jwt-controller-remember-me");
         user.setEmail("user-jwt-controller-remember-me@example.com");
         user.setActivated(true);
         user.setPassword(passwordEncoder.encode("test"));

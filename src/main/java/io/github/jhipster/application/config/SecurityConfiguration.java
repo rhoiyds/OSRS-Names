@@ -3,6 +3,8 @@ package io.github.jhipster.application.config;
 import io.github.jhipster.application.security.*;
 import io.github.jhipster.application.security.jwt.*;
 
+import org.springframework.beans.factory.BeanInitializationException;
+import org.springframework.beans.factory.InitializingBean;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Import;
 import org.springframework.http.HttpMethod;
@@ -82,12 +84,7 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
             .antMatchers("/api/activate").permitAll()
             .antMatchers("/api/account/reset-password/init").permitAll()
             .antMatchers("/api/account/reset-password/finish").permitAll()
-            .antMatchers(HttpMethod.GET,"/api/listings").permitAll()
-            .antMatchers(HttpMethod.GET,"/api/ratings/average").permitAll()
-            .antMatchers(HttpMethod.GET,"/api/_search/listings").permitAll()
             .antMatchers("/api/**").authenticated()
-            .antMatchers("/websocket/tracker").hasAuthority(AuthoritiesConstants.ADMIN)
-            .antMatchers("/websocket/**").permitAll()
             .antMatchers("/management/health").permitAll()
             .antMatchers("/management/info").permitAll()
             .antMatchers("/management/prometheus").permitAll()

@@ -2,7 +2,7 @@
   "generator-jhipster": {
     "applicationType": "monolith",
     "gitCompany": "",
-    "baseName": "rsnsales",
+    "baseName": "osrsnames",
     "packageName": "io.github.jhipster.application",
     "packageFolder": "io/github/jhipster/application",
     "serverPort": 8080,
@@ -11,11 +11,11 @@
     "uaaBaseName": "../uaa",
     "cacheProvider": "ehcache",
     "enableHibernateCache": true,
-    "websocket": "spring-websocket",
+    "websocket": false,
     "databaseType": "sql",
     "devDatabaseType": "h2Disk",
     "prodDatabaseType": "mysql",
-    "searchEngine": "elasticsearch",
+    "searchEngine": false,
     "enableSwaggerCodegen": false,
     "messageBroker": false,
     "buildTool": "maven",
@@ -38,5 +38,5 @@
   },
   "git-provider": "GitHub",
   "git-company": "rhoiyds",
-  "repository-name": "rsnsales"
+  "repository-name": "OSRS-Names"
 }

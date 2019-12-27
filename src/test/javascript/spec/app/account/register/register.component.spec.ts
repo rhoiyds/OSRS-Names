@@ -2,8 +2,8 @@ import { ComponentFixture, TestBed, async, inject, tick, fakeAsync } from '@angu
 import { FormBuilder } from '@angular/forms';
 import { Observable, of, throwError } from 'rxjs';
 
-import { RsnsalesTestModule } from '../../../test.module';
-import { EMAIL_ALREADY_USED_TYPE, USERNAME_ALREADY_USED_TYPE } from 'app/shared';
+import { OsrsnamesTestModule } from '../../../test.module';
+import { EMAIL_ALREADY_USED_TYPE, LOGIN_ALREADY_USED_TYPE } from 'app/shared';
 import { Register } from 'app/account/register/register.service';
 import { RegisterComponent } from 'app/account/register/register.component';
 
@@ -14,7 +14,7 @@ describe('Component Tests', () => {
 
     beforeEach(async(() => {
       TestBed.configureTestingModule({
-        imports: [RsnsalesTestModule],
+        imports: [OsrsnamesTestModule],
         declarations: [RegisterComponent],
         providers: [FormBuilder]
       })
@@ -54,7 +54,7 @@ describe('Component Tests', () => {
         expect(service.save).toHaveBeenCalledWith({
           email: '',
           password: 'password',
-          username: '',
+          login: '',
           langKey: 'en'
         });
         expect(comp.success).toEqual(true);
@@ -64,13 +64,13 @@ describe('Component Tests', () => {
       })
     ));
 
-    it('should notify of user existence upon 400/username already in use', inject(
+    it('should notify of user existence upon 400/login already in use', inject(
       [Register],
       fakeAsync((service: Register) => {
         spyOn(service, 'save').and.returnValue(
           throwError({
             status: 400,
-            error: { type: USERNAME_ALREADY_USED_TYPE }
+            error: { type: LOGIN_ALREADY_USED_TYPE }
           })
         );
         comp.registerForm.patchValue({

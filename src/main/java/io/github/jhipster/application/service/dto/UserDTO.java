@@ -8,9 +8,6 @@ import io.github.jhipster.application.domain.User;
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotBlank;
 
-import com.fasterxml.jackson.annotation.JsonProperty;
-import com.fasterxml.jackson.annotation.JsonProperty.Access;
-
 import javax.validation.constraints.*;
 import java.time.Instant;
 import java.util.Set;
@@ -26,7 +23,7 @@ public class UserDTO {
     @NotBlank
     @Pattern(regexp = Constants.LOGIN_REGEX)
     @Size(min = 1, max = 50)
-    private String username;
+    private String login;
 
     @Size(max = 50)
     private String firstName;
@@ -35,7 +32,6 @@ public class UserDTO {
     private String lastName;
 
     @Email
-    @JsonProperty(access = Access.WRITE_ONLY)
     @Size(min = 5, max = 254)
     private String email;
 
@@ -63,7 +59,7 @@ public class UserDTO {
 
     public UserDTO(User user) {
         this.id = user.getId();
-        this.username = user.getUsername();
+        this.login = user.getLogin();
         this.firstName = user.getFirstName();
         this.lastName = user.getLastName();
         this.email = user.getEmail();
@@ -87,12 +83,12 @@ public class UserDTO {
         this.id = id;
     }
 
-    public String getUsername() {
-        return username;
+    public String getLogin() {
+        return login;
     }
 
-    public void setUsername(String username) {
-        this.username = username;
+    public void setLogin(String login) {
+        this.login = login;
     }
 
     public String getFirstName() {
@@ -186,7 +182,7 @@ public class UserDTO {
     @Override
     public String toString() {
         return "UserDTO{" +
-            "username='" + username + '\'' +
+            "login='" + login + '\'' +
             ", firstName='" + firstName + '\'' +
             ", lastName='" + lastName + '\'' +
             ", email='" + email + '\'' +

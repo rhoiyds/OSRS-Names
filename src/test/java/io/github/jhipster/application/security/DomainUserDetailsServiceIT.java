@@ -1,6 +1,6 @@
 package io.github.jhipster.application.security;
 
-import io.github.jhipster.application.RsnsalesApp;
+import io.github.jhipster.application.OsrsnamesApp;
 import io.github.jhipster.application.domain.User;
 import io.github.jhipster.application.repository.UserRepository;
 
@@ -22,7 +22,7 @@ import static org.assertj.core.api.Assertions.assertThatExceptionOfType;
 /**
  * Integrations tests for {@link DomainUserDetailsService}.
  */
-@SpringBootTest(classes = RsnsalesApp.class)
+@SpringBootTest(classes = OsrsnamesApp.class)
 @Transactional
 public class DomainUserDetailsServiceIT {
 
@@ -46,7 +46,7 @@ public class DomainUserDetailsServiceIT {
     @BeforeEach
     public void init() {
         userOne = new User();
-        userOne.setUsername(USER_ONE_LOGIN);
+        userOne.setLogin(USER_ONE_LOGIN);
         userOne.setPassword(RandomStringUtils.random(60));
         userOne.setActivated(true);
         userOne.setEmail(USER_ONE_EMAIL);
@@ -56,7 +56,7 @@ public class DomainUserDetailsServiceIT {
         userRepository.save(userOne);
 
         userTwo = new User();
-        userTwo.setUsername(USER_TWO_LOGIN);
+        userTwo.setLogin(USER_TWO_LOGIN);
         userTwo.setPassword(RandomStringUtils.random(60));
         userTwo.setActivated(true);
         userTwo.setEmail(USER_TWO_EMAIL);
@@ -66,7 +66,7 @@ public class DomainUserDetailsServiceIT {
         userRepository.save(userTwo);
 
         userThree = new User();
-        userThree.setUsername(USER_THREE_LOGIN);
+        userThree.setLogin(USER_THREE_LOGIN);
         userThree.setPassword(RandomStringUtils.random(60));
         userThree.setActivated(false);
         userThree.setEmail(USER_THREE_EMAIL);

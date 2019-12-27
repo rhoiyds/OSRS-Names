@@ -3,7 +3,7 @@ package io.github.jhipster.application.config;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 
 /**
- * Properties specific to Rsnsales.
+ * Properties specific to Osrsnames.
  * <p>
  * Properties are configured in the {@code application.yml} file.
  * See {@link io.github.jhipster.config.JHipsterProperties} for a good example.

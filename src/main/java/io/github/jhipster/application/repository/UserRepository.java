@@ -20,7 +20,7 @@ import java.time.Instant;
 @Repository
 public interface UserRepository extends JpaRepository<User, Long> {
 
-    String USERS_BY_USERNAME_CACHE = "usersByUsername";
+    String USERS_BY_LOGIN_CACHE = "usersByLogin";
 
     String USERS_BY_EMAIL_CACHE = "usersByEmail";
 
@@ -34,18 +34,18 @@ public interface UserRepository extends JpaRepository<User, Long> {
 
     Optional<User> findOneByEmailIgnoreCase(String email);
 
-    Optional<User> findOneByUsername(String username);
+    Optional<User> findOneByLogin(String login);
 
     @EntityGraph(attributePaths = "authorities")
     Optional<User> findOneWithAuthoritiesById(Long id);
 
     @EntityGraph(attributePaths = "authorities")
-    @Cacheable(cacheNames = USERS_BY_USERNAME_CACHE)
-    Optional<User> findOneWithAuthoritiesByUsername(String username);
+    @Cacheable(cacheNames = USERS_BY_LOGIN_CACHE)
+    Optional<User> findOneWithAuthoritiesByLogin(String login);
 
     @EntityGraph(attributePaths = "authorities")
     @Cacheable(cacheNames = USERS_BY_EMAIL_CACHE)
     Optional<User> findOneWithAuthoritiesByEmail(String email);
 
-    Page<User> findAllByUsernameNot(Pageable pageable, String username);
+    Page<User> findAllByLoginNot(Pageable pageable, String login);
 }

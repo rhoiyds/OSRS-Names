@@ -19,11 +19,6 @@ logging:
     io.github.jhipster: DEBUG
     io.github.jhipster.application: DEBUG
 
-management:
-  health:
-    elasticsearch:
-      enabled: false
-
 spring:
   profiles:
     active: dev
@@ -42,8 +37,8 @@ spring:
       indent-output: true
   datasource:
     type: com.zaxxer.hikari.HikariDataSource
-    url: jdbc:h2:file:./target/h2db/db/rsnsales;DB_CLOSE_DELAY=-1
-    username: rsnsales
+    url: jdbc:h2:file:./target/h2db/db/osrsnames;DB_CLOSE_DELAY=-1
+    username: osrsnames
     password:
     hikari:
       poolName: Hikari
@@ -61,14 +56,9 @@ spring:
       hibernate.cache.use_second_level_cache: true
       hibernate.cache.use_query_cache: false
       hibernate.generate_statistics: false
-  data:
-    elasticsearch:
-      properties:
-        path:
-          home: target/elasticsearch
   liquibase:
     # Remove 'faker' if you do not want the sample data to be loaded automatically
-    contexts: dev
+    contexts: dev, faker
   mail:
     host: localhost
     port: 25
@@ -110,7 +100,7 @@ jhipster:
         token-validity-in-seconds: 86400
         token-validity-in-seconds-for-remember-me: 2592000
   mail: # specific JHipster mail property, for standard properties see MailProperties
-    from: rsnsales@localhost
+    from: osrsnames@localhost
     base-url: http://127.0.0.1:8080
   metrics:
     logs: # Reports metrics in the logs

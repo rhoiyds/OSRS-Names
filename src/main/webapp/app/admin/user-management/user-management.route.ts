@@ -21,7 +21,7 @@ export class UserMgmtResolve implements Resolve<any> {
   constructor(private service: UserService) {}
 
   resolve(route: ActivatedRouteSnapshot, state: RouterStateSnapshot) {
-    const id = route.params['username'] ? route.params['username'] : null;
+    const id = route.params['login'] ? route.params['login'] : null;
     if (id) {
       return this.service.find(id);
     }
@@ -42,7 +42,7 @@ export const userMgmtRoute: Routes = [
     }
   },
   {
-    path: 'user-management/:username/view',
+    path: 'user-management/:login/view',
     component: UserMgmtDetailComponent,
     resolve: {
       user: UserMgmtResolve
@@ -59,7 +59,7 @@ export const userMgmtRoute: Routes = [
     }
   },
   {
-    path: 'user-management/:username/edit',
+    path: 'user-management/:login/edit',
     component: UserMgmtUpdateComponent,
     resolve: {
       user: UserMgmtResolve

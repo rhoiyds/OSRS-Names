@@ -1,9 +1,8 @@
 package io.github.jhipster.application.service;
 
-import io.github.jhipster.application.RsnsalesApp;
+import io.github.jhipster.application.OsrsnamesApp;
 import io.github.jhipster.application.config.Constants;
 import io.github.jhipster.application.domain.User;
-import io.github.jhipster.application.repository.search.UserSearchRepository;
 import io.github.jhipster.application.repository.UserRepository;
 import io.github.jhipster.application.service.dto.UserDTO;
 import io.github.jhipster.application.service.util.RandomUtil;
@@ -27,15 +26,12 @@ import java.util.Optional;
 import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.mockito.Mockito.times;
-import static org.mockito.Mockito.never;
-import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 /**
  * Integration tests for {@link UserService}.
  */
-@SpringBootTest(classes = RsnsalesApp.class)
+@SpringBootTest(classes = OsrsnamesApp.class)
 @Transactional
 public class UserServiceIT {
 
@@ -57,14 +53,6 @@ public class UserServiceIT {
     @Autowired
     private UserService userService;
 
-    /**
-     * This repository is mocked in the io.github.jhipster.application.repository.search test package.
-     *
-     * @see io.github.jhipster.application.repository.search.UserSearchRepositoryMockConfiguration
-     */
-    @Autowired
-    private UserSearchRepository mockUserSearchRepository;
-
     @Autowired
     private AuditingHandler auditingHandler;
 
@@ -76,7 +64,7 @@ public class UserServiceIT {
     @BeforeEach
     public void init() {
         user = new User();
-        user.setUsername(DEFAULT_LOGIN);
+        user.setLogin(DEFAULT_LOGIN);
         user.setPassword(RandomStringUtils.random(60));
         user.setActivated(true);
         user.setEmail(DEFAULT_EMAIL);
@@ -93,7 +81,7 @@ public class UserServiceIT {
     @Transactional
     public void assertThatUserMustExistToResetPassword() {
         userRepository.saveAndFlush(user);
-        Optional<User> maybeUser = userService.requestPasswordReset("invalid.username@localhost");
+        Optional<User> maybeUser = userService.requestPasswordReset("invalid.login@localhost");
         assertThat(maybeUser).isNotPresent();
 
         maybeUser = userService.requestPasswordReset(user.getEmail());
@@ -109,7 +97,7 @@ public class UserServiceIT {
         user.setActivated(false);
         userRepository.saveAndFlush(user);
 
-        Optional<User> maybeUser = userService.requestPasswordReset(user.getUsername());
+        Optional<User> maybeUser = userService.requestPasswordReset(user.getLogin());
         assertThat(maybeUser).isNotPresent();
         userRepository.delete(user);
     }
@@ -178,9 +166,6 @@ public class UserServiceIT {
         userService.removeNotActivatedUsers();
         users = userRepository.findAllByActivatedIsFalseAndActivationKeyIsNotNullAndCreatedDateBefore(now.minus(3, ChronoUnit.DAYS));
         assertThat(users).isEmpty();
-
-        // Verify Elasticsearch mock
-        verify(mockUserSearchRepository, times(1)).delete(user);
     }
 
     @Test
@@ -197,22 +182,19 @@ public class UserServiceIT {
         userService.removeNotActivatedUsers();
         Optional<User> maybeDbUser = userRepository.findById(dbUser.getId());
         assertThat(maybeDbUser).contains(dbUser);
-
-        // Verify Elasticsearch mock
-        verify(mockUserSearchRepository, never()).delete(user);
     }
 
     @Test
     @Transactional
     public void assertThatAnonymousUserIsNotGet() {
-        user.setUsername(Constants.ANONYMOUS_USER);
-        if (!userRepository.findOneByUsername(Constants.ANONYMOUS_USER).isPresent()) {
+        user.setLogin(Constants.ANONYMOUS_USER);
+        if (!userRepository.findOneByLogin(Constants.ANONYMOUS_USER).isPresent()) {
             userRepository.saveAndFlush(user);
         }
         final PageRequest pageable = PageRequest.of(0, (int) userRepository.count());
         final Page<UserDTO> allManagedUsers = userService.getAllManagedUsers(pageable);
         assertThat(allManagedUsers.getContent().stream()
-            .noneMatch(user -> Constants.ANONYMOUS_USER.equals(user.getUsername())))
+            .noneMatch(user -> Constants.ANONYMOUS_USER.equals(user.getLogin())))
             .isTrue();
     }
 

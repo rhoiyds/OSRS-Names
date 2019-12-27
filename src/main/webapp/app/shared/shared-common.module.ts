@@ -1,10 +1,10 @@
 import { NgModule } from '@angular/core';
 
-import { RsnsalesSharedLibsModule, JhiAlertComponent, JhiAlertErrorComponent } from './';
+import { OsrsnamesSharedLibsModule, JhiAlertComponent, JhiAlertErrorComponent } from './';
 
 @NgModule({
-  imports: [RsnsalesSharedLibsModule],
+  imports: [OsrsnamesSharedLibsModule],
   declarations: [JhiAlertComponent, JhiAlertErrorComponent],
-  exports: [RsnsalesSharedLibsModule, JhiAlertComponent, JhiAlertErrorComponent]
+  exports: [OsrsnamesSharedLibsModule, JhiAlertComponent, JhiAlertErrorComponent]
 })
-export class RsnsalesSharedCommonModule {}
+export class OsrsnamesSharedCommonModule {}

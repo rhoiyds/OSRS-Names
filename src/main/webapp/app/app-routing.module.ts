@@ -1,9 +1,9 @@
 import { NgModule } from '@angular/core';
 import { RouterModule } from '@angular/router';
-import { errorRoute, navbarRoute, pricingRoute } from './layouts';
+import { errorRoute, navbarRoute } from './layouts';
 import { DEBUG_INFO_ENABLED } from 'app/app.constants';
 
-const LAYOUT_ROUTES = [navbarRoute, ...pricingRoute, ...errorRoute];
+const LAYOUT_ROUTES = [navbarRoute, ...errorRoute];
 
 @NgModule({
   imports: [
@@ -11,13 +11,13 @@ const LAYOUT_ROUTES = [navbarRoute, ...pricingRoute, ...errorRoute];
       [
         {
           path: 'admin',
-          loadChildren: './admin/admin.module#RsnsalesAdminModule'
+          loadChildren: './admin/admin.module#OsrsnamesAdminModule'
         },
         ...LAYOUT_ROUTES
       ],
-      { enableTracing: DEBUG_INFO_ENABLED, anchorScrolling: 'enabled', onSameUrlNavigation: 'reload', scrollPositionRestoration: 'enabled' }
+      { enableTracing: DEBUG_INFO_ENABLED }
     )
   ],
   exports: [RouterModule]
 })
-export class RsnsalesAppRoutingModule {}
+export class OsrsnamesAppRoutingModule {}

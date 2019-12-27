@@ -2,7 +2,7 @@ package io.github.jhipster.application.service;
 
 import io.github.jhipster.application.config.Constants;
 
-import io.github.jhipster.application.RsnsalesApp;
+import io.github.jhipster.application.OsrsnamesApp;
 import io.github.jhipster.application.domain.User;
 import io.github.jhipster.config.JHipsterProperties;
 import org.junit.jupiter.api.BeforeEach;
@@ -29,6 +29,8 @@ import java.io.InputStreamReader;
 import java.net.URI;
 import java.net.URL;
 import java.nio.charset.Charset;
+import java.util.Arrays;
+import java.util.List;
 import java.util.Properties;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -37,13 +39,10 @@ import static org.assertj.core.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.*;
 
-import org.thymeleaf.context.Context;
-import java.util.Locale;
-
 /**
  * Integration tests for {@link MailService}.
  */
-@SpringBootTest(classes = RsnsalesApp.class)
+@SpringBootTest(classes = OsrsnamesApp.class)
 public class MailServiceIT {
 
     private static String[] languages = {
@@ -139,13 +138,10 @@ public class MailServiceIT {
     @Test
     public void testSendEmailFromTemplate() throws Exception {
         User user = new User();
-        user.setUsername("john");
+        user.setLogin("john");
         user.setEmail("john.doe@example.com");
         user.setLangKey("en");
-        Locale locale = Locale.forLanguageTag(user.getLangKey());
-        Context context = new Context(locale);
-        context.setVariable("USER", user);
-        mailService.sendEmailFromTemplate(context, "mail/testEmail", "email.test.title");
+        mailService.sendEmailFromTemplate(user, "mail/testEmail", "email.test.title");
         verify(javaMailSender).send(messageCaptor.capture());
         MimeMessage message = messageCaptor.getValue();
         assertThat(message.getSubject()).isEqualTo("test title");
@@ -159,7 +155,7 @@ public class MailServiceIT {
     public void testSendActivationEmail() throws Exception {
         User user = new User();
         user.setLangKey(Constants.DEFAULT_LANGUAGE);
-        user.setUsername("john");
+        user.setLogin("john");
         user.setEmail("john.doe@example.com");
         mailService.sendActivationEmail(user);
         verify(javaMailSender).send(messageCaptor.capture());
@@ -174,7 +170,7 @@ public class MailServiceIT {
     public void testCreationEmail() throws Exception {
         User user = new User();
         user.setLangKey(Constants.DEFAULT_LANGUAGE);
-        user.setUsername("john");
+        user.setLogin("john");
         user.setEmail("john.doe@example.com");
         mailService.sendCreationEmail(user);
         verify(javaMailSender).send(messageCaptor.capture());
@@ -189,7 +185,7 @@ public class MailServiceIT {
     public void testSendPasswordResetMail() throws Exception {
         User user = new User();
         user.setLangKey(Constants.DEFAULT_LANGUAGE);
-        user.setUsername("john");
+        user.setLogin("john");
         user.setEmail("john.doe@example.com");
         mailService.sendPasswordResetMail(user);
         verify(javaMailSender).send(messageCaptor.capture());
@@ -209,14 +205,11 @@ public class MailServiceIT {
     @Test
     public void testSendLocalizedEmailForAllSupportedLanguages() throws Exception {
         User user = new User();
-        user.setUsername("john");
+        user.setLogin("john");
         user.setEmail("john.doe@example.com");
         for (String langKey : languages) {
             user.setLangKey(langKey);
-            Locale locale = Locale.forLanguageTag(user.getLangKey());
-            Context context = new Context(locale);
-            context.setVariable("USER", user);
-            mailService.sendEmailFromTemplate(context, "mail/testEmail", "email.test.title");
+            mailService.sendEmailFromTemplate(user, "mail/testEmail", "email.test.title");
             verify(javaMailSender, atLeastOnce()).send(messageCaptor.capture());
             MimeMessage message = messageCaptor.getValue();
 

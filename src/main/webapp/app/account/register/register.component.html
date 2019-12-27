@@ -12,7 +12,7 @@
             </div>
 
             <div class="alert alert-danger" *ngIf="errorUserExists">
-                <strong>Username already registered!</strong> Please choose another one.
+                <strong>Login name already registered!</strong> Please choose another one.
             </div>
 
             <div class="alert alert-danger" *ngIf="errorEmailExists">
@@ -29,22 +29,22 @@
             <form name="form" role="form" (ngSubmit)="register()" [formGroup]="registerForm" *ngIf="!success">
                 <div class="form-group">
 
-                    <label class="form-control-label" for="username">Username</label>
-                    <input type="text" class="form-control" id="username" name="username" placeholder="Your username"
-                           formControlName="username">
-                    <div *ngIf="registerForm.get('username').invalid && (registerForm.get('username').dirty || registerForm.get('username').touched)">
-                        <small class="form-text text-danger" *ngIf="registerForm.get('username').errors.required">
+                    <label class="form-control-label" for="login">Username</label>
+                    <input type="text" class="form-control" id="login" name="login" placeholder="Your username"
+                           formControlName="login">
+                    <div *ngIf="registerForm.get('login').invalid && (registerForm.get('login').dirty || registerForm.get('login').touched)">
+                        <small class="form-text text-danger" *ngIf="registerForm.get('login').errors.required">
                             Your username is required.
                         </small>
-                        <small class="form-text text-danger" *ngIf="registerForm.get('username').errors.minlength"
+                        <small class="form-text text-danger" *ngIf="registerForm.get('login').errors.minlength"
                                >
                             Your username is required to be at least 1 character.
                         </small>
-                        <small class="form-text text-danger" *ngIf="registerForm.get('username').errors.maxlength"
+                        <small class="form-text text-danger" *ngIf="registerForm.get('login').errors.maxlength"
                                >
                             Your username cannot be longer than 50 characters.
                         </small>
-                        <small class="form-text text-danger" *ngIf="registerForm.get('username').errors.pattern"
+                        <small class="form-text text-danger" *ngIf="registerForm.get('login').errors.pattern"
                               >
                             Your username can only contain letters and digits.
                         </small>
@@ -118,7 +118,7 @@
             <p></p>
             <div class="alert alert-warning">
                 <span>If you want to </span>
-                <a class="alert-link" (click)="openLogin()">sign in</a><span>, you can try the default accounts:<br/>- Administrator (username="admin" and password="admin") <br/>- User (username="user" and password="user").</span>
+                <a class="alert-link" (click)="openLogin()">sign in</a><span>, you can try the default accounts:<br/>- Administrator (login="admin" and password="admin") <br/>- User (login="user" and password="user").</span>
             </div>
         </div>
     </div>
