@@ -1,0 +1,93 @@
+<div class="row justify-content-center">
+    <div class="col-8">
+        <form name="editForm" role="form" novalidate (ngSubmit)="save()" [formGroup]="editForm">
+            <h2 id="jhi-rating-heading">Create or edit a Rating</h2>
+            <div>
+                <jhi-alert-error></jhi-alert-error>
+                <div class="form-group" [hidden]="!editForm.get('id').value">
+                    <label for="id">ID</label>
+                    <input type="text" class="form-control" id="id" name="id" formControlName="id"
+                        readonly />
+                </div>
+                <div class="form-group">
+                    <label class="form-control-label" for="field_score">Score</label>
+                    <input type="number" class="form-control" name="score" id="field_score"
+                           formControlName="score"/>
+                    <div *ngIf="editForm.get('score').invalid && (editForm.get('score').dirty || editForm.get('score').touched)">
+                        <small class="form-text text-danger"
+                               *ngIf="editForm.get('score').errors.required">
+                        This field is required.
+                        </small>
+                        <small class="form-text text-danger"
+                               *ngIf="editForm.get('score').errors.min">
+                            This field should be at least 1.
+                        </small>
+                        <small class="form-text text-danger"
+                               *ngIf="editForm.get('score').errors.max">
+                            This field cannot be more than 5.
+                        </small>
+                        <small class="form-text text-danger"
+                            [hidden]="!editForm.get('score')?.errors?.number">
+                            This field should be a number.
+                        </small>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="form-control-label" for="field_message">Message</label>
+                    <input type="text" class="form-control" name="message" id="field_message"
+                           formControlName="message"/>
+                    <div *ngIf="editForm.get('message').invalid && (editForm.get('message').dirty || editForm.get('message').touched)">
+                        <small class="form-text text-danger"
+                               *ngIf="editForm.get('message').errors.required">
+                        This field is required.
+                        </small>
+                        <small class="form-text text-danger"
+                               *ngIf="editForm.get('message').errors.minlength">
+                        This field is required to be at least 1 characters.
+                        </small>
+                        <small class="form-text text-danger"
+                               *ngIf="editForm.get('message').errors.maxlength">
+                        This field cannot be longer than 1024 characters.
+                        </small>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="form-control-label" for="field_timestamp">Timestamp</label>
+                    <div class="d-flex">
+                        <input id="field_timestamp" type="datetime-local" class="form-control" name="timestamp" formControlName="timestamp" placeholder="YYYY-MM-DD HH:mm"/>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label class="form-control-label" for="field_owner">Owner</label>
+                    <select class="form-control" id="field_owner" name="owner" formControlName="owner">
+                        <option [ngValue]="null"></option>
+                        <option [ngValue]="userOption.id === editForm.get('owner').value?.id ? editForm.get('owner').value : userOption" *ngFor="let userOption of users; trackBy: trackUserById">{{userOption.login}}</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label class="form-control-label" for="field_recipient">Recipient</label>
+                    <select class="form-control" id="field_recipient" name="recipient" formControlName="recipient">
+                        <option [ngValue]="null"></option>
+                        <option [ngValue]="userOption.id === editForm.get('recipient').value?.id ? editForm.get('recipient').value : userOption" *ngFor="let userOption of users; trackBy: trackUserById">{{userOption.login}}</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label class="form-control-label" for="field_trade">Trade</label>
+                    <select class="form-control" id="field_trade" name="trade" formControlName="trade">
+                        <option [ngValue]="null"></option>
+                        <option [ngValue]="tradeOption.id === editForm.get('trade').value?.id ? editForm.get('trade').value : tradeOption" *ngFor="let tradeOption of trades; trackBy: trackTradeById">{{tradeOption.id}}</option>
+                    </select>
+                </div>
+            </div>
+            <div>
+                <button type="button" id="cancel-save" class="btn btn-secondary"  (click)="previousState()">
+                    <fa-icon [icon]="'ban'"></fa-icon>&nbsp;<span>Cancel</span>
+                </button>
+                <button type="submit" id="save-entity" [disabled]="editForm.invalid || isSaving" class="btn btn-primary">
+                    <fa-icon [icon]="'save'"></fa-icon>&nbsp;<span>Save</span>
+                </button>
+            </div>
+        </form>
+    </div>
+</div>

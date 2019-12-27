@@ -1,0 +1,71 @@
+<div>
+    <h2 id="page-heading">
+        <span>Listings</span>
+        <button id="jh-create-entity" class="btn btn-primary float-right jh-create-entity create-listing" [routerLink]="['/listing/new']">
+            <fa-icon [icon]="'plus'"></fa-icon>
+            <span >
+            Create new Listing
+            </span>
+        </button>
+    </h2>
+    <jhi-alert></jhi-alert>
+    <br/>
+    <div class="alert alert-warning" *ngIf="listings?.length === 0">
+        <span>No listings found</span>
+    </div>
+    <div class="table-responsive" *ngIf="listings?.length > 0">
+        <table class="table table-striped">
+            <thead>
+            <tr jhiSort [(predicate)]="predicate" [(ascending)]="reverse" [callback]="reset.bind(this)">
+            <th jhiSortBy="id"><span>ID</span> <fa-icon [icon]="'sort'"></fa-icon></th>
+            <th jhiSortBy="timestamp"><span>Timestamp</span> <fa-icon [icon]="'sort'"></fa-icon></th>
+            <th jhiSortBy="type"><span>Type</span> <fa-icon [icon]="'sort'"></fa-icon></th>
+            <th jhiSortBy="rsn"><span>Rsn</span> <fa-icon [icon]="'sort'"></fa-icon></th>
+            <th jhiSortBy="amount"><span>Amount</span> <fa-icon [icon]="'sort'"></fa-icon></th>
+            <th jhiSortBy="description"><span>Description</span> <fa-icon [icon]="'sort'"></fa-icon></th>
+            <th jhiSortBy="active"><span>Active</span> <fa-icon [icon]="'sort'"></fa-icon></th>
+            <th jhiSortBy="owner.username"><span>Owner</span> <fa-icon [icon]="'sort'"></fa-icon></th>
+            <th></th>
+            </tr>
+            </thead>
+            <tbody infinite-scroll (scrolled)="loadPage(page + 1)" [infiniteScrollDisabled]="page >= links['last']" [infiniteScrollDistance]="0">
+            <tr *ngFor="let listing of listings ;trackBy: trackId">
+                <td><a [routerLink]="['/listing', listing.id, 'view' ]">{{listing.id}}</a></td>
+                <td>{{listing.timestamp | date:'medium'}}</td>
+                <td>{{listing.type}}</td>
+                <td>{{listing.rsn}}</td>
+                <td>{{listing.amount}}</td>
+                <td>{{listing.description}}</td>
+                <td>{{listing.active}}</td>
+                <td>
+                    {{listing.owner?.username}}
+                </td>
+                <td class="text-right">
+                    <div class="btn-group">
+                        <button type="submit"
+                                [routerLink]="['/listing', listing.id, 'view' ]"
+                                class="btn btn-info btn-sm">
+                            <fa-icon [icon]="'eye'"></fa-icon>
+                            <span class="d-none d-md-inline">View</span>
+                        </button>
+                        <button type="submit"
+                                [routerLink]="['/listing', listing.id, 'edit']"
+                                class="btn btn-primary btn-sm">
+                            <fa-icon [icon]="'pencil-alt'"></fa-icon>
+                            <span class="d-none d-md-inline">Edit</span>
+                        </button>
+                        <button type="submit"
+                                [routerLink]="['/', 'listing', { outlets: { popup: listing.id + '/delete'} }]"
+                                replaceUrl="true"
+                                queryParamsHandling="merge"
+                                class="btn btn-danger btn-sm">
+                            <fa-icon [icon]="'times'"></fa-icon>
+                            <span class="d-none d-md-inline">Delete</span>
+                        </button>
+                    </div>
+                </td>
+            </tr>
+            </tbody>
+        </table>
+    </div>
+</div>

@@ -22,7 +22,8 @@
             "relationshipName": "trade",
             "otherEntityName": "trade",
             "relationshipType": "many-to-one",
-            "otherEntityField": "id"
+            "otherEntityField": "id",
+            "otherEntityRelationshipName": "rating"
         }
     ],
     "fields": [

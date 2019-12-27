@@ -1,0 +1,49 @@
+<div class="row justify-content-center">
+    <div class="col-8">
+        <div *ngIf="rating">
+            <h2><span>Rating</span> {{rating.id}}</h2>
+            <hr>
+            <jhi-alert-error></jhi-alert-error>
+            <dl class="row-md jh-entity-details">
+                <dt><span>Score</span></dt>
+                <dd>
+                    <span>{{rating.score}}</span>
+                </dd>
+                <dt><span>Message</span></dt>
+                <dd>
+                    <span>{{rating.message}}</span>
+                </dd>
+                <dt><span>Timestamp</span></dt>
+                <dd>
+                    <span>{{rating.timestamp}}</span>
+                </dd>
+                <dt><span>Owner</span></dt>
+                <dd>
+                    {{rating.owner?.login}}
+                </dd>
+                <dt><span>Recipient</span></dt>
+                <dd>
+                    {{rating.recipient?.login}}
+                </dd>
+                <dt><span>Trade</span></dt>
+                <dd>
+                    <div *ngIf="rating.trade">
+                        <a [routerLink]="['/trade', rating.trade?.id, 'view']">{{rating.trade?.id}}</a>
+                    </div>
+                </dd>
+            </dl>
+
+            <button type="submit"
+                    (click)="previousState()"
+                    class="btn btn-info">
+                <fa-icon [icon]="'arrow-left'"></fa-icon>&nbsp;<span> Back</span>
+            </button>
+
+            <button type="button"
+                    [routerLink]="['/rating', rating.id, 'edit']"
+                    class="btn btn-primary">
+                <fa-icon [icon]="'pencil-alt'"></fa-icon>&nbsp;<span> Edit</span>
+            </button>
+        </div>
+    </div>
+</div>

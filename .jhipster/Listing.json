@@ -63,6 +63,6 @@
     "service": "serviceImpl",
     "entityTableName": "listing",
     "databaseType": "sql",
-    "jpaMetamodelFiltering": false,
+    "jpaMetamodelFiltering": true,
     "pagination": "infinite-scroll"
 }
