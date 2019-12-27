@@ -3,7 +3,7 @@
     "clientRootFolder": "",
     "relationships": [
         {
-            "relationshipType": "one-to-one",
+            "relationshipType": "many-to-one",
             "otherEntityName": "user",
             "otherEntityRelationshipName": "offer",
             "relationshipValidateRules": "required",
