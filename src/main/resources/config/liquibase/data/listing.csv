@@ -1,4 +1,0 @@
-id;timestamp;type;rsn;amount;description;active;owner_id
-1;2019-12-01T05:52:43;WANT;Roy;125000000;Trace;true;5
-2;2019-12-01T11:26:19;HAVE;Luffy;600000000;Sick name;true;6
-3;2019-12-01T07:52:41;WANT;Coordinator;23277;You shouldn't be able to see this tbh;false;7
