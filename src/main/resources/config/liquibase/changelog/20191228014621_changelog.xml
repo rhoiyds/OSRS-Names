@@ -1,0 +1,34 @@
+<?xml version="1.1" encoding="UTF-8" standalone="no"?>
+<databaseChangeLog xmlns="http://www.liquibase.org/xml/ns/dbchangelog" xmlns:ext="http://www.liquibase.org/xml/ns/dbchangelog-ext" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog-ext http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-ext.xsd http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.6.xsd">
+    <changeSet author="roypo (generated)" id="1577497587565-5">
+        <addUniqueConstraint columnNames="owner_id" constraintName="UK_2at9xfsk6lpefeiccht13hsrc" tableName="offer"/>
+    </changeSet>
+    <changeSet author="roypo (generated)" id="1577497587565-6">
+        <addForeignKeyConstraint baseColumnNames="owner_id" baseTableName="rating" constraintName="FKhnx8myrhxsq987g6ebr3249x6" deferrable="false" initiallyDeferred="false" referencedColumnNames="id" referencedTableName="jhi_user" validate="true"/>
+    </changeSet>
+    <changeSet author="roypo (generated)" id="1577497587565-7">
+        <addForeignKeyConstraint baseColumnNames="trade_id" baseTableName="rating" constraintName="FKk1yj653r6khe79vk3ibhe4i2o" deferrable="false" initiallyDeferred="false" referencedColumnNames="id" referencedTableName="trade" validate="true"/>
+    </changeSet>
+    <changeSet author="roypo (generated)" id="1577497587565-8">
+        <addForeignKeyConstraint baseColumnNames="recipient_id" baseTableName="rating" constraintName="FKqdddvh6lr7xlhlvefsej6t2db" deferrable="false" initiallyDeferred="false" referencedColumnNames="id" referencedTableName="jhi_user" validate="true"/>
+    </changeSet>
+    <changeSet author="roypo (generated)" id="1577497587565-9">
+        <addForeignKeyConstraint baseColumnNames="id" baseTableName="trade" constraintName="FKtp9q9uapasyi32ka6gjfedrbv" deferrable="false" initiallyDeferred="false" referencedColumnNames="id" referencedTableName="offer" validate="true"/>
+    </changeSet>
+    <changeSet author="roypo (generated)" id="1577497587565-1">
+        <dropUniqueConstraint constraintName="UC_JHI_USEREMAIL_COL" tableName="jhi_user"/>
+        <addUniqueConstraint columnNames="email" constraintName="UC_JHI_USEREMAIL_COL" tableName="jhi_user"/>
+    </changeSet>
+    <changeSet author="roypo (generated)" id="1577497587565-2">
+        <dropUniqueConstraint constraintName="UC_JHI_USERLOGIN_COL" tableName="jhi_user"/>
+        <addUniqueConstraint columnNames="login" constraintName="UC_JHI_USERLOGIN_COL" tableName="jhi_user"/>
+    </changeSet>
+    <changeSet author="roypo (generated)" id="1577497587565-3">
+        <dropUniqueConstraint constraintName="UC_TAGNAME_COL" tableName="tag"/>
+        <addUniqueConstraint columnNames="name" constraintName="UC_TAGNAME_COL" tableName="tag"/>
+    </changeSet>
+    <changeSet author="roypo (generated)" id="1577497587565-4">
+        <dropUniqueConstraint constraintName="UK_2at9xfsk6lpefeiccht13hsrc" tableName="offer"/>
+        <addUniqueConstraint columnNames="owner_id" constraintName="UK_2at9xfsk6lpefeiccht13hsrc" tableName="offer"/>
+    </changeSet>
+</databaseChangeLog>
