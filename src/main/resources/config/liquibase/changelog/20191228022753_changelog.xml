@@ -1,6 +1,6 @@
 <?xml version="1.1" encoding="UTF-8" standalone="no"?>
 <databaseChangeLog xmlns="http://www.liquibase.org/xml/ns/dbchangelog" xmlns:ext="http://www.liquibase.org/xml/ns/dbchangelog-ext" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog-ext http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-ext.xsd http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.6.xsd">
-    <changeSet author="roypo (generated)" id="1577498377031-1">
+    <changeSet author="roypo (generated)" id="1577500123690-1">
         <createTable tableName="comment">
             <column autoIncrement="true" name="id" type="BIGINT">
                 <constraints primaryKey="true" primaryKeyName="commentPK"/>
@@ -15,14 +15,14 @@
             <column name="owner_id" type="BIGINT"/>
         </createTable>
     </changeSet>
-    <changeSet author="roypo (generated)" id="1577498377031-2">
+    <changeSet author="roypo (generated)" id="1577500123690-2">
         <createTable tableName="jhi_authority">
             <column name="name" type="VARCHAR(50)">
                 <constraints primaryKey="true" primaryKeyName="jhi_authorityPK"/>
             </column>
         </createTable>
     </changeSet>
-    <changeSet author="roypo (generated)" id="1577498377031-3">
+    <changeSet author="roypo (generated)" id="1577500123690-3">
         <createTable tableName="jhi_persistent_audit_event">
             <column autoIncrement="true" name="event_id" type="BIGINT">
                 <constraints primaryKey="true" primaryKeyName="jhi_persistent_audit_eventPK"/>
@@ -34,7 +34,7 @@
             </column>
         </createTable>
     </changeSet>
-    <changeSet author="roypo (generated)" id="1577498377031-4">
+    <changeSet author="roypo (generated)" id="1577500123690-4">
         <createTable tableName="jhi_persistent_audit_evt_data">
             <column name="event_id" type="BIGINT">
                 <constraints primaryKey="true"/>
@@ -45,7 +45,7 @@
             </column>
         </createTable>
     </changeSet>
-    <changeSet author="roypo (generated)" id="1577498377031-5">
+    <changeSet author="roypo (generated)" id="1577500123690-5">
         <createTable tableName="jhi_user">
             <column autoIncrement="true" name="id" type="BIGINT">
                 <constraints primaryKey="true" primaryKeyName="jhi_userPK"/>
@@ -75,7 +75,7 @@
             <column name="reset_key" type="VARCHAR(20)"/>
         </createTable>
     </changeSet>
-    <changeSet author="roypo (generated)" id="1577498377031-6">
+    <changeSet author="roypo (generated)" id="1577500123690-6">
         <createTable tableName="jhi_user_authority">
             <column name="user_id" type="BIGINT">
                 <constraints primaryKey="true"/>
@@ -85,7 +85,7 @@
             </column>
         </createTable>
     </changeSet>
-    <changeSet author="roypo (generated)" id="1577498377031-7">
+    <changeSet author="roypo (generated)" id="1577500123690-7">
         <createTable tableName="listing">
             <column autoIncrement="true" name="id" type="BIGINT">
                 <constraints primaryKey="true" primaryKeyName="listingPK"/>
@@ -107,7 +107,7 @@
             </column>
         </createTable>
     </changeSet>
-    <changeSet author="roypo (generated)" id="1577498377031-8">
+    <changeSet author="roypo (generated)" id="1577500123690-8">
         <createTable tableName="listing_tags">
             <column name="listing_id" type="BIGINT">
                 <constraints primaryKey="true"/>
@@ -117,7 +117,7 @@
             </column>
         </createTable>
     </changeSet>
-    <changeSet author="roypo (generated)" id="1577498377031-9">
+    <changeSet author="roypo (generated)" id="1577500123690-9">
         <createTable tableName="offer">
             <column autoIncrement="true" name="id" type="BIGINT">
                 <constraints primaryKey="true" primaryKeyName="offerPK"/>
@@ -135,7 +135,7 @@
             </column>
         </createTable>
     </changeSet>
-    <changeSet author="roypo (generated)" id="1577498377031-10">
+    <changeSet author="roypo (generated)" id="1577500123690-10">
         <createTable tableName="rating">
             <column autoIncrement="true" name="id" type="BIGINT">
                 <constraints primaryKey="true" primaryKeyName="ratingPK"/>
@@ -152,7 +152,7 @@
             <column name="trade_id" type="BIGINT"/>
         </createTable>
     </changeSet>
-    <changeSet author="roypo (generated)" id="1577498377031-11">
+    <changeSet author="roypo (generated)" id="1577500123690-11">
         <createTable tableName="tag">
             <column autoIncrement="true" name="id" type="BIGINT">
                 <constraints primaryKey="true" primaryKeyName="tagPK"/>
@@ -162,7 +162,7 @@
             </column>
         </createTable>
     </changeSet>
-    <changeSet author="roypo (generated)" id="1577498377031-12">
+    <changeSet author="roypo (generated)" id="1577500123690-12">
         <createTable tableName="trade">
             <column name="id" type="BIGINT">
                 <constraints primaryKey="true" primaryKeyName="tradePK"/>
@@ -171,58 +171,55 @@
             <column name="offer_owner_status" type="VARCHAR(255)"/>
         </createTable>
     </changeSet>
-    <changeSet author="roypo (generated)" id="1577498377031-13">
+    <changeSet author="roypo (generated)" id="1577500123690-13">
         <addUniqueConstraint columnNames="email" constraintName="UC_JHI_USEREMAIL_COL" tableName="jhi_user"/>
     </changeSet>
-    <changeSet author="roypo (generated)" id="1577498377031-14">
+    <changeSet author="roypo (generated)" id="1577500123690-14">
         <addUniqueConstraint columnNames="login" constraintName="UC_JHI_USERLOGIN_COL" tableName="jhi_user"/>
     </changeSet>
-    <changeSet author="roypo (generated)" id="1577498377031-15">
+    <changeSet author="roypo (generated)" id="1577500123690-15">
         <addUniqueConstraint columnNames="name" constraintName="UC_TAGNAME_COL" tableName="tag"/>
     </changeSet>
-    <changeSet author="roypo (generated)" id="1577498377031-16">
-        <addUniqueConstraint columnNames="owner_id" constraintName="UK_2at9xfsk6lpefeiccht13hsrc" tableName="offer"/>
-    </changeSet>
-    <changeSet author="roypo (generated)" id="1577498377031-17">
+    <changeSet author="roypo (generated)" id="1577500123690-16">
         <addForeignKeyConstraint baseColumnNames="user_id" baseTableName="jhi_user_authority" constraintName="FK290okww5jujghp4el5i7mgwu0" deferrable="false" initiallyDeferred="false" referencedColumnNames="id" referencedTableName="jhi_user" validate="true"/>
     </changeSet>
-    <changeSet author="roypo (generated)" id="1577498377031-18">
+    <changeSet author="roypo (generated)" id="1577500123690-17">
         <addForeignKeyConstraint baseColumnNames="event_id" baseTableName="jhi_persistent_audit_evt_data" constraintName="FK2ehnyx2si4tjd2nt4q7y40v8m" deferrable="false" initiallyDeferred="false" referencedColumnNames="event_id" referencedTableName="jhi_persistent_audit_event" validate="true"/>
     </changeSet>
-    <changeSet author="roypo (generated)" id="1577498377031-19">
+    <changeSet author="roypo (generated)" id="1577500123690-18">
         <addForeignKeyConstraint baseColumnNames="owner_id" baseTableName="offer" constraintName="FK3f26e746pv90psfvpwl92k5e5" deferrable="false" initiallyDeferred="false" referencedColumnNames="id" referencedTableName="jhi_user" validate="true"/>
     </changeSet>
-    <changeSet author="roypo (generated)" id="1577498377031-20">
+    <changeSet author="roypo (generated)" id="1577500123690-19">
         <addForeignKeyConstraint baseColumnNames="authority_name" baseTableName="jhi_user_authority" constraintName="FK4psxl0jtx6nr7rhqbynr6itoc" deferrable="false" initiallyDeferred="false" referencedColumnNames="name" referencedTableName="jhi_authority" validate="true"/>
     </changeSet>
-    <changeSet author="roypo (generated)" id="1577498377031-21">
+    <changeSet author="roypo (generated)" id="1577500123690-20">
         <addForeignKeyConstraint baseColumnNames="tags_id" baseTableName="listing_tags" constraintName="FK8go8tkyvwxe85mu70wnmv9bhk" deferrable="false" initiallyDeferred="false" referencedColumnNames="id" referencedTableName="tag" validate="true"/>
     </changeSet>
-    <changeSet author="roypo (generated)" id="1577498377031-22">
+    <changeSet author="roypo (generated)" id="1577500123690-21">
         <addForeignKeyConstraint baseColumnNames="listing_id" baseTableName="listing_tags" constraintName="FK9ntlontc599vn80404tkanft1" deferrable="false" initiallyDeferred="false" referencedColumnNames="id" referencedTableName="listing" validate="true"/>
     </changeSet>
-    <changeSet author="roypo (generated)" id="1577498377031-23">
+    <changeSet author="roypo (generated)" id="1577500123690-22">
         <addForeignKeyConstraint baseColumnNames="offer_id" baseTableName="comment" constraintName="FKawotdo8geckjc8t09jpu7eodk" deferrable="false" initiallyDeferred="false" referencedColumnNames="id" referencedTableName="offer" validate="true"/>
     </changeSet>
-    <changeSet author="roypo (generated)" id="1577498377031-24">
+    <changeSet author="roypo (generated)" id="1577500123690-23">
         <addForeignKeyConstraint baseColumnNames="owner_id" baseTableName="rating" constraintName="FKhnx8myrhxsq987g6ebr3249x6" deferrable="false" initiallyDeferred="false" referencedColumnNames="id" referencedTableName="jhi_user" validate="true"/>
     </changeSet>
-    <changeSet author="roypo (generated)" id="1577498377031-25">
+    <changeSet author="roypo (generated)" id="1577500123690-24">
         <addForeignKeyConstraint baseColumnNames="owner_id" baseTableName="listing" constraintName="FKibfutsa5ejudlb918mmlimouh" deferrable="false" initiallyDeferred="false" referencedColumnNames="id" referencedTableName="jhi_user" validate="true"/>
     </changeSet>
-    <changeSet author="roypo (generated)" id="1577498377031-26">
+    <changeSet author="roypo (generated)" id="1577500123690-25">
         <addForeignKeyConstraint baseColumnNames="owner_id" baseTableName="comment" constraintName="FKjgutv9am41te4vf7k5idfy7pf" deferrable="false" initiallyDeferred="false" referencedColumnNames="id" referencedTableName="jhi_user" validate="true"/>
     </changeSet>
-    <changeSet author="roypo (generated)" id="1577498377031-27">
+    <changeSet author="roypo (generated)" id="1577500123690-26">
         <addForeignKeyConstraint baseColumnNames="trade_id" baseTableName="rating" constraintName="FKk1yj653r6khe79vk3ibhe4i2o" deferrable="false" initiallyDeferred="false" referencedColumnNames="id" referencedTableName="trade" validate="true"/>
     </changeSet>
-    <changeSet author="roypo (generated)" id="1577498377031-28">
+    <changeSet author="roypo (generated)" id="1577500123690-27">
         <addForeignKeyConstraint baseColumnNames="recipient_id" baseTableName="rating" constraintName="FKqdddvh6lr7xlhlvefsej6t2db" deferrable="false" initiallyDeferred="false" referencedColumnNames="id" referencedTableName="jhi_user" validate="true"/>
     </changeSet>
-    <changeSet author="roypo (generated)" id="1577498377031-29">
+    <changeSet author="roypo (generated)" id="1577500123690-28">
         <addForeignKeyConstraint baseColumnNames="listing_id" baseTableName="offer" constraintName="FKqsbrjj3aajgd9jmfelwo1nps6" deferrable="false" initiallyDeferred="false" referencedColumnNames="id" referencedTableName="listing" validate="true"/>
     </changeSet>
-    <changeSet author="roypo (generated)" id="1577498377031-30">
+    <changeSet author="roypo (generated)" id="1577500123690-29">
         <addForeignKeyConstraint baseColumnNames="id" baseTableName="trade" constraintName="FKtp9q9uapasyi32ka6gjfedrbv" deferrable="false" initiallyDeferred="false" referencedColumnNames="id" referencedTableName="offer" validate="true"/>
     </changeSet>
 </databaseChangeLog>

@@ -36,9 +36,9 @@ public class Offer implements Serializable {
     @Column(name = "status")
     private OfferStatus status;
 
-    @OneToOne(optional = false)    @NotNull
-
-    @JoinColumn(unique = true)
+    @ManyToOne(optional = false)
+    @NotNull
+    @JsonIgnoreProperties("offers")
     private User owner;
 
     @ManyToOne(optional = false)
