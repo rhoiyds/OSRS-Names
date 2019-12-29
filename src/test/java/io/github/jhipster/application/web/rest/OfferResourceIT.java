@@ -1,11 +1,10 @@
 package io.github.jhipster.application.web.rest;
 
-import io.github.jhipster.application.RsnsalesApp;
+import io.github.jhipster.application.OsrsnamesApp;
 import io.github.jhipster.application.domain.Offer;
 import io.github.jhipster.application.domain.User;
 import io.github.jhipster.application.domain.Listing;
 import io.github.jhipster.application.repository.OfferRepository;
-import io.github.jhipster.application.repository.search.OfferSearchRepository;
 import io.github.jhipster.application.service.OfferService;
 import io.github.jhipster.application.service.ListingService;
 import io.github.jhipster.application.service.UserService;
@@ -30,14 +29,11 @@ import org.springframework.validation.Validator;
 import javax.persistence.EntityManager;
 import java.time.Instant;
 import java.time.temporal.ChronoUnit;
-import java.util.Collections;
 import java.util.List;
 
 import static io.github.jhipster.application.web.rest.TestUtil.createFormattingConversionService;
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.elasticsearch.index.query.QueryBuilders.queryStringQuery;
 import static org.hamcrest.Matchers.hasItem;
-import static org.mockito.Mockito.*;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
@@ -45,7 +41,7 @@ import io.github.jhipster.application.domain.enumeration.OfferStatus;
 /**
  * Integration tests for the {@Link OfferResource} REST controller.
  */
-@SpringBootTest(classes = RsnsalesApp.class)
+@SpringBootTest(classes = OsrsnamesApp.class)
 public class OfferResourceIT {
 
     private static final Instant DEFAULT_TIMESTAMP = Instant.ofEpochMilli(0L);
@@ -74,14 +70,6 @@ public class OfferResourceIT {
 
     @Autowired
     private ListingService listingService;
-
-    /**
-     * This repository is mocked in the io.github.jhipster.application.repository.search test package.
-     *
-     * @see io.github.jhipster.application.repository.search.OfferSearchRepositoryMockConfiguration
-     */
-    @Autowired
-    private OfferSearchRepository mockOfferSearchRepository;
 
     @Autowired
     private MappingJackson2HttpMessageConverter jacksonMessageConverter;
@@ -194,9 +182,6 @@ public class OfferResourceIT {
         assertThat(testOffer.getTimestamp()).isEqualTo(DEFAULT_TIMESTAMP);
         assertThat(testOffer.getDescription()).isEqualTo(DEFAULT_DESCRIPTION);
         assertThat(testOffer.getStatus()).isEqualTo(DEFAULT_STATUS);
-
-        // Validate the Offer in Elasticsearch
-        verify(mockOfferSearchRepository, times(1)).save(testOffer);
     }
 
     @Test
@@ -216,9 +201,6 @@ public class OfferResourceIT {
         // Validate the Offer in the database
         List<Offer> offerList = offerRepository.findAll();
         assertThat(offerList).hasSize(databaseSizeBeforeCreate);
-
-        // Validate the Offer in Elasticsearch
-        verify(mockOfferSearchRepository, times(0)).save(offer);
     }
 
 
@@ -285,8 +267,6 @@ public class OfferResourceIT {
     public void updateOffer() throws Exception {
         // Initialize the database
         offerService.save(offer);
-        // As the test used the service layer, reset the Elasticsearch mock repository
-        reset(mockOfferSearchRepository);
 
         int databaseSizeBeforeUpdate = offerRepository.findAll().size();
 
@@ -311,9 +291,6 @@ public class OfferResourceIT {
         assertThat(testOffer.getTimestamp()).isEqualTo(UPDATED_TIMESTAMP);
         assertThat(testOffer.getDescription()).isEqualTo(UPDATED_DESCRIPTION);
         assertThat(testOffer.getStatus()).isEqualTo(UPDATED_STATUS);
-
-        // Validate the Offer in Elasticsearch
-        verify(mockOfferSearchRepository, times(1)).save(testOffer);
     }
 
     @Test
@@ -332,9 +309,6 @@ public class OfferResourceIT {
         // Validate the Offer in the database
         List<Offer> offerList = offerRepository.findAll();
         assertThat(offerList).hasSize(databaseSizeBeforeUpdate);
-
-        // Validate the Offer in Elasticsearch
-        verify(mockOfferSearchRepository, times(0)).save(offer);
     }
 
     @Test
@@ -353,26 +327,6 @@ public class OfferResourceIT {
         // Validate the database contains one less item
         List<Offer> offerList = offerRepository.findAll();
         assertThat(offerList).hasSize(databaseSizeBeforeDelete - 1);
-
-        // Validate the Offer in Elasticsearch
-        verify(mockOfferSearchRepository, times(1)).deleteById(offer.getId());
-    }
-
-    @Test
-    @Transactional
-    public void searchOffer() throws Exception {
-        // Initialize the database
-        offerService.save(offer);
-        when(mockOfferSearchRepository.search(queryStringQuery("id:" + offer.getId())))
-            .thenReturn(Collections.singletonList(offer));
-        // Search the offer
-        restOfferMockMvc.perform(get("/api/_search/offers?query=id:" + offer.getId()))
-            .andExpect(status().isOk())
-            .andExpect(content().contentType(MediaType.APPLICATION_JSON_UTF8_VALUE))
-            .andExpect(jsonPath("$.[*].id").value(hasItem(offer.getId().intValue())))
-            .andExpect(jsonPath("$.[*].timestamp").value(hasItem(DEFAULT_TIMESTAMP.toString())))
-            .andExpect(jsonPath("$.[*].description").value(hasItem(DEFAULT_DESCRIPTION)))
-            .andExpect(jsonPath("$.[*].status").value(hasItem(DEFAULT_STATUS.toString())));
     }
 
     @Test

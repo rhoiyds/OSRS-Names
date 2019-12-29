@@ -34,7 +34,7 @@ import java.util.stream.StreamSupport;
 import java.math.RoundingMode;
 import java.text.DecimalFormat;
 
-import static org.elasticsearch.index.query.QueryBuilders.*;
+
 
 /**
  * REST controller for managing {@link io.github.jhipster.application.domain.Rating}.
@@ -157,24 +157,6 @@ public class RatingResource {
         log.debug("REST request to delete Rating : {}", id);
         ratingService.delete(id);
         return ResponseEntity.noContent().headers(HeaderUtil.createEntityDeletionAlert(applicationName, false, ENTITY_NAME, id.toString())).build();
-    }
-
-    /**
-     * {@code SEARCH  /_search/ratings?query=:query} : search for the rating corresponding
-     * to the query.
-     *
-     * @param query the query of the rating search.
-     * @param pageable the pagination information.
-     * @param queryParams a {@link MultiValueMap} query parameters.
-     * @param uriBuilder a {@link UriComponentsBuilder} URI builder.
-     * @return the result of the search.
-     */
-    @GetMapping("/_search/ratings")
-    public ResponseEntity<List<Rating>> searchRatings(@RequestParam String query, Pageable pageable, @RequestParam MultiValueMap<String, String> queryParams, UriComponentsBuilder uriBuilder) {
-        log.debug("REST request to search for a page of Ratings for query {}", query);
-        Page<Rating> page = ratingService.search(query, pageable);
-        HttpHeaders headers = PaginationUtil.generatePaginationHttpHeaders(uriBuilder.queryParams(queryParams), page);
-        return ResponseEntity.ok().headers(headers).body(page.getContent());
     }
 
     /**

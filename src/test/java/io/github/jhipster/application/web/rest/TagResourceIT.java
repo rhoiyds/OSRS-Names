@@ -1,9 +1,8 @@
 package io.github.jhipster.application.web.rest;
 
-import io.github.jhipster.application.RsnsalesApp;
+import io.github.jhipster.application.OsrsnamesApp;
 import io.github.jhipster.application.domain.Tag;
 import io.github.jhipster.application.repository.TagRepository;
-import io.github.jhipster.application.repository.search.TagSearchRepository;
 import io.github.jhipster.application.service.TagService;
 import io.github.jhipster.application.web.rest.errors.ExceptionTranslator;
 
@@ -12,8 +11,6 @@ import org.junit.jupiter.api.Test;
 import org.mockito.MockitoAnnotations;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.data.domain.PageImpl;
-import org.springframework.data.domain.PageRequest;
 import org.springframework.data.web.PageableHandlerMethodArgumentResolver;
 import org.springframework.http.MediaType;
 import org.springframework.http.converter.json.MappingJackson2HttpMessageConverter;
@@ -23,21 +20,18 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.validation.Validator;
 
 import javax.persistence.EntityManager;
-import java.util.Collections;
 import java.util.List;
 
 import static io.github.jhipster.application.web.rest.TestUtil.createFormattingConversionService;
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.elasticsearch.index.query.QueryBuilders.queryStringQuery;
 import static org.hamcrest.Matchers.hasItem;
-import static org.mockito.Mockito.*;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 /**
  * Integration tests for the {@Link TagResource} REST controller.
  */
-@SpringBootTest(classes = RsnsalesApp.class)
+@SpringBootTest(classes = OsrsnamesApp.class)
 public class TagResourceIT {
 
     private static final String DEFAULT_NAME = "AAAAAAAAAA";
@@ -48,14 +42,6 @@ public class TagResourceIT {
 
     @Autowired
     private TagService tagService;
-
-    /**
-     * This repository is mocked in the io.github.jhipster.application.repository.search test package.
-     *
-     * @see io.github.jhipster.application.repository.search.TagSearchRepositoryMockConfiguration
-     */
-    @Autowired
-    private TagSearchRepository mockTagSearchRepository;
 
     @Autowired
     private MappingJackson2HttpMessageConverter jacksonMessageConverter;
@@ -132,9 +118,6 @@ public class TagResourceIT {
         assertThat(tagList).hasSize(databaseSizeBeforeCreate + 1);
         Tag testTag = tagList.get(tagList.size() - 1);
         assertThat(testTag.getName()).isEqualTo(DEFAULT_NAME);
-
-        // Validate the Tag in Elasticsearch
-        verify(mockTagSearchRepository, times(1)).save(testTag);
     }
 
     @Test
@@ -154,9 +137,6 @@ public class TagResourceIT {
         // Validate the Tag in the database
         List<Tag> tagList = tagRepository.findAll();
         assertThat(tagList).hasSize(databaseSizeBeforeCreate);
-
-        // Validate the Tag in Elasticsearch
-        verify(mockTagSearchRepository, times(0)).save(tag);
     }
 
 
@@ -219,8 +199,6 @@ public class TagResourceIT {
     public void updateTag() throws Exception {
         // Initialize the database
         tagService.save(tag);
-        // As the test used the service layer, reset the Elasticsearch mock repository
-        reset(mockTagSearchRepository);
 
         int databaseSizeBeforeUpdate = tagRepository.findAll().size();
 
@@ -241,9 +219,6 @@ public class TagResourceIT {
         assertThat(tagList).hasSize(databaseSizeBeforeUpdate);
         Tag testTag = tagList.get(tagList.size() - 1);
         assertThat(testTag.getName()).isEqualTo(UPDATED_NAME);
-
-        // Validate the Tag in Elasticsearch
-        verify(mockTagSearchRepository, times(1)).save(testTag);
     }
 
     @Test
@@ -262,9 +237,6 @@ public class TagResourceIT {
         // Validate the Tag in the database
         List<Tag> tagList = tagRepository.findAll();
         assertThat(tagList).hasSize(databaseSizeBeforeUpdate);
-
-        // Validate the Tag in Elasticsearch
-        verify(mockTagSearchRepository, times(0)).save(tag);
     }
 
     @Test
@@ -283,24 +255,6 @@ public class TagResourceIT {
         // Validate the database contains one less item
         List<Tag> tagList = tagRepository.findAll();
         assertThat(tagList).hasSize(databaseSizeBeforeDelete - 1);
-
-        // Validate the Tag in Elasticsearch
-        verify(mockTagSearchRepository, times(1)).deleteById(tag.getId());
-    }
-
-    @Test
-    @Transactional
-    public void searchTag() throws Exception {
-        // Initialize the database
-        tagService.save(tag);
-        when(mockTagSearchRepository.search(queryStringQuery("id:" + tag.getId()), PageRequest.of(0, 20)))
-            .thenReturn(new PageImpl<>(Collections.singletonList(tag), PageRequest.of(0, 1), 1));
-        // Search the tag
-        restTagMockMvc.perform(get("/api/_search/tags?query=id:" + tag.getId()))
-            .andExpect(status().isOk())
-            .andExpect(content().contentType(MediaType.APPLICATION_JSON_UTF8_VALUE))
-            .andExpect(jsonPath("$.[*].id").value(hasItem(tag.getId().intValue())))
-            .andExpect(jsonPath("$.[*].name").value(hasItem(DEFAULT_NAME)));
     }
 
     @Test

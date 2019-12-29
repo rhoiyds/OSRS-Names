@@ -6,7 +6,6 @@ import org.hibernate.annotations.CacheConcurrencyStrategy;
 import javax.persistence.*;
 import javax.validation.constraints.*;
 
-import org.springframework.data.elasticsearch.annotations.FieldType;
 import java.io.Serializable;
 import java.time.Instant;
 
@@ -18,14 +17,12 @@ import io.github.jhipster.application.domain.enumeration.OfferStatus;
 @Entity
 @Table(name = "offer")
 @Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)
-@org.springframework.data.elasticsearch.annotations.Document(indexName = "offer")
 public class Offer implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @org.springframework.data.elasticsearch.annotations.Field(type = FieldType.Keyword)
     private Long id;
 
     @Column(name = "timestamp", nullable = false)
@@ -38,7 +35,8 @@ public class Offer implements Serializable {
     @Column(name = "status")
     private OfferStatus status;
 
-    @OneToOne(optional = false)
+    @ManyToOne(optional = false)
+    @JsonIgnoreProperties("offers")
     private User owner;
 
     @ManyToOne(optional = false)

@@ -3,11 +3,9 @@ import { HttpResponse } from '@angular/common/http';
 import { FormBuilder } from '@angular/forms';
 import { Observable, of, throwError } from 'rxjs';
 
-import { RsnsalesTestModule } from '../../../test.module';
+import { OsrsnamesTestModule } from '../../../test.module';
 import { PasswordComponent } from 'app/account/password/password.component';
 import { PasswordService } from 'app/account/password/password.service';
-import { JhiTrackerService } from 'app/core/tracker/tracker.service';
-import { MockTrackerService } from '../../../helpers/mock-tracker.service';
 
 describe('Component Tests', () => {
   describe('PasswordComponent', () => {
@@ -17,15 +15,9 @@ describe('Component Tests', () => {
 
     beforeEach(async(() => {
       TestBed.configureTestingModule({
-        imports: [RsnsalesTestModule],
+        imports: [OsrsnamesTestModule],
         declarations: [PasswordComponent],
-        providers: [
-          FormBuilder,
-          {
-            provide: JhiTrackerService,
-            useClass: MockTrackerService
-          }
-        ]
+        providers: [FormBuilder]
       })
         .overrideTemplate(PasswordComponent, '')
         .compileComponents();

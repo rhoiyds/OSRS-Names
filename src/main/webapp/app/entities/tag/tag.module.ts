@@ -1,7 +1,7 @@
 import { NgModule, CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
 import { RouterModule } from '@angular/router';
 
-import { RsnsalesSharedModule } from 'app/shared';
+import { OsrsnamesSharedModule } from 'app/shared';
 import {
   TagComponent,
   TagDetailComponent,
@@ -15,9 +15,9 @@ import {
 const ENTITY_STATES = [...tagRoute, ...tagPopupRoute];
 
 @NgModule({
-  imports: [RsnsalesSharedModule, RouterModule.forChild(ENTITY_STATES)],
+  imports: [OsrsnamesSharedModule, RouterModule.forChild(ENTITY_STATES)],
   declarations: [TagComponent, TagDetailComponent, TagUpdateComponent, TagDeleteDialogComponent, TagDeletePopupComponent],
   entryComponents: [TagComponent, TagUpdateComponent, TagDeleteDialogComponent, TagDeletePopupComponent],
   schemas: [CUSTOM_ELEMENTS_SCHEMA]
 })
-export class RsnsalesTagModule {}
+export class OsrsnamesTagModule {}

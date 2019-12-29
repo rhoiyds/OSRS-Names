@@ -20,7 +20,7 @@ export class MockLoginService extends SpyObject {
   }
 
   setLoginSpy(json: any) {
-    this.loginSpy = this.spy('username').andReturn(Promise.resolve(json));
+    this.loginSpy = this.spy('login').andReturn(Promise.resolve(json));
   }
 
   setResponse(json: any): void {

@@ -17,7 +17,6 @@ import io.github.jhipster.service.QueryService;
 import io.github.jhipster.application.domain.Rating;
 import io.github.jhipster.application.domain.*; // for static metamodels
 import io.github.jhipster.application.repository.RatingRepository;
-import io.github.jhipster.application.repository.search.RatingSearchRepository;
 import io.github.jhipster.application.service.dto.RatingCriteria;
 
 /**
@@ -34,11 +33,8 @@ public class RatingQueryService extends QueryService<Rating> {
 
     private final RatingRepository ratingRepository;
 
-    private final RatingSearchRepository ratingSearchRepository;
-
-    public RatingQueryService(RatingRepository ratingRepository, RatingSearchRepository ratingSearchRepository) {
+    public RatingQueryService(RatingRepository ratingRepository) {
         this.ratingRepository = ratingRepository;
-        this.ratingSearchRepository = ratingSearchRepository;
     }
 
     /**

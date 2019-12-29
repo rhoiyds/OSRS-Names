@@ -17,7 +17,6 @@ import io.github.jhipster.service.QueryService;
 import io.github.jhipster.application.domain.Trade;
 import io.github.jhipster.application.domain.*; // for static metamodels
 import io.github.jhipster.application.repository.TradeRepository;
-import io.github.jhipster.application.repository.search.TradeSearchRepository;
 import io.github.jhipster.application.service.dto.TradeCriteria;
 
 /**
@@ -34,11 +33,8 @@ public class TradeQueryService extends QueryService<Trade> {
 
     private final TradeRepository tradeRepository;
 
-    private final TradeSearchRepository tradeSearchRepository;
-
-    public TradeQueryService(TradeRepository tradeRepository, TradeSearchRepository tradeSearchRepository) {
+    public TradeQueryService(TradeRepository tradeRepository) {
         this.tradeRepository = tradeRepository;
-        this.tradeSearchRepository = tradeSearchRepository;
     }
 
     /**

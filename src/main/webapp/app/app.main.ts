@@ -1,6 +1,6 @@
 import { platformBrowserDynamic } from '@angular/platform-browser-dynamic';
 import { ProdConfig } from './blocks/config/prod.config';
-import { RsnsalesAppModule } from './app.module';
+import { OsrsnamesAppModule } from './app.module';
 
 ProdConfig();
 
@@ -9,6 +9,6 @@ if (module['hot']) {
 }
 
 platformBrowserDynamic()
-  .bootstrapModule(RsnsalesAppModule, { preserveWhitespaces: true })
+  .bootstrapModule(OsrsnamesAppModule, { preserveWhitespaces: true })
   .then(success => console.log(`Application started`))
   .catch(err => console.error(err));

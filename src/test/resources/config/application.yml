@@ -15,10 +15,10 @@
 
 spring:
   application:
-    name: rsnsales
+    name: osrsnames
   datasource:
     type: com.zaxxer.hikari.HikariDataSource
-    url: jdbc:h2:mem:rsnsales;DB_CLOSE_DELAY=-1;DB_CLOSE_ON_EXIT=FALSE;MULTI_THREADED=FALSE
+    url: jdbc:h2:mem:osrsnames;DB_CLOSE_DELAY=-1;DB_CLOSE_ON_EXIT=FALSE;MULTI_THREADED=FALSE
     name:
     username:
     password:
@@ -42,11 +42,6 @@ spring:
       hibernate.generate_statistics: false
       hibernate.hbm2ddl.auto: validate
       hibernate.jdbc.time_zone: UTC
-  data:
-    elasticsearch:
-      properties:
-        path:
-          home: target/elasticsearch
   liquibase:
     contexts: test
   mail:
@@ -60,13 +55,13 @@ spring:
       enabled: false
   task:
     execution:
-      thread-name-prefix: rsnsales-task-
+      thread-name-prefix: osrsnames-task-
       pool:
         core-size: 1
         max-size: 50
         queue-capacity: 10000
     scheduling:
-      thread-name-prefix: rsnsales-scheduling-
+      thread-name-prefix: osrsnames-scheduling-
       pool:
         size: 1
   thymeleaf:
@@ -84,7 +79,7 @@ server:
 
 jhipster:
   clientApp:
-    name: 'rsnsalesApp'
+    name: 'osrsnamesApp'
   logging:
     # To test json console appender
     use-json-format: true # By default, logs are in Json format

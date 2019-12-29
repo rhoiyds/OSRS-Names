@@ -4,7 +4,7 @@ import { HttpResponse } from '@angular/common/http';
 import { FormBuilder } from '@angular/forms';
 import { Observable, of } from 'rxjs';
 
-import { RsnsalesTestModule } from '../../../test.module';
+import { OsrsnamesTestModule } from '../../../test.module';
 import { RatingUpdateComponent } from 'app/entities/rating/rating-update.component';
 import { RatingService } from 'app/entities/rating/rating.service';
 import { Rating } from 'app/shared/model/rating.model';
@@ -17,7 +17,7 @@ describe('Component Tests', () => {
 
     beforeEach(() => {
       TestBed.configureTestingModule({
-        imports: [RsnsalesTestModule],
+        imports: [OsrsnamesTestModule],
         declarations: [RatingUpdateComponent],
         providers: [FormBuilder]
       })

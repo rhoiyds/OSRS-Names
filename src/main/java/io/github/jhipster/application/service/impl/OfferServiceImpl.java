@@ -4,7 +4,6 @@ import io.github.jhipster.application.domain.Listing;
 import io.github.jhipster.application.service.OfferService;
 import io.github.jhipster.application.domain.Offer;
 import io.github.jhipster.application.repository.OfferRepository;
-import io.github.jhipster.application.repository.search.OfferSearchRepository;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -13,10 +12,6 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.Optional;
-import java.util.stream.Collectors;
-import java.util.stream.StreamSupport;
-
-import static org.elasticsearch.index.query.QueryBuilders.*;
 
 /**
  * Service Implementation for managing {@link Offer}.
@@ -29,11 +24,8 @@ public class OfferServiceImpl implements OfferService {
 
     private final OfferRepository offerRepository;
 
-    private final OfferSearchRepository offerSearchRepository;
-
-    public OfferServiceImpl(OfferRepository offerRepository, OfferSearchRepository offerSearchRepository) {
+    public OfferServiceImpl(OfferRepository offerRepository) {
         this.offerRepository = offerRepository;
-        this.offerSearchRepository = offerSearchRepository;
     }
 
     /**
@@ -45,9 +37,7 @@ public class OfferServiceImpl implements OfferService {
     @Override
     public Offer save(Offer offer) {
         log.debug("Request to save Offer : {}", offer);
-        Offer result = offerRepository.save(offer);
-        offerSearchRepository.save(result);
-        return result;
+        return offerRepository.save(offer);
     }
 
     /**
@@ -85,22 +75,6 @@ public class OfferServiceImpl implements OfferService {
     public void delete(Long id) {
         log.debug("Request to delete Offer : {}", id);
         offerRepository.deleteById(id);
-        offerSearchRepository.deleteById(id);
-    }
-
-    /**
-     * Search for the offer corresponding to the query.
-     *
-     * @param query the query of the search.
-     * @return the list of entities.
-     */
-    @Override
-    @Transactional(readOnly = true)
-    public List<Offer> search(String query) {
-        log.debug("Request to search Offers for query {}", query);
-        return StreamSupport
-            .stream(offerSearchRepository.search(queryStringQuery(query)).spliterator(), false)
-            .collect(Collectors.toList());
     }
 
     @Override

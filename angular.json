@@ -3,7 +3,7 @@
   "version": 1,
   "newProjectRoot": "projects",
   "projects": {
-    "rsnsales": {
+    "osrsnames": {
       "root": "",
       "sourceRoot": "src/main/webapp",
       "projectType": "application",
@@ -29,7 +29,7 @@
       "architect": {}
     }
   },
-  "defaultProject": "rsnsales",
+  "defaultProject": "osrsnames",
   "cli": {
     "packageManager": "npm"
   }

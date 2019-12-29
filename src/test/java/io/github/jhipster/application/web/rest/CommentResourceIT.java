@@ -1,11 +1,10 @@
 package io.github.jhipster.application.web.rest;
 
-import io.github.jhipster.application.RsnsalesApp;
+import io.github.jhipster.application.OsrsnamesApp;
 import io.github.jhipster.application.domain.Comment;
 import io.github.jhipster.application.domain.Offer;
 import io.github.jhipster.application.domain.User;
 import io.github.jhipster.application.repository.CommentRepository;
-import io.github.jhipster.application.repository.search.CommentSearchRepository;
 import io.github.jhipster.application.service.CommentService;
 import io.github.jhipster.application.service.MailService;
 import io.github.jhipster.application.web.rest.errors.ExceptionTranslator;
@@ -19,8 +18,6 @@ import org.junit.jupiter.api.Test;
 import org.mockito.MockitoAnnotations;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.data.domain.PageImpl;
-import org.springframework.data.domain.PageRequest;
 import org.springframework.data.web.PageableHandlerMethodArgumentResolver;
 import org.springframework.http.MediaType;
 import org.springframework.http.converter.json.MappingJackson2HttpMessageConverter;
@@ -32,21 +29,18 @@ import org.springframework.validation.Validator;
 import javax.persistence.EntityManager;
 import java.time.Instant;
 import java.time.temporal.ChronoUnit;
-import java.util.Collections;
 import java.util.List;
 
 import static io.github.jhipster.application.web.rest.TestUtil.createFormattingConversionService;
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.elasticsearch.index.query.QueryBuilders.queryStringQuery;
 import static org.hamcrest.Matchers.hasItem;
-import static org.mockito.Mockito.*;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 /**
  * Integration tests for the {@Link CommentResource} REST controller.
  */
-@SpringBootTest(classes = RsnsalesApp.class)
+@SpringBootTest(classes = OsrsnamesApp.class)
 public class CommentResourceIT {
 
     private static final Instant DEFAULT_TIMESTAMP = Instant.ofEpochMilli(0L);
@@ -66,13 +60,6 @@ public class CommentResourceIT {
 
     @Autowired
     private UserService userService;
-    /**
-     * This repository is mocked in the io.github.jhipster.application.repository.search test package.
-     *
-     * @see io.github.jhipster.application.repository.search.CommentSearchRepositoryMockConfiguration
-     */
-    @Autowired
-    private CommentSearchRepository mockCommentSearchRepository;
 
     @Autowired
     private CommentQueryService commentQueryService;
@@ -155,9 +142,6 @@ public class CommentResourceIT {
         Comment testComment = commentList.get(commentList.size() - 1);
         assertThat(testComment.getTimestamp()).isEqualTo(DEFAULT_TIMESTAMP);
         assertThat(testComment.getText()).isEqualTo(DEFAULT_TEXT);
-
-        // Validate the Comment in Elasticsearch
-        verify(mockCommentSearchRepository, times(1)).save(testComment);
     }
 
     @Test
@@ -177,9 +161,6 @@ public class CommentResourceIT {
         // Validate the Comment in the database
         List<Comment> commentList = commentRepository.findAll();
         assertThat(commentList).hasSize(databaseSizeBeforeCreate);
-
-        // Validate the Comment in Elasticsearch
-        verify(mockCommentSearchRepository, times(0)).save(comment);
     }
 
 
@@ -413,8 +394,6 @@ public class CommentResourceIT {
     public void updateComment() throws Exception {
         // Initialize the database
         commentService.save(comment);
-        // As the test used the service layer, reset the Elasticsearch mock repository
-        reset(mockCommentSearchRepository);
 
         int databaseSizeBeforeUpdate = commentRepository.findAll().size();
 
@@ -437,9 +416,6 @@ public class CommentResourceIT {
         Comment testComment = commentList.get(commentList.size() - 1);
         assertThat(testComment.getTimestamp()).isEqualTo(UPDATED_TIMESTAMP);
         assertThat(testComment.getText()).isEqualTo(UPDATED_TEXT);
-
-        // Validate the Comment in Elasticsearch
-        verify(mockCommentSearchRepository, times(1)).save(testComment);
     }
 
     @Test
@@ -458,9 +434,6 @@ public class CommentResourceIT {
         // Validate the Comment in the database
         List<Comment> commentList = commentRepository.findAll();
         assertThat(commentList).hasSize(databaseSizeBeforeUpdate);
-
-        // Validate the Comment in Elasticsearch
-        verify(mockCommentSearchRepository, times(0)).save(comment);
     }
 
     @Test
@@ -479,25 +452,6 @@ public class CommentResourceIT {
         // Validate the database contains one less item
         List<Comment> commentList = commentRepository.findAll();
         assertThat(commentList).hasSize(databaseSizeBeforeDelete - 1);
-
-        // Validate the Comment in Elasticsearch
-        verify(mockCommentSearchRepository, times(1)).deleteById(comment.getId());
-    }
-
-    @Test
-    @Transactional
-    public void searchComment() throws Exception {
-        // Initialize the database
-        commentService.save(comment);
-        when(mockCommentSearchRepository.search(queryStringQuery("id:" + comment.getId()), PageRequest.of(0, 20)))
-            .thenReturn(new PageImpl<>(Collections.singletonList(comment), PageRequest.of(0, 1), 1));
-        // Search the comment
-        restCommentMockMvc.perform(get("/api/_search/comments?query=id:" + comment.getId()))
-            .andExpect(status().isOk())
-            .andExpect(content().contentType(MediaType.APPLICATION_JSON_UTF8_VALUE))
-            .andExpect(jsonPath("$.[*].id").value(hasItem(comment.getId().intValue())))
-            .andExpect(jsonPath("$.[*].timestamp").value(hasItem(DEFAULT_TIMESTAMP.toString())))
-            .andExpect(jsonPath("$.[*].text").value(hasItem(DEFAULT_TEXT)));
     }
 
     @Test

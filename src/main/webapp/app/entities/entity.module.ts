@@ -6,31 +6,31 @@ import { RouterModule } from '@angular/router';
     RouterModule.forChild([
       {
         path: '',
-        loadChildren: './listing/listing.module#RsnsalesListingModule'
+        loadChildren: './listing/listing.module#OsrsnamesListingModule'
       },
       {
         path: 'listing',
-        loadChildren: './listing/listing.module#RsnsalesListingModule'
-      },
-      {
-        path: 'offer',
-        loadChildren: './offer/offer.module#RsnsalesOfferModule'
+        loadChildren: './listing/listing.module#OsrsnamesListingModule'
       },
       {
         path: 'tag',
-        loadChildren: './tag/tag.module#RsnsalesTagModule'
+        loadChildren: './tag/tag.module#OsrsnamesTagModule'
+      },
+      {
+        path: 'offer',
+        loadChildren: './offer/offer.module#OsrsnamesOfferModule'
       },
       {
         path: 'comment',
-        loadChildren: './comment/comment.module#RsnsalesCommentModule'
+        loadChildren: './comment/comment.module#OsrsnamesCommentModule'
       },
       {
         path: 'trade',
-        loadChildren: './trade/trade.module#RsnsalesTradeModule'
+        loadChildren: './trade/trade.module#OsrsnamesTradeModule'
       },
       {
         path: 'rating',
-        loadChildren: './rating/rating.module#RsnsalesRatingModule'
+        loadChildren: './rating/rating.module#OsrsnamesRatingModule'
       }
       /* jhipster-needle-add-entity-route - JHipster will add entity modules routes here */
     ])
@@ -40,4 +40,4 @@ import { RouterModule } from '@angular/router';
   providers: [],
   schemas: [CUSTOM_ELEMENTS_SCHEMA]
 })
-export class RsnsalesEntityModule {}
+export class OsrsnamesEntityModule {}

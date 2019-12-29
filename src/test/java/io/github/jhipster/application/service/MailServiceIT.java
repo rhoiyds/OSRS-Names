@@ -2,7 +2,7 @@ package io.github.jhipster.application.service;
 
 import io.github.jhipster.application.config.Constants;
 
-import io.github.jhipster.application.RsnsalesApp;
+import io.github.jhipster.application.OsrsnamesApp;
 import io.github.jhipster.application.domain.User;
 import io.github.jhipster.config.JHipsterProperties;
 import org.junit.jupiter.api.BeforeEach;
@@ -43,7 +43,7 @@ import java.util.Locale;
 /**
  * Integration tests for {@link MailService}.
  */
-@SpringBootTest(classes = RsnsalesApp.class)
+@SpringBootTest(classes = OsrsnamesApp.class)
 public class MailServiceIT {
 
     private static String[] languages = {

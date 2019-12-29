@@ -22,18 +22,18 @@ import java.util.Collection;
 
 @SpringBootApplication
 @EnableConfigurationProperties({LiquibaseProperties.class, ApplicationProperties.class})
-public class RsnsalesApp implements InitializingBean {
+public class OsrsnamesApp implements InitializingBean {
 
-    private static final Logger log = LoggerFactory.getLogger(RsnsalesApp.class);
+    private static final Logger log = LoggerFactory.getLogger(OsrsnamesApp.class);
 
     private final Environment env;
 
-    public RsnsalesApp(Environment env) {
+    public OsrsnamesApp(Environment env) {
         this.env = env;
     }
 
     /**
-     * Initializes rsnsales.
+     * Initializes osrsnames.
      * <p>
      * Spring profiles can be configured with a program argument --spring.profiles.active=your-active-profile
      * <p>
@@ -58,7 +58,7 @@ public class RsnsalesApp implements InitializingBean {
      * @param args the command line arguments.
      */
     public static void main(String[] args) {
-        SpringApplication app = new SpringApplication(RsnsalesApp.class);
+        SpringApplication app = new SpringApplication(OsrsnamesApp.class);
         DefaultProfileUtil.addDefaultProfile(app);
         Environment env = app.run(args).getEnvironment();
         logApplicationStartup(env);

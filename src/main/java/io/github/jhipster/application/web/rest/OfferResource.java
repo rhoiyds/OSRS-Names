@@ -37,8 +37,21 @@ import io.github.jhipster.application.service.MailService;
 import io.github.jhipster.application.service.TradeService;
 
 import io.github.jhipster.application.web.rest.errors.BadRequestAlertException;
+
 import io.github.jhipster.web.util.HeaderUtil;
 import io.github.jhipster.web.util.ResponseUtil;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.*;
+
+import javax.validation.Valid;
+import java.net.URI;
+import java.net.URISyntaxException;
+
+import java.util.List;
+import java.util.Optional;
 
 /**
  * REST controller for managing {@link io.github.jhipster.application.domain.Offer}.
@@ -119,11 +132,11 @@ public class OfferResource {
             throw new BadRequestAlertException("You must create an entity as a logged user", ENTITY_NAME, "notloggeduser");
         }
         Optional<Offer> existingEntity = offerService.findOne(offer.getId());
-        if (!existingEntity.get().getOwner().equals(currentUser.get()) && 
+        if (!existingEntity.get().getOwner().equals(currentUser.get()) &&
         !existingEntity.get().getListing().getOwner().equals(currentUser.get())) {
             throw new BadRequestAlertException("Only the owner of the offer or listing can update the offer", ENTITY_NAME, "owner not updating");
         }
-        OfferStatus currentOfferStatus = existingEntity.get().getStatus(); 
+        OfferStatus currentOfferStatus = existingEntity.get().getStatus();
         if (!offer.getStatus().equals(offer.getStatus()) && !currentUser.get().equals(offer.getListing().getOwner())) {
             throw new BadRequestAlertException("Only the listing owner can change offer status", ENTITY_NAME, "listing owner not updating");
         }
@@ -144,6 +157,7 @@ public class OfferResource {
 
     /**
      * {@code GET  /offers} : get all the offers.
+     *
      * @return the {@link ResponseEntity} with status {@code 200 (OK)} and the list of offers in body.
      */
     @GetMapping("/offers")
@@ -196,19 +210,4 @@ public class OfferResource {
         offerService.delete(id);
         return ResponseEntity.noContent().headers(HeaderUtil.createEntityDeletionAlert(applicationName, false, ENTITY_NAME, id.toString())).build();
     }
-
-    /**
-     * {@code SEARCH  /_search/offers?query=:query} : search for the offer corresponding
-     * to the query.
-     *
-     * @param query the query of the offer search.
-     * @return the result of the search.
-     */
-    @GetMapping("/_search/offers")
-    public List<Offer> searchOffers(@RequestParam String query) {
-        log.debug("REST request to search Offers for query {}", query);
-        return offerService.search(query);
-    }
-
-
 }

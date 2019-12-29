@@ -1,5 +1,6 @@
 package io.github.jhipster.application.web.rest;
 
+
 import io.github.jhipster.application.domain.User;
 import io.github.jhipster.application.repository.UserRepository;
 import io.github.jhipster.application.security.SecurityUtils;
@@ -11,11 +12,11 @@ import io.github.jhipster.application.web.rest.errors.*;
 import io.github.jhipster.application.web.rest.vm.KeyAndPasswordVM;
 import io.github.jhipster.application.web.rest.vm.ManagedUserVM;
 
-import org.apache.commons.codec.digest.DigestUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
+import org.springframework.util.DigestUtils;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
@@ -64,7 +65,7 @@ public class AccountResource {
         if (!checkPasswordLength(managedUserVM.getPassword())) {
             throw new InvalidPasswordException();
         }
-        String md5Hex = DigestUtils.md5Hex(managedUserVM.getEmail()).toLowerCase();
+        String md5Hex = DigestUtils.md5DigestAsHex(managedUserVM.getEmail().toLowerCase().getBytes());
         managedUserVM.setImageUrl(md5Hex);
         User user = userService.registerUser(managedUserVM, managedUserVM.getPassword());
         mailService.sendActivationEmail(user);

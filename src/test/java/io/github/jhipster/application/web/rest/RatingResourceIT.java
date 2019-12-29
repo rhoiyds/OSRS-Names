@@ -1,13 +1,12 @@
 package io.github.jhipster.application.web.rest;
 
-import io.github.jhipster.application.RsnsalesApp;
+import io.github.jhipster.application.OsrsnamesApp;
 import io.github.jhipster.application.domain.Rating;
 import io.github.jhipster.application.domain.User;
 import io.github.jhipster.application.domain.Trade;
 import io.github.jhipster.application.repository.RatingRepository;
-import io.github.jhipster.application.repository.search.RatingSearchRepository;
-import io.github.jhipster.application.service.UserService;
 import io.github.jhipster.application.service.RatingService;
+import io.github.jhipster.application.service.UserService;
 import io.github.jhipster.application.web.rest.errors.ExceptionTranslator;
 import io.github.jhipster.application.service.dto.RatingCriteria;
 import io.github.jhipster.application.service.RatingQueryService;
@@ -17,8 +16,6 @@ import org.junit.jupiter.api.Test;
 import org.mockito.MockitoAnnotations;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.data.domain.PageImpl;
-import org.springframework.data.domain.PageRequest;
 import org.springframework.data.web.PageableHandlerMethodArgumentResolver;
 import org.springframework.http.MediaType;
 import org.springframework.http.converter.json.MappingJackson2HttpMessageConverter;
@@ -30,21 +27,18 @@ import org.springframework.validation.Validator;
 import javax.persistence.EntityManager;
 import java.time.Instant;
 import java.time.temporal.ChronoUnit;
-import java.util.Collections;
 import java.util.List;
 
 import static io.github.jhipster.application.web.rest.TestUtil.createFormattingConversionService;
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.elasticsearch.index.query.QueryBuilders.queryStringQuery;
 import static org.hamcrest.Matchers.hasItem;
-import static org.mockito.Mockito.*;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 /**
  * Integration tests for the {@Link RatingResource} REST controller.
  */
-@SpringBootTest(classes = RsnsalesApp.class)
+@SpringBootTest(classes = OsrsnamesApp.class)
 public class RatingResourceIT {
 
     private static final Integer DEFAULT_SCORE = 1;
@@ -61,14 +55,6 @@ public class RatingResourceIT {
 
     @Autowired
     private RatingService ratingService;
-
-    /**
-     * This repository is mocked in the io.github.jhipster.application.repository.search test package.
-     *
-     * @see io.github.jhipster.application.repository.search.RatingSearchRepositoryMockConfiguration
-     */
-    @Autowired
-    private RatingSearchRepository mockRatingSearchRepository;
 
     @Autowired
     private RatingQueryService ratingQueryService;
@@ -157,9 +143,6 @@ public class RatingResourceIT {
         assertThat(testRating.getScore()).isEqualTo(DEFAULT_SCORE);
         assertThat(testRating.getMessage()).isEqualTo(DEFAULT_MESSAGE);
         assertThat(testRating.getTimestamp()).isEqualTo(DEFAULT_TIMESTAMP);
-
-        // Validate the Rating in Elasticsearch
-        verify(mockRatingSearchRepository, times(1)).save(testRating);
     }
 
     @Test
@@ -179,9 +162,6 @@ public class RatingResourceIT {
         // Validate the Rating in the database
         List<Rating> ratingList = ratingRepository.findAll();
         assertThat(ratingList).hasSize(databaseSizeBeforeCreate);
-
-        // Validate the Rating in Elasticsearch
-        verify(mockRatingSearchRepository, times(0)).save(rating);
     }
 
 
@@ -503,8 +483,6 @@ public class RatingResourceIT {
     public void updateRating() throws Exception {
         // Initialize the database
         ratingService.save(rating);
-        // As the test used the service layer, reset the Elasticsearch mock repository
-        reset(mockRatingSearchRepository);
 
         int databaseSizeBeforeUpdate = ratingRepository.findAll().size();
 
@@ -529,9 +507,6 @@ public class RatingResourceIT {
         assertThat(testRating.getScore()).isEqualTo(UPDATED_SCORE);
         assertThat(testRating.getMessage()).isEqualTo(UPDATED_MESSAGE);
         assertThat(testRating.getTimestamp()).isEqualTo(UPDATED_TIMESTAMP);
-
-        // Validate the Rating in Elasticsearch
-        verify(mockRatingSearchRepository, times(1)).save(testRating);
     }
 
     @Test
@@ -550,9 +525,6 @@ public class RatingResourceIT {
         // Validate the Rating in the database
         List<Rating> ratingList = ratingRepository.findAll();
         assertThat(ratingList).hasSize(databaseSizeBeforeUpdate);
-
-        // Validate the Rating in Elasticsearch
-        verify(mockRatingSearchRepository, times(0)).save(rating);
     }
 
     @Test
@@ -571,26 +543,6 @@ public class RatingResourceIT {
         // Validate the database contains one less item
         List<Rating> ratingList = ratingRepository.findAll();
         assertThat(ratingList).hasSize(databaseSizeBeforeDelete - 1);
-
-        // Validate the Rating in Elasticsearch
-        verify(mockRatingSearchRepository, times(1)).deleteById(rating.getId());
-    }
-
-    @Test
-    @Transactional
-    public void searchRating() throws Exception {
-        // Initialize the database
-        ratingService.save(rating);
-        when(mockRatingSearchRepository.search(queryStringQuery("id:" + rating.getId()), PageRequest.of(0, 20)))
-            .thenReturn(new PageImpl<>(Collections.singletonList(rating), PageRequest.of(0, 1), 1));
-        // Search the rating
-        restRatingMockMvc.perform(get("/api/_search/ratings?query=id:" + rating.getId()))
-            .andExpect(status().isOk())
-            .andExpect(content().contentType(MediaType.APPLICATION_JSON_UTF8_VALUE))
-            .andExpect(jsonPath("$.[*].id").value(hasItem(rating.getId().intValue())))
-            .andExpect(jsonPath("$.[*].score").value(hasItem(DEFAULT_SCORE)))
-            .andExpect(jsonPath("$.[*].message").value(hasItem(DEFAULT_MESSAGE)))
-            .andExpect(jsonPath("$.[*].timestamp").value(hasItem(DEFAULT_TIMESTAMP.toString())));
     }
 
     @Test

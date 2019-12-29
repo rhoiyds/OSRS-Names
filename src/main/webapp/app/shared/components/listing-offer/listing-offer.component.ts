@@ -114,7 +114,7 @@ export class ListingOfferComponent implements OnInit, OnDestroy {
     return GRAVATAR_BASE_URL + GRAVATAR_AVATAR_PATH + imageUrl + GRAVATAR_PARAMETERS;
   }
 
-  getFromStatus(tradeStatus: TradeStatus) {
+  private getFromStatus(tradeStatus: TradeStatus) {
     if (tradeStatus === TradeStatus.CONFIRMED) {
       return this.CONFIRMED_STATUS;
     }

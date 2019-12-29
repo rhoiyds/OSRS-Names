@@ -1,7 +1,7 @@
 import { NgModule, CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
 import { RouterModule } from '@angular/router';
 
-import { RsnsalesSharedModule } from 'app/shared';
+import { OsrsnamesSharedModule } from 'app/shared';
 import {
   CommentComponent,
   CommentDetailComponent,
@@ -15,7 +15,7 @@ import {
 const ENTITY_STATES = [...commentRoute, ...commentPopupRoute];
 
 @NgModule({
-  imports: [RsnsalesSharedModule, RouterModule.forChild(ENTITY_STATES)],
+  imports: [OsrsnamesSharedModule, RouterModule.forChild(ENTITY_STATES)],
   declarations: [
     CommentComponent,
     CommentDetailComponent,
@@ -26,4 +26,4 @@ const ENTITY_STATES = [...commentRoute, ...commentPopupRoute];
   entryComponents: [CommentComponent, CommentUpdateComponent, CommentDeleteDialogComponent, CommentDeletePopupComponent],
   schemas: [CUSTOM_ELEMENTS_SCHEMA]
 })
-export class RsnsalesCommentModule {}
+export class OsrsnamesCommentModule {}

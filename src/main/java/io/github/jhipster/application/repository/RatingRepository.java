@@ -23,6 +23,6 @@ public interface RatingRepository extends JpaRepository<Rating, Long>, JpaSpecif
 
     @Query("select coalesce(avg(CAST(rating.score as double)), 0.0) from Rating rating where rating.recipient = :recipient")
     Double getAverageRatingForUser(@Param("recipient") User recipient);
-    
+
 
 }

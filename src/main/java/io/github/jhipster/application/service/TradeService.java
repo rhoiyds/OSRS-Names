@@ -43,14 +43,4 @@ public interface TradeService {
      * @param id the id of the entity.
      */
     void delete(Long id);
-
-    /**
-     * Search for the trade corresponding to the query.
-     *
-     * @param query the query of the search.
-     * 
-     * @param pageable the pagination information.
-     * @return the list of entities.
-     */
-    Page<Trade> search(String query, Pageable pageable);
 }

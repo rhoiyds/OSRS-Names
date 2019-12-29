@@ -4,7 +4,7 @@ import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
 import { Observable, of } from 'rxjs';
 import { JhiEventManager } from 'ng-jhipster';
 
-import { RsnsalesTestModule } from '../../../test.module';
+import { OsrsnamesTestModule } from '../../../test.module';
 import { TagDeleteDialogComponent } from 'app/entities/tag/tag-delete-dialog.component';
 import { TagService } from 'app/entities/tag/tag.service';
 
@@ -18,7 +18,7 @@ describe('Component Tests', () => {
 
     beforeEach(() => {
       TestBed.configureTestingModule({
-        imports: [RsnsalesTestModule],
+        imports: [OsrsnamesTestModule],
         declarations: [TagDeleteDialogComponent]
       })
         .overrideTemplate(TagDeleteDialogComponent, '')

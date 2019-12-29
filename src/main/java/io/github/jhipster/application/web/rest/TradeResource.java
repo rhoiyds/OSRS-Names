@@ -9,6 +9,7 @@ import io.github.jhipster.application.service.*;
 import io.github.jhipster.application.service.dto.TradeConfirmDTO;
 import io.github.jhipster.application.web.rest.errors.BadRequestAlertException;
 import io.github.jhipster.application.service.dto.TradeCriteria;
+import io.github.jhipster.application.service.TradeQueryService;
 
 import io.github.jhipster.web.util.HeaderUtil;
 import io.github.jhipster.web.util.PaginationUtil;
@@ -32,9 +33,6 @@ import java.time.Instant;
 import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
-import java.util.stream.StreamSupport;
-
-import static org.elasticsearch.index.query.QueryBuilders.*;
 
 /**
  * REST controller for managing {@link io.github.jhipster.application.domain.Trade}.
@@ -167,24 +165,6 @@ public class TradeResource {
     }
 
     /**
-     * {@code SEARCH  /_search/trades?query=:query} : search for the trade corresponding
-     * to the query.
-     *
-     * @param query the query of the trade search.
-     * @param pageable the pagination information.
-     * @param queryParams a {@link MultiValueMap} query parameters.
-     * @param uriBuilder a {@link UriComponentsBuilder} URI builder.
-     * @return the result of the search.
-     */
-    @GetMapping("/_search/trades")
-    public ResponseEntity<List<Trade>> searchTrades(@RequestParam String query, Pageable pageable, @RequestParam MultiValueMap<String, String> queryParams, UriComponentsBuilder uriBuilder) {
-        log.debug("REST request to search for a page of Trades for query {}", query);
-        Page<Trade> page = tradeService.search(query, pageable);
-        HttpHeaders headers = PaginationUtil.generatePaginationHttpHeaders(uriBuilder.queryParams(queryParams), page);
-        return ResponseEntity.ok().headers(headers).body(page.getContent());
-    }
-
-    /**
      * {@code PUT  /trades/:id/rate} : Finalises a trade and/or listing by providing rating and confirmation.
      *
      * @param id the id of the trade to rate.
@@ -230,5 +210,4 @@ public class TradeResource {
             .headers(HeaderUtil.createEntityUpdateAlert(applicationName, false, ENTITY_NAME, trade.getId().toString()))
             .body(result);
     }
-
 }

@@ -31,9 +31,7 @@ import java.net.URISyntaxException;
 import java.time.Instant;
 import java.util.List;
 import java.util.Optional;
-import java.util.stream.StreamSupport;
 
-import static org.elasticsearch.index.query.QueryBuilders.*;
 
 /**
  * REST controller for managing {@link io.github.jhipster.application.domain.Comment}.
@@ -165,23 +163,4 @@ public class CommentResource {
         commentService.delete(id);
         return ResponseEntity.noContent().headers(HeaderUtil.createEntityDeletionAlert(applicationName, false, ENTITY_NAME, id.toString())).build();
     }
-
-    /**
-     * {@code SEARCH  /_search/comments?query=:query} : search for the comment corresponding
-     * to the query.
-     *
-     * @param query the query of the comment search.
-     * @param pageable the pagination information.
-     * @param queryParams a {@link MultiValueMap} query parameters.
-     * @param uriBuilder a {@link UriComponentsBuilder} URI builder.
-     * @return the result of the search.
-     */
-    @GetMapping("/_search/comments")
-    public ResponseEntity<List<Comment>> searchComments(@RequestParam String query, Pageable pageable, @RequestParam MultiValueMap<String, String> queryParams, UriComponentsBuilder uriBuilder) {
-        log.debug("REST request to search for a page of Comments for query {}", query);
-        Page<Comment> page = commentService.search(query, pageable);
-        HttpHeaders headers = PaginationUtil.generatePaginationHttpHeaders(uriBuilder.queryParams(queryParams), page);
-        return ResponseEntity.ok().headers(headers).body(page.getContent());
-    }
-
 }

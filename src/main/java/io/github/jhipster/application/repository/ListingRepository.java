@@ -14,12 +14,12 @@ import java.util.Optional;
  * Spring Data  repository for the Listing entity.
  */
 @Repository
-public interface ListingRepository extends JpaRepository<Listing, Long> {
+public interface ListingRepository extends JpaRepository<Listing, Long>, JpaSpecificationExecutor<Listing> {
 
     @Query(value = "SELECT l FROM Listing l where l.active = TRUE")
     Page<Listing> findAllActive(Pageable pageable);
 
-    @Query("select listing from Listing listing")
+    @Query("select listing from Listing listing where listing.owner.username = ?#{principal.username}")
     List<Listing> findByOwnerIsCurrentUser();
 
     @Query(value = "select distinct listing from Listing listing left join fetch listing.tags",

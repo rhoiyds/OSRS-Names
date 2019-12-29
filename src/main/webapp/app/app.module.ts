@@ -11,12 +11,12 @@ import { AuthInterceptor } from './blocks/interceptor/auth.interceptor';
 import { AuthExpiredInterceptor } from './blocks/interceptor/auth-expired.interceptor';
 import { ErrorHandlerInterceptor } from './blocks/interceptor/errorhandler.interceptor';
 import { NotificationInterceptor } from './blocks/interceptor/notification.interceptor';
-import { RsnsalesSharedModule } from 'app/shared';
-import { RsnsalesCoreModule } from 'app/core';
-import { RsnsalesAppRoutingModule } from './app-routing.module';
-import { RsnsalesHomeModule } from './home/home.module';
-import { RsnsalesAccountModule } from './account/account.module';
-import { RsnsalesEntityModule } from './entities/entity.module';
+import { OsrsnamesSharedModule } from 'app/shared';
+import { OsrsnamesCoreModule } from 'app/core';
+import { OsrsnamesAppRoutingModule } from './app-routing.module';
+import { OsrsnamesHomeModule } from './home/home.module';
+import { OsrsnamesAccountModule } from './account/account.module';
+import { OsrsnamesEntityModule } from './entities/entity.module';
 import * as moment from 'moment';
 // jhipster-needle-angular-add-module-import JHipster will add new module here
 import { JhiMainComponent, NavbarComponent, FooterComponent, PageRibbonComponent, ErrorComponent, PricingComponent } from './layouts';
@@ -30,13 +30,13 @@ import { JhiMainComponent, NavbarComponent, FooterComponent, PageRibbonComponent
       alertAsToast: false,
       alertTimeout: 5000
     }),
-    RsnsalesSharedModule.forRoot(),
-    RsnsalesCoreModule,
-    RsnsalesHomeModule,
-    RsnsalesEntityModule,
-    RsnsalesAccountModule,
+    OsrsnamesSharedModule.forRoot(),
+    OsrsnamesCoreModule,
+    OsrsnamesHomeModule,
+    OsrsnamesEntityModule,
+    OsrsnamesAccountModule,
     // jhipster-needle-angular-add-module JHipster will add new module here
-    RsnsalesAppRoutingModule
+    OsrsnamesAppRoutingModule
   ],
   declarations: [JhiMainComponent, NavbarComponent, ErrorComponent, PageRibbonComponent, FooterComponent, PricingComponent],
   providers: [
@@ -63,7 +63,7 @@ import { JhiMainComponent, NavbarComponent, FooterComponent, PageRibbonComponent
   ],
   bootstrap: [JhiMainComponent]
 })
-export class RsnsalesAppModule {
+export class OsrsnamesAppModule {
   constructor(private dpConfig: NgbDatepickerConfig) {
     this.dpConfig.minDate = { year: moment().year() - 100, month: 1, day: 1 };
   }

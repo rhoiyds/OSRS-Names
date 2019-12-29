@@ -29,6 +29,13 @@ public interface ListingService {
     Page<Listing> findAll(Pageable pageable);
 
     /**
+     * Get all the listings with eager load of many-to-many relationships.
+     *
+     * @return the list of entities.
+     */
+    Page<Listing> findAllWithEagerRelationships(Pageable pageable);
+    
+    /**
      * Get the "id" listing.
      *
      * @param id the id of the entity.
@@ -42,14 +49,4 @@ public interface ListingService {
      * @param id the id of the entity.
      */
     void delete(Long id);
-
-    /**
-     * Search for the listing corresponding to the query.
-     *
-     * @param query the query of the search.
-     * 
-     * @param pageable the pagination information.
-     * @return the list of entities.
-     */
-    Page<Listing> search(String query, Pageable pageable);
 }

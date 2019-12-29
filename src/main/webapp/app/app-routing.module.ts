@@ -11,7 +11,7 @@ const LAYOUT_ROUTES = [navbarRoute, ...pricingRoute, ...errorRoute];
       [
         {
           path: 'admin',
-          loadChildren: './admin/admin.module#RsnsalesAdminModule'
+          loadChildren: './admin/admin.module#OsrsnamesAdminModule'
         },
         ...LAYOUT_ROUTES
       ],
@@ -20,4 +20,4 @@ const LAYOUT_ROUTES = [navbarRoute, ...pricingRoute, ...errorRoute];
   ],
   exports: [RouterModule]
 })
-export class RsnsalesAppRoutingModule {}
+export class OsrsnamesAppRoutingModule {}

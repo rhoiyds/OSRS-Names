@@ -1,7 +1,7 @@
 import { NgModule, CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
 import { RouterModule } from '@angular/router';
 
-import { RsnsalesSharedModule } from 'app/shared';
+import { OsrsnamesSharedModule } from 'app/shared';
 import {
   ListingComponent,
   ListingDetailComponent,
@@ -17,7 +17,7 @@ import {
 const ENTITY_STATES = [...listingRoute, ...listingPopupRoute];
 
 @NgModule({
-  imports: [RsnsalesSharedModule, RouterModule.forChild(ENTITY_STATES)],
+  imports: [OsrsnamesSharedModule, RouterModule.forChild(ENTITY_STATES)],
   declarations: [
     ListingComponent,
     ListingDetailComponent,
@@ -37,4 +37,4 @@ const ENTITY_STATES = [...listingRoute, ...listingPopupRoute];
   ],
   schemas: [CUSTOM_ELEMENTS_SCHEMA]
 })
-export class RsnsalesListingModule {}
+export class OsrsnamesListingModule {}
