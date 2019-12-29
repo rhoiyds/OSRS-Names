@@ -6,7 +6,6 @@ import org.hibernate.annotations.CacheConcurrencyStrategy;
 import javax.persistence.*;
 import javax.validation.constraints.*;
 
-import org.springframework.data.elasticsearch.annotations.FieldType;
 import java.io.Serializable;
 import java.time.Instant;
 import java.util.HashSet;
@@ -20,14 +19,12 @@ import io.github.jhipster.application.domain.enumeration.ListingType;
 @Entity
 @Table(name = "listing")
 @Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)
-@org.springframework.data.elasticsearch.annotations.Document(indexName = "listing")
 public class Listing implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @org.springframework.data.elasticsearch.annotations.Field(type = FieldType.Keyword)
     private Long id;
 
     @Column(name = "timestamp", nullable = false)
@@ -173,11 +170,13 @@ public class Listing implements Serializable {
 
     public Listing addTags(Tag tag) {
         this.tags.add(tag);
+        // tag.getListings().add(this);
         return this;
     }
 
     public Listing removeTags(Tag tag) {
         this.tags.remove(tag);
+        // tag.getListings().remove(this);
         return this;
     }
 

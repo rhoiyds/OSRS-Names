@@ -17,7 +17,6 @@ import io.github.jhipster.service.QueryService;
 import io.github.jhipster.application.domain.Comment;
 import io.github.jhipster.application.domain.*; // for static metamodels
 import io.github.jhipster.application.repository.CommentRepository;
-import io.github.jhipster.application.repository.search.CommentSearchRepository;
 import io.github.jhipster.application.service.dto.CommentCriteria;
 
 /**
@@ -34,11 +33,8 @@ public class CommentQueryService extends QueryService<Comment> {
 
     private final CommentRepository commentRepository;
 
-    private final CommentSearchRepository commentSearchRepository;
-
-    public CommentQueryService(CommentRepository commentRepository, CommentSearchRepository commentSearchRepository) {
+    public CommentQueryService(CommentRepository commentRepository) {
         this.commentRepository = commentRepository;
-        this.commentSearchRepository = commentSearchRepository;
     }
 
     /**

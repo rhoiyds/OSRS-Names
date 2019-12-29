@@ -21,10 +21,10 @@ import { RouterModule } from '@angular/router';
     RouterModule
   ]
 })
-export class RsnsalesSharedLibsModule {
+export class OsrsnamesSharedLibsModule {
   static forRoot() {
     return {
-      ngModule: RsnsalesSharedLibsModule
+      ngModule: OsrsnamesSharedLibsModule
     };
   }
 }

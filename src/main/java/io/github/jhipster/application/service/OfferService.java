@@ -42,14 +42,5 @@ public interface OfferService {
      */
     void delete(Long id);
 
-    /**
-     * Search for the offer corresponding to the query.
-     *
-     * @param query the query of the search.
-     * 
-     * @return the list of entities.
-     */
-    List<Offer> search(String query);
-    
     Offer[] findAllForListing(Listing listing);
 }

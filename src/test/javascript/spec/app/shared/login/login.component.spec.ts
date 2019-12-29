@@ -7,7 +7,7 @@ import { JhiEventManager } from 'ng-jhipster';
 import { LoginService } from 'app/core/login/login.service';
 import { JhiLoginModalComponent } from 'app/shared/login/login.component';
 import { StateStorageService } from 'app/core/auth/state-storage.service';
-import { RsnsalesTestModule } from '../../../test.module';
+import { OsrsnamesTestModule } from '../../../test.module';
 import { MockLoginService } from '../../../helpers/mock-login.service';
 import { MockStateStorageService } from '../../../helpers/mock-state-storage.service';
 
@@ -23,7 +23,7 @@ describe('Component Tests', () => {
 
     beforeEach(async(() => {
       TestBed.configureTestingModule({
-        imports: [RsnsalesTestModule],
+        imports: [OsrsnamesTestModule],
         declarations: [JhiLoginModalComponent],
         providers: [
           FormBuilder,
@@ -51,7 +51,7 @@ describe('Component Tests', () => {
       mockActiveModal = fixture.debugElement.injector.get(NgbActiveModal);
     });
 
-    it('should authenticate the user upon username when previous state was set', inject(
+    it('should authenticate the user upon login when previous state was set', inject(
       [],
       fakeAsync(() => {
         // GIVEN
@@ -75,7 +75,7 @@ describe('Component Tests', () => {
 
         // THEN
         expect(comp.authenticationError).toEqual(false);
-        expect(mockActiveModal.dismissSpy).toHaveBeenCalledWith('username success');
+        expect(mockActiveModal.dismissSpy).toHaveBeenCalledWith('login success');
         expect(mockEventManager.broadcastSpy).toHaveBeenCalledTimes(1);
         expect(mockLoginService.loginSpy).toHaveBeenCalledWith(credentials);
         expect(mockStateStorageService.getUrlSpy).toHaveBeenCalledTimes(1);
@@ -84,7 +84,7 @@ describe('Component Tests', () => {
       })
     ));
 
-    it('should authenticate the user upon username when previous state was not set', inject(
+    it('should authenticate the user upon login when previous state was not set', inject(
       [],
       fakeAsync(() => {
         // GIVEN
@@ -107,7 +107,7 @@ describe('Component Tests', () => {
 
         // THEN
         expect(comp.authenticationError).toEqual(false);
-        expect(mockActiveModal.dismissSpy).toHaveBeenCalledWith('username success');
+        expect(mockActiveModal.dismissSpy).toHaveBeenCalledWith('login success');
         expect(mockEventManager.broadcastSpy).toHaveBeenCalledTimes(1);
         expect(mockLoginService.loginSpy).toHaveBeenCalledWith(credentials);
         expect(mockStateStorageService.getUrlSpy).toHaveBeenCalledTimes(1);

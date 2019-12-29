@@ -60,6 +60,6 @@ export class ListingDetailComponent implements OnInit {
 
   private sortedOffers(offers: IOffer[]) {
     const offerOrder = Object.entries(OfferStatus).map(([key, value]) => value);
-    return offers.sort((a, b) => offerOrder.indexOf(a) - offerOrder.indexOf(b));
+    return offers.sort((a, b) => offerOrder.indexOf(a.status) - offerOrder.indexOf(b.status));
   }
 }

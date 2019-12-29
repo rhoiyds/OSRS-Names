@@ -5,7 +5,7 @@ import { HttpClientTestingModule } from '@angular/common/http/testing';
 import { NgbActiveModal, NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { JhiDataUtils, JhiDateUtils, JhiEventManager, JhiAlertService, JhiParseLinks } from 'ng-jhipster';
 
-import { AccountService, LoginModalService, JhiTrackerService } from 'app/core';
+import { AccountService, LoginModalService } from 'app/core';
 import { MockAccountService } from './helpers/mock-account.service';
 import { MockActivatedRoute, MockRouter } from './helpers/mock-route.service';
 import { MockActiveModal } from './helpers/mock-active-modal.service';
@@ -17,10 +17,6 @@ import { MockEventManager } from './helpers/mock-event-manager.service';
     JhiDataUtils,
     JhiDateUtils,
     JhiParseLinks,
-    {
-      provide: JhiTrackerService,
-      useValue: null
-    },
     {
       provide: JhiEventManager,
       useClass: MockEventManager
@@ -64,4 +60,4 @@ import { MockEventManager } from './helpers/mock-event-manager.service';
   ],
   imports: [HttpClientTestingModule]
 })
-export class RsnsalesTestModule {}
+export class OsrsnamesTestModule {}

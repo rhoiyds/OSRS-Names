@@ -2,7 +2,6 @@ package io.github.jhipster.application.service;
 
 import io.github.jhipster.application.domain.Comment;
 import io.github.jhipster.application.repository.CommentRepository;
-import io.github.jhipster.application.repository.search.CommentSearchRepository;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -12,8 +11,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Optional;
-
-import static org.elasticsearch.index.query.QueryBuilders.*;
 
 /**
  * Service Implementation for managing {@link Comment}.
@@ -26,11 +23,8 @@ public class CommentService {
 
     private final CommentRepository commentRepository;
 
-    private final CommentSearchRepository commentSearchRepository;
-
-    public CommentService(CommentRepository commentRepository, CommentSearchRepository commentSearchRepository) {
+    public CommentService(CommentRepository commentRepository) {
         this.commentRepository = commentRepository;
-        this.commentSearchRepository = commentSearchRepository;
     }
 
     /**
@@ -41,9 +35,7 @@ public class CommentService {
      */
     public Comment save(Comment comment) {
         log.debug("Request to save Comment : {}", comment);
-        Comment result = commentRepository.save(comment);
-        commentSearchRepository.save(result);
-        return result;
+        return commentRepository.save(comment);
     }
 
     /**
@@ -79,18 +71,5 @@ public class CommentService {
     public void delete(Long id) {
         log.debug("Request to delete Comment : {}", id);
         commentRepository.deleteById(id);
-        commentSearchRepository.deleteById(id);
     }
-
-    /**
-     * Search for the comment corresponding to the query.
-     *
-     * @param query the query of the search.
-     * @param pageable the pagination information.
-     * @return the list of entities.
-     */
-    @Transactional(readOnly = true)
-    public Page<Comment> search(String query, Pageable pageable) {
-        log.debug("Request to search for a page of Comments for query {}", query);
-        return commentSearchRepository.search(queryStringQuery(query), pageable);    }
 }

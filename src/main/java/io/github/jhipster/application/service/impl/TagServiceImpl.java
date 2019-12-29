@@ -3,7 +3,6 @@ package io.github.jhipster.application.service.impl;
 import io.github.jhipster.application.service.TagService;
 import io.github.jhipster.application.domain.Tag;
 import io.github.jhipster.application.repository.TagRepository;
-import io.github.jhipster.application.repository.search.TagSearchRepository;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -13,8 +12,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Optional;
-
-import static org.elasticsearch.index.query.QueryBuilders.*;
 
 /**
  * Service Implementation for managing {@link Tag}.
@@ -27,11 +24,8 @@ public class TagServiceImpl implements TagService {
 
     private final TagRepository tagRepository;
 
-    private final TagSearchRepository tagSearchRepository;
-
-    public TagServiceImpl(TagRepository tagRepository, TagSearchRepository tagSearchRepository) {
+    public TagServiceImpl(TagRepository tagRepository) {
         this.tagRepository = tagRepository;
-        this.tagSearchRepository = tagSearchRepository;
     }
 
     /**
@@ -43,9 +37,7 @@ public class TagServiceImpl implements TagService {
     @Override
     public Tag save(Tag tag) {
         log.debug("Request to save Tag : {}", tag);
-        Tag result = tagRepository.save(tag);
-        tagSearchRepository.save(result);
-        return result;
+        return tagRepository.save(tag);
     }
 
     /**
@@ -84,19 +76,5 @@ public class TagServiceImpl implements TagService {
     public void delete(Long id) {
         log.debug("Request to delete Tag : {}", id);
         tagRepository.deleteById(id);
-        tagSearchRepository.deleteById(id);
     }
-
-    /**
-     * Search for the tag corresponding to the query.
-     *
-     * @param query the query of the search.
-     * @param pageable the pagination information.
-     * @return the list of entities.
-     */
-    @Override
-    @Transactional(readOnly = true)
-    public Page<Tag> search(String query, Pageable pageable) {
-        log.debug("Request to search for a page of Tags for query {}", query);
-        return tagSearchRepository.search(queryStringQuery(query), pageable);    }
 }

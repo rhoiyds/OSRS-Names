@@ -1,7 +1,7 @@
 import { NgModule, CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
 import { RouterModule } from '@angular/router';
 
-import { RsnsalesSharedModule } from 'app/shared';
+import { OsrsnamesSharedModule } from 'app/shared';
 import {
   RatingComponent,
   RatingDetailComponent,
@@ -15,9 +15,9 @@ import {
 const ENTITY_STATES = [...ratingRoute, ...ratingPopupRoute];
 
 @NgModule({
-  imports: [RsnsalesSharedModule, RouterModule.forChild(ENTITY_STATES)],
+  imports: [OsrsnamesSharedModule, RouterModule.forChild(ENTITY_STATES)],
   declarations: [RatingComponent, RatingDetailComponent, RatingUpdateComponent, RatingDeleteDialogComponent, RatingDeletePopupComponent],
   entryComponents: [RatingComponent, RatingUpdateComponent, RatingDeleteDialogComponent, RatingDeletePopupComponent],
   schemas: [CUSTOM_ELEMENTS_SCHEMA]
 })
-export class RsnsalesRatingModule {}
+export class OsrsnamesRatingModule {}

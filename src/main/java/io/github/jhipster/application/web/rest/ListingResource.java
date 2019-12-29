@@ -3,8 +3,10 @@ package io.github.jhipster.application.web.rest;
 import io.github.jhipster.application.domain.Listing;
 import io.github.jhipster.application.domain.User;
 import io.github.jhipster.application.security.SecurityUtils;
+import io.github.jhipster.application.service.ListingQueryService;
 import io.github.jhipster.application.service.ListingService;
 import io.github.jhipster.application.service.UserService;
+import io.github.jhipster.application.service.dto.ListingCriteria;
 import io.github.jhipster.application.web.rest.errors.BadRequestAlertException;
 
 import io.github.jhipster.web.util.HeaderUtil;
@@ -16,6 +18,7 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpStatus;
 import org.springframework.util.MultiValueMap;
 import org.springframework.web.util.UriComponentsBuilder;
 import org.springframework.http.ResponseEntity;
@@ -45,9 +48,15 @@ public class ListingResource {
 
     private final ListingService listingService;
 
+    private final ListingQueryService listingQueryService;
+
     private final UserService userService;
 
-    public ListingResource(ListingService listingService, UserService userService) { this.listingService = listingService; this.userService = userService; }
+    public ListingResource(ListingService listingService, UserService userService, ListingQueryService listingQueryService) {
+        this.listingService = listingService;
+        this.userService = userService;
+        this.listingQueryService = listingQueryService;
+    }
 
     /**
      * {@code POST  /listings} : Create a new listing.
@@ -114,9 +123,9 @@ public class ListingResource {
      * @return the {@link ResponseEntity} with status {@code 200 (OK)} and the list of listings in body.
      */
     @GetMapping("/listings")
-    public ResponseEntity<List<Listing>> getAllListings(Pageable pageable, @RequestParam MultiValueMap<String, String> queryParams, UriComponentsBuilder uriBuilder) {
-        log.debug("REST request to get a page of Listings");
-        Page<Listing> page = listingService.findAll(pageable);
+    public ResponseEntity<List<Listing>> getAllListings(ListingCriteria criteria, Pageable pageable, @RequestParam MultiValueMap<String, String> queryParams, UriComponentsBuilder uriBuilder) {
+        log.debug("REST request to get Listings by criteria: {}", criteria);
+        Page<Listing> page = listingQueryService.findByCriteria(criteria, pageable);
         HttpHeaders headers = PaginationUtil.generatePaginationHttpHeaders(uriBuilder.queryParams(queryParams), page);
         return ResponseEntity.ok().headers(headers).body(page.getContent());
     }
@@ -156,24 +165,4 @@ public class ListingResource {
         listingService.save(listing);
         return ResponseEntity.noContent().headers(HeaderUtil.createEntityDeletionAlert(applicationName, false, ENTITY_NAME, id.toString())).build();
     }
-
-    /**
-     * {@code SEARCH  /_search/listings?query=:query} : search for the listing corresponding
-     * to the query.
-     *
-     * @param query the query of the listing search.
-     * @param pageable the pagination information.
-     * @param queryParams a {@link MultiValueMap} query parameters.
-     * @param uriBuilder a {@link UriComponentsBuilder} URI builder.
-     * @return the result of the search.
-     */
-    @GetMapping("/_search/listings")
-    public ResponseEntity<List<Listing>> searchListings(@RequestParam String query, Pageable pageable, @RequestParam MultiValueMap<String, String> queryParams, UriComponentsBuilder uriBuilder) {
-        log.debug("REST request to search for a page of Listings for query {}", query);
-        query = query.replace("active:false", "") + " AND active:true";
-        Page<Listing> page = listingService.search(query, pageable);
-        HttpHeaders headers = PaginationUtil.generatePaginationHttpHeaders(uriBuilder.queryParams(queryParams), page);
-        return ResponseEntity.ok().headers(headers).body(page.getContent());
-    }
-
 }

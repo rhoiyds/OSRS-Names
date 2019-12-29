@@ -25,7 +25,6 @@ export class ListingComponent implements OnInit, OnDestroy {
   predicate: any;
   reverse: any;
   totalItems: number;
-  currentSearch: string;
   listingType = ListingType;
 
   constructor(
@@ -44,25 +43,9 @@ export class ListingComponent implements OnInit, OnDestroy {
     };
     this.predicate = 'id';
     this.reverse = true;
-    this.currentSearch =
-      this.activatedRoute.snapshot && this.activatedRoute.snapshot.params['search'] ? this.activatedRoute.snapshot.params['search'] : '';
   }
 
   loadAll() {
-    if (this.currentSearch) {
-      this.listingService
-        .search({
-          query: this.currentSearch,
-          page: this.page,
-          size: this.itemsPerPage,
-          sort: this.sort()
-        })
-        .subscribe(
-          (res: HttpResponse<IListing[]>) => this.paginateListings(res.body, res.headers),
-          (res: HttpErrorResponse) => this.onError(res.message)
-        );
-      return;
-    }
     this.listingService
       .query({
         page: this.page,
@@ -83,33 +66,6 @@ export class ListingComponent implements OnInit, OnDestroy {
 
   loadPage(page) {
     this.page = page;
-    this.loadAll();
-  }
-
-  clear() {
-    this.listings = [];
-    this.links = {
-      last: 0
-    };
-    this.page = 0;
-    this.predicate = 'id';
-    this.reverse = true;
-    this.currentSearch = '';
-    this.loadAll();
-  }
-
-  search(query) {
-    if (!query) {
-      return this.clear();
-    }
-    this.listings = [];
-    this.links = {
-      last: 0
-    };
-    this.page = 0;
-    this.predicate = '_score';
-    this.reverse = false;
-    this.currentSearch = query;
     this.loadAll();
   }
 

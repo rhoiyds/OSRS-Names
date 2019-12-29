@@ -1,5 +1,5 @@
 import { NgModule, CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
-import { RsnsalesSharedCommonModule, JhiLoginModalComponent, HasAnyAuthorityDirective } from './';
+import { OsrsnamesSharedCommonModule, JhiLoginModalComponent, HasAnyAuthorityDirective } from './';
 import { ListingOfferComponent } from './components/listing-offer/listing-offer.component';
 import { UserProfileComponent } from './components/user-profile/user-profile.component';
 import { OsrsCurrencyPipe } from './osrs-currency.pipe';
@@ -7,7 +7,7 @@ import { RatingSelectionDialogComponent } from 'app/shared/components/rating-sel
 import { TimeAgoPipe } from 'time-ago-pipe';
 
 @NgModule({
-  imports: [RsnsalesSharedCommonModule],
+  imports: [OsrsnamesSharedCommonModule],
   declarations: [
     JhiLoginModalComponent,
     HasAnyAuthorityDirective,
@@ -19,7 +19,7 @@ import { TimeAgoPipe } from 'time-ago-pipe';
   ],
   entryComponents: [JhiLoginModalComponent, RatingSelectionDialogComponent],
   exports: [
-    RsnsalesSharedCommonModule,
+    OsrsnamesSharedCommonModule,
     JhiLoginModalComponent,
     HasAnyAuthorityDirective,
     ListingOfferComponent,
@@ -30,10 +30,10 @@ import { TimeAgoPipe } from 'time-ago-pipe';
   ],
   schemas: [CUSTOM_ELEMENTS_SCHEMA]
 })
-export class RsnsalesSharedModule {
+export class OsrsnamesSharedModule {
   static forRoot() {
     return {
-      ngModule: RsnsalesSharedModule
+      ngModule: OsrsnamesSharedModule
     };
   }
 }

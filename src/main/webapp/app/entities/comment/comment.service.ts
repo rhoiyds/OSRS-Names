@@ -15,7 +15,6 @@ type EntityArrayResponseType = HttpResponse<IComment[]>;
 @Injectable({ providedIn: 'root' })
 export class CommentService {
   public resourceUrl = SERVER_API_URL + 'api/comments';
-  public resourceSearchUrl = SERVER_API_URL + 'api/_search/comments';
 
   constructor(protected http: HttpClient) {}
 
@@ -48,13 +47,6 @@ export class CommentService {
 
   delete(id: number): Observable<HttpResponse<any>> {
     return this.http.delete<any>(`${this.resourceUrl}/${id}`, { observe: 'response' });
-  }
-
-  search(req?: any): Observable<EntityArrayResponseType> {
-    const options = createRequestOption(req);
-    return this.http
-      .get<IComment[]>(this.resourceSearchUrl, { params: options, observe: 'response' })
-      .pipe(map((res: EntityArrayResponseType) => this.convertDateArrayFromServer(res)));
   }
 
   protected convertDateFromClient(comment: IComment): IComment {

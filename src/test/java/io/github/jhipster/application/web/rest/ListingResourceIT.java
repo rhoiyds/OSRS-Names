@@ -1,13 +1,15 @@
 package io.github.jhipster.application.web.rest;
 
-import io.github.jhipster.application.RsnsalesApp;
+import io.github.jhipster.application.OsrsnamesApp;
 import io.github.jhipster.application.domain.Listing;
 import io.github.jhipster.application.domain.User;
+import io.github.jhipster.application.domain.Tag;
 import io.github.jhipster.application.repository.ListingRepository;
-import io.github.jhipster.application.repository.search.ListingSearchRepository;
 import io.github.jhipster.application.service.ListingService;
 import io.github.jhipster.application.service.UserService;
 import io.github.jhipster.application.web.rest.errors.ExceptionTranslator;
+import io.github.jhipster.application.service.dto.ListingCriteria;
+import io.github.jhipster.application.service.ListingQueryService;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -28,12 +30,11 @@ import org.springframework.validation.Validator;
 import javax.persistence.EntityManager;
 import java.time.Instant;
 import java.time.temporal.ChronoUnit;
-import java.util.Collections;
+import java.util.ArrayList;
 import java.util.List;
 
 import static io.github.jhipster.application.web.rest.TestUtil.createFormattingConversionService;
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.elasticsearch.index.query.QueryBuilders.queryStringQuery;
 import static org.hamcrest.Matchers.hasItem;
 import static org.mockito.Mockito.*;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
@@ -43,7 +44,7 @@ import io.github.jhipster.application.domain.enumeration.ListingType;
 /**
  * Integration tests for the {@Link ListingResource} REST controller.
  */
-@SpringBootTest(classes = RsnsalesApp.class)
+@SpringBootTest(classes = OsrsnamesApp.class)
 public class ListingResourceIT {
 
     private static final Instant DEFAULT_TIMESTAMP = Instant.ofEpochMilli(0L);
@@ -73,19 +74,17 @@ public class ListingResourceIT {
     @Mock
     private ListingService listingServiceMock;
 
+    @Mock
+    private UserService userServiceMock;
+
     @Autowired
     private ListingService listingService;
 
     @Autowired
-    private UserService userService;
+    private ListingQueryService listingQueryService;
 
-    /**
-     * This repository is mocked in the io.github.jhipster.application.repository.search test package.
-     *
-     * @see io.github.jhipster.application.repository.search.ListingSearchRepositoryMockConfiguration
-     */
     @Autowired
-    private ListingSearchRepository mockListingSearchRepository;
+    private UserService userService;
 
     @Autowired
     private MappingJackson2HttpMessageConverter jacksonMessageConverter;
@@ -109,7 +108,7 @@ public class ListingResourceIT {
     @BeforeEach
     public void setup() {
         MockitoAnnotations.initMocks(this);
-        final ListingResource listingResource = new ListingResource(listingService, userService);
+        final ListingResource listingResource = new ListingResource(listingService, userService, listingQueryService);
         this.restListingMockMvc = MockMvcBuilders.standaloneSetup(listingResource)
             .setCustomArgumentResolvers(pageableArgumentResolver)
             .setControllerAdvice(exceptionTranslator)
@@ -187,9 +186,6 @@ public class ListingResourceIT {
         assertThat(testListing.getAmount()).isEqualTo(DEFAULT_AMOUNT);
         assertThat(testListing.getDescription()).isEqualTo(DEFAULT_DESCRIPTION);
         assertThat(testListing.isActive()).isEqualTo(DEFAULT_ACTIVE);
-
-        // Validate the Listing in Elasticsearch
-        verify(mockListingSearchRepository, times(1)).save(testListing);
     }
 
     @Test
@@ -209,9 +205,6 @@ public class ListingResourceIT {
         // Validate the Listing in the database
         List<Listing> listingList = listingRepository.findAll();
         assertThat(listingList).hasSize(databaseSizeBeforeCreate);
-
-        // Validate the Listing in Elasticsearch
-        verify(mockListingSearchRepository, times(0)).save(listing);
     }
 
 
@@ -287,6 +280,39 @@ public class ListingResourceIT {
             .andExpect(jsonPath("$.[*].description").value(hasItem(DEFAULT_DESCRIPTION.toString())))
             .andExpect(jsonPath("$.[*].active").value(hasItem(DEFAULT_ACTIVE.booleanValue())));
     }
+    
+    @SuppressWarnings({"unchecked"})
+    public void getAllListingsWithEagerRelationshipsIsEnabled() throws Exception {
+        ListingResource listingResource = new ListingResource(listingServiceMock, userServiceMock, listingQueryService);
+        when(listingServiceMock.findAllWithEagerRelationships(any())).thenReturn(new PageImpl(new ArrayList<>()));
+
+        MockMvc restListingMockMvc = MockMvcBuilders.standaloneSetup(listingResource)
+            .setCustomArgumentResolvers(pageableArgumentResolver)
+            .setControllerAdvice(exceptionTranslator)
+            .setConversionService(createFormattingConversionService())
+            .setMessageConverters(jacksonMessageConverter).build();
+
+        restListingMockMvc.perform(get("/api/listings?eagerload=true"))
+        .andExpect(status().isOk());
+
+        verify(listingServiceMock, times(1)).findAllWithEagerRelationships(any());
+    }
+
+    @SuppressWarnings({"unchecked"})
+    public void getAllListingsWithEagerRelationshipsIsNotEnabled() throws Exception {
+        ListingResource listingResource = new ListingResource(listingServiceMock, userServiceMock, listingQueryService);
+            when(listingServiceMock.findAllWithEagerRelationships(any())).thenReturn(new PageImpl(new ArrayList<>()));
+            MockMvc restListingMockMvc = MockMvcBuilders.standaloneSetup(listingResource)
+            .setCustomArgumentResolvers(pageableArgumentResolver)
+            .setControllerAdvice(exceptionTranslator)
+            .setConversionService(createFormattingConversionService())
+            .setMessageConverters(jacksonMessageConverter).build();
+
+        restListingMockMvc.perform(get("/api/listings?eagerload=true"))
+        .andExpect(status().isOk());
+
+            verify(listingServiceMock, times(1)).findAllWithEagerRelationships(any());
+    }
 
     @Test
     @Transactional
@@ -309,6 +335,341 @@ public class ListingResourceIT {
 
     @Test
     @Transactional
+    public void getAllListingsByTimestampIsEqualToSomething() throws Exception {
+        // Initialize the database
+        listingRepository.saveAndFlush(listing);
+
+        // Get all the listingList where timestamp equals to DEFAULT_TIMESTAMP
+        defaultListingShouldBeFound("timestamp.equals=" + DEFAULT_TIMESTAMP);
+
+        // Get all the listingList where timestamp equals to UPDATED_TIMESTAMP
+        defaultListingShouldNotBeFound("timestamp.equals=" + UPDATED_TIMESTAMP);
+    }
+
+    @Test
+    @Transactional
+    public void getAllListingsByTimestampIsInShouldWork() throws Exception {
+        // Initialize the database
+        listingRepository.saveAndFlush(listing);
+
+        // Get all the listingList where timestamp in DEFAULT_TIMESTAMP or UPDATED_TIMESTAMP
+        defaultListingShouldBeFound("timestamp.in=" + DEFAULT_TIMESTAMP + "," + UPDATED_TIMESTAMP);
+
+        // Get all the listingList where timestamp equals to UPDATED_TIMESTAMP
+        defaultListingShouldNotBeFound("timestamp.in=" + UPDATED_TIMESTAMP);
+    }
+
+    @Test
+    @Transactional
+    public void getAllListingsByTimestampIsNullOrNotNull() throws Exception {
+        // Initialize the database
+        listingRepository.saveAndFlush(listing);
+
+        // Get all the listingList where timestamp is not null
+        defaultListingShouldBeFound("timestamp.specified=true");
+
+        // Get all the listingList where timestamp is null
+        defaultListingShouldNotBeFound("timestamp.specified=false");
+    }
+
+    @Test
+    @Transactional
+    public void getAllListingsByTypeIsEqualToSomething() throws Exception {
+        // Initialize the database
+        listingRepository.saveAndFlush(listing);
+
+        // Get all the listingList where type equals to DEFAULT_TYPE
+        defaultListingShouldBeFound("type.equals=" + DEFAULT_TYPE);
+
+        // Get all the listingList where type equals to UPDATED_TYPE
+        defaultListingShouldNotBeFound("type.equals=" + UPDATED_TYPE);
+    }
+
+    @Test
+    @Transactional
+    public void getAllListingsByTypeIsInShouldWork() throws Exception {
+        // Initialize the database
+        listingRepository.saveAndFlush(listing);
+
+        // Get all the listingList where type in DEFAULT_TYPE or UPDATED_TYPE
+        defaultListingShouldBeFound("type.in=" + DEFAULT_TYPE + "," + UPDATED_TYPE);
+
+        // Get all the listingList where type equals to UPDATED_TYPE
+        defaultListingShouldNotBeFound("type.in=" + UPDATED_TYPE);
+    }
+
+    @Test
+    @Transactional
+    public void getAllListingsByTypeIsNullOrNotNull() throws Exception {
+        // Initialize the database
+        listingRepository.saveAndFlush(listing);
+
+        // Get all the listingList where type is not null
+        defaultListingShouldBeFound("type.specified=true");
+
+        // Get all the listingList where type is null
+        defaultListingShouldNotBeFound("type.specified=false");
+    }
+
+    @Test
+    @Transactional
+    public void getAllListingsByRsnIsEqualToSomething() throws Exception {
+        // Initialize the database
+        listingRepository.saveAndFlush(listing);
+
+        // Get all the listingList where rsn equals to DEFAULT_RSN
+        defaultListingShouldBeFound("rsn.equals=" + DEFAULT_RSN);
+
+        // Get all the listingList where rsn equals to UPDATED_RSN
+        defaultListingShouldNotBeFound("rsn.equals=" + UPDATED_RSN);
+    }
+
+    @Test
+    @Transactional
+    public void getAllListingsByRsnIsInShouldWork() throws Exception {
+        // Initialize the database
+        listingRepository.saveAndFlush(listing);
+
+        // Get all the listingList where rsn in DEFAULT_RSN or UPDATED_RSN
+        defaultListingShouldBeFound("rsn.in=" + DEFAULT_RSN + "," + UPDATED_RSN);
+
+        // Get all the listingList where rsn equals to UPDATED_RSN
+        defaultListingShouldNotBeFound("rsn.in=" + UPDATED_RSN);
+    }
+
+    @Test
+    @Transactional
+    public void getAllListingsByRsnIsNullOrNotNull() throws Exception {
+        // Initialize the database
+        listingRepository.saveAndFlush(listing);
+
+        // Get all the listingList where rsn is not null
+        defaultListingShouldBeFound("rsn.specified=true");
+
+        // Get all the listingList where rsn is null
+        defaultListingShouldNotBeFound("rsn.specified=false");
+    }
+
+    @Test
+    @Transactional
+    public void getAllListingsByAmountIsEqualToSomething() throws Exception {
+        // Initialize the database
+        listingRepository.saveAndFlush(listing);
+
+        // Get all the listingList where amount equals to DEFAULT_AMOUNT
+        defaultListingShouldBeFound("amount.equals=" + DEFAULT_AMOUNT);
+
+        // Get all the listingList where amount equals to UPDATED_AMOUNT
+        defaultListingShouldNotBeFound("amount.equals=" + UPDATED_AMOUNT);
+    }
+
+    @Test
+    @Transactional
+    public void getAllListingsByAmountIsInShouldWork() throws Exception {
+        // Initialize the database
+        listingRepository.saveAndFlush(listing);
+
+        // Get all the listingList where amount in DEFAULT_AMOUNT or UPDATED_AMOUNT
+        defaultListingShouldBeFound("amount.in=" + DEFAULT_AMOUNT + "," + UPDATED_AMOUNT);
+
+        // Get all the listingList where amount equals to UPDATED_AMOUNT
+        defaultListingShouldNotBeFound("amount.in=" + UPDATED_AMOUNT);
+    }
+
+    @Test
+    @Transactional
+    public void getAllListingsByAmountIsNullOrNotNull() throws Exception {
+        // Initialize the database
+        listingRepository.saveAndFlush(listing);
+
+        // Get all the listingList where amount is not null
+        defaultListingShouldBeFound("amount.specified=true");
+
+        // Get all the listingList where amount is null
+        defaultListingShouldNotBeFound("amount.specified=false");
+    }
+
+    @Test
+    @Transactional
+    public void getAllListingsByAmountIsGreaterThanOrEqualToSomething() throws Exception {
+        // Initialize the database
+        listingRepository.saveAndFlush(listing);
+
+        // Get all the listingList where amount greater than or equals to DEFAULT_AMOUNT
+        defaultListingShouldBeFound("amount.greaterOrEqualThan=" + DEFAULT_AMOUNT);
+
+        // Get all the listingList where amount greater than or equals to UPDATED_AMOUNT
+        defaultListingShouldNotBeFound("amount.greaterOrEqualThan=" + UPDATED_AMOUNT);
+    }
+
+    @Test
+    @Transactional
+    public void getAllListingsByAmountIsLessThanSomething() throws Exception {
+        // Initialize the database
+        listingRepository.saveAndFlush(listing);
+
+        // Get all the listingList where amount less than or equals to DEFAULT_AMOUNT
+        defaultListingShouldNotBeFound("amount.lessThan=" + DEFAULT_AMOUNT);
+
+        // Get all the listingList where amount less than or equals to UPDATED_AMOUNT
+        defaultListingShouldBeFound("amount.lessThan=" + UPDATED_AMOUNT);
+    }
+
+
+    @Test
+    @Transactional
+    public void getAllListingsByDescriptionIsEqualToSomething() throws Exception {
+        // Initialize the database
+        listingRepository.saveAndFlush(listing);
+
+        // Get all the listingList where description equals to DEFAULT_DESCRIPTION
+        defaultListingShouldBeFound("description.equals=" + DEFAULT_DESCRIPTION);
+
+        // Get all the listingList where description equals to UPDATED_DESCRIPTION
+        defaultListingShouldNotBeFound("description.equals=" + UPDATED_DESCRIPTION);
+    }
+
+    @Test
+    @Transactional
+    public void getAllListingsByDescriptionIsInShouldWork() throws Exception {
+        // Initialize the database
+        listingRepository.saveAndFlush(listing);
+
+        // Get all the listingList where description in DEFAULT_DESCRIPTION or UPDATED_DESCRIPTION
+        defaultListingShouldBeFound("description.in=" + DEFAULT_DESCRIPTION + "," + UPDATED_DESCRIPTION);
+
+        // Get all the listingList where description equals to UPDATED_DESCRIPTION
+        defaultListingShouldNotBeFound("description.in=" + UPDATED_DESCRIPTION);
+    }
+
+    @Test
+    @Transactional
+    public void getAllListingsByDescriptionIsNullOrNotNull() throws Exception {
+        // Initialize the database
+        listingRepository.saveAndFlush(listing);
+
+        // Get all the listingList where description is not null
+        defaultListingShouldBeFound("description.specified=true");
+
+        // Get all the listingList where description is null
+        defaultListingShouldNotBeFound("description.specified=false");
+    }
+
+    @Test
+    @Transactional
+    public void getAllListingsByActiveIsEqualToSomething() throws Exception {
+        // Initialize the database
+        listingRepository.saveAndFlush(listing);
+
+        // Get all the listingList where active equals to DEFAULT_ACTIVE
+        defaultListingShouldBeFound("active.equals=" + DEFAULT_ACTIVE);
+
+        // Get all the listingList where active equals to UPDATED_ACTIVE
+        defaultListingShouldNotBeFound("active.equals=" + UPDATED_ACTIVE);
+    }
+
+    @Test
+    @Transactional
+    public void getAllListingsByActiveIsInShouldWork() throws Exception {
+        // Initialize the database
+        listingRepository.saveAndFlush(listing);
+
+        // Get all the listingList where active in DEFAULT_ACTIVE or UPDATED_ACTIVE
+        defaultListingShouldBeFound("active.in=" + DEFAULT_ACTIVE + "," + UPDATED_ACTIVE);
+
+        // Get all the listingList where active equals to UPDATED_ACTIVE
+        defaultListingShouldNotBeFound("active.in=" + UPDATED_ACTIVE);
+    }
+
+    @Test
+    @Transactional
+    public void getAllListingsByActiveIsNullOrNotNull() throws Exception {
+        // Initialize the database
+        listingRepository.saveAndFlush(listing);
+
+        // Get all the listingList where active is not null
+        defaultListingShouldBeFound("active.specified=true");
+
+        // Get all the listingList where active is null
+        defaultListingShouldNotBeFound("active.specified=false");
+    }
+
+    @Test
+    @Transactional
+    public void getAllListingsByOwnerIsEqualToSomething() throws Exception {
+        // Get already existing entity
+        User owner = listing.getOwner();
+        listingRepository.saveAndFlush(listing);
+        Long ownerId = owner.getId();
+
+        // Get all the listingList where owner equals to ownerId
+        defaultListingShouldBeFound("ownerId.equals=" + ownerId);
+
+        // Get all the listingList where owner equals to ownerId + 1
+        defaultListingShouldNotBeFound("ownerId.equals=" + (ownerId + 1));
+    }
+
+
+    @Test
+    @Transactional
+    public void getAllListingsByTagsIsEqualToSomething() throws Exception {
+        // Initialize the database
+        Tag tags = TagResourceIT.createEntity(em);
+        em.persist(tags);
+        em.flush();
+        listing.addTags(tags);
+        listingRepository.saveAndFlush(listing);
+        Long tagsId = tags.getId();
+
+        // Get all the listingList where tags equals to tagsId
+        defaultListingShouldBeFound("tagsId.equals=" + tagsId);
+
+        // Get all the listingList where tags equals to tagsId + 1
+        defaultListingShouldNotBeFound("tagsId.equals=" + (tagsId + 1));
+    }
+
+    /**
+     * Executes the search, and checks that the default entity is returned.
+     */
+    private void defaultListingShouldBeFound(String filter) throws Exception {
+        restListingMockMvc.perform(get("/api/listings?sort=id,desc&" + filter))
+            .andExpect(status().isOk())
+            .andExpect(content().contentType(MediaType.APPLICATION_JSON_UTF8_VALUE))
+            .andExpect(jsonPath("$.[*].id").value(hasItem(listing.getId().intValue())))
+            .andExpect(jsonPath("$.[*].timestamp").value(hasItem(DEFAULT_TIMESTAMP.toString())))
+            .andExpect(jsonPath("$.[*].type").value(hasItem(DEFAULT_TYPE.toString())))
+            .andExpect(jsonPath("$.[*].rsn").value(hasItem(DEFAULT_RSN)))
+            .andExpect(jsonPath("$.[*].amount").value(hasItem(DEFAULT_AMOUNT.intValue())))
+            .andExpect(jsonPath("$.[*].description").value(hasItem(DEFAULT_DESCRIPTION)))
+            .andExpect(jsonPath("$.[*].active").value(hasItem(DEFAULT_ACTIVE.booleanValue())));
+
+        // Check, that the count call also returns 1
+        restListingMockMvc.perform(get("/api/listings/count?sort=id,desc&" + filter))
+            .andExpect(status().isOk())
+            .andExpect(content().contentType(MediaType.APPLICATION_JSON_UTF8_VALUE))
+            .andExpect(content().string("1"));
+    }
+
+    /**
+     * Executes the search, and checks that the default entity is not returned.
+     */
+    private void defaultListingShouldNotBeFound(String filter) throws Exception {
+        restListingMockMvc.perform(get("/api/listings?sort=id,desc&" + filter))
+            .andExpect(status().isOk())
+            .andExpect(content().contentType(MediaType.APPLICATION_JSON_UTF8_VALUE))
+            .andExpect(jsonPath("$").isArray())
+            .andExpect(jsonPath("$").isEmpty());
+
+        // Check, that the count call also returns 0
+        restListingMockMvc.perform(get("/api/listings/count?sort=id,desc&" + filter))
+            .andExpect(status().isOk())
+            .andExpect(content().contentType(MediaType.APPLICATION_JSON_UTF8_VALUE))
+            .andExpect(content().string("0"));
+    }
+
+
+    @Test
+    @Transactional
     public void getNonExistingListing() throws Exception {
         // Get the listing
         restListingMockMvc.perform(get("/api/listings/{id}", Long.MAX_VALUE))
@@ -320,8 +681,6 @@ public class ListingResourceIT {
     public void updateListing() throws Exception {
         // Initialize the database
         listingService.save(listing);
-        // As the test used the service layer, reset the Elasticsearch mock repository
-        reset(mockListingSearchRepository);
 
         int databaseSizeBeforeUpdate = listingRepository.findAll().size();
 
@@ -352,9 +711,6 @@ public class ListingResourceIT {
         assertThat(testListing.getAmount()).isEqualTo(UPDATED_AMOUNT);
         assertThat(testListing.getDescription()).isEqualTo(UPDATED_DESCRIPTION);
         assertThat(testListing.isActive()).isEqualTo(UPDATED_ACTIVE);
-
-        // Validate the Listing in Elasticsearch
-        verify(mockListingSearchRepository, times(1)).save(testListing);
     }
 
     @Test
@@ -373,9 +729,6 @@ public class ListingResourceIT {
         // Validate the Listing in the database
         List<Listing> listingList = listingRepository.findAll();
         assertThat(listingList).hasSize(databaseSizeBeforeUpdate);
-
-        // Validate the Listing in Elasticsearch
-        verify(mockListingSearchRepository, times(0)).save(listing);
     }
 
     @Test
@@ -394,29 +747,6 @@ public class ListingResourceIT {
         // Validate the database contains one less item
         List<Listing> listingList = listingRepository.findAll();
         assertThat(listingList).hasSize(databaseSizeBeforeDelete - 1);
-
-        // Validate the Listing in Elasticsearch
-        verify(mockListingSearchRepository, times(1)).deleteById(listing.getId());
-    }
-
-    @Test
-    @Transactional
-    public void searchListing() throws Exception {
-        // Initialize the database
-        listingService.save(listing);
-        when(mockListingSearchRepository.search(queryStringQuery("id:" + listing.getId()), PageRequest.of(0, 20)))
-            .thenReturn(new PageImpl<>(Collections.singletonList(listing), PageRequest.of(0, 1), 1));
-        // Search the listing
-        restListingMockMvc.perform(get("/api/_search/listings?query=id:" + listing.getId()))
-            .andExpect(status().isOk())
-            .andExpect(content().contentType(MediaType.APPLICATION_JSON_UTF8_VALUE))
-            .andExpect(jsonPath("$.[*].id").value(hasItem(listing.getId().intValue())))
-            .andExpect(jsonPath("$.[*].timestamp").value(hasItem(DEFAULT_TIMESTAMP.toString())))
-            .andExpect(jsonPath("$.[*].type").value(hasItem(DEFAULT_TYPE.toString())))
-            .andExpect(jsonPath("$.[*].rsn").value(hasItem(DEFAULT_RSN)))
-            .andExpect(jsonPath("$.[*].amount").value(hasItem(DEFAULT_AMOUNT.intValue())))
-            .andExpect(jsonPath("$.[*].description").value(hasItem(DEFAULT_DESCRIPTION)))
-            .andExpect(jsonPath("$.[*].active").value(hasItem(DEFAULT_ACTIVE.booleanValue())));
     }
 
     @Test

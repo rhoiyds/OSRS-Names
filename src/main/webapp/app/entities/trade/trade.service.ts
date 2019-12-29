@@ -16,7 +16,6 @@ type EntityArrayResponseType = HttpResponse<ITrade[]>;
 @Injectable({ providedIn: 'root' })
 export class TradeService {
   public resourceUrl = SERVER_API_URL + 'api/trades';
-  public resourceSearchUrl = SERVER_API_URL + 'api/_search/trades';
 
   constructor(protected http: HttpClient) {}
 
@@ -39,11 +38,6 @@ export class TradeService {
 
   delete(id: number): Observable<HttpResponse<any>> {
     return this.http.delete<any>(`${this.resourceUrl}/${id}`, { observe: 'response' });
-  }
-
-  search(req?: any): Observable<EntityArrayResponseType> {
-    const options = createRequestOption(req);
-    return this.http.get<ITrade[]>(this.resourceSearchUrl, { params: options, observe: 'response' });
   }
 
   rate(id, rating): Observable<EntityResponseType> {

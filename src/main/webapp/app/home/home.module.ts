@@ -1,12 +1,12 @@
 import { NgModule, CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
 import { RouterModule } from '@angular/router';
 
-import { RsnsalesSharedModule } from 'app/shared';
+import { OsrsnamesSharedModule } from 'app/shared';
 import { HOME_ROUTE, HomeComponent } from './';
 
 @NgModule({
-  imports: [RsnsalesSharedModule, RouterModule.forChild([HOME_ROUTE])],
+  imports: [OsrsnamesSharedModule, RouterModule.forChild([HOME_ROUTE])],
   declarations: [HomeComponent],
   schemas: [CUSTOM_ELEMENTS_SCHEMA]
 })
-export class RsnsalesHomeModule {}
+export class OsrsnamesHomeModule {}

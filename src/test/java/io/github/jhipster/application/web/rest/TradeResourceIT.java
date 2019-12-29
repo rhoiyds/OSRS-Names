@@ -1,21 +1,19 @@
 package io.github.jhipster.application.web.rest;
 
-import io.github.jhipster.application.RsnsalesApp;
+import io.github.jhipster.application.OsrsnamesApp;
 import io.github.jhipster.application.domain.Trade;
 import io.github.jhipster.application.domain.Offer;
 import io.github.jhipster.application.repository.TradeRepository;
-import io.github.jhipster.application.repository.search.TradeSearchRepository;
 import io.github.jhipster.application.service.*;
 import io.github.jhipster.application.web.rest.errors.ExceptionTranslator;
 import io.github.jhipster.application.service.dto.TradeCriteria;
+import io.github.jhipster.application.service.TradeQueryService;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.MockitoAnnotations;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.data.domain.PageImpl;
-import org.springframework.data.domain.PageRequest;
 import org.springframework.data.web.PageableHandlerMethodArgumentResolver;
 import org.springframework.http.MediaType;
 import org.springframework.http.converter.json.MappingJackson2HttpMessageConverter;
@@ -25,14 +23,11 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.validation.Validator;
 
 import javax.persistence.EntityManager;
-import java.util.Collections;
 import java.util.List;
 
 import static io.github.jhipster.application.web.rest.TestUtil.createFormattingConversionService;
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.elasticsearch.index.query.QueryBuilders.queryStringQuery;
 import static org.hamcrest.Matchers.hasItem;
-import static org.mockito.Mockito.*;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
@@ -41,7 +36,7 @@ import io.github.jhipster.application.domain.enumeration.TradeStatus;
 /**
  * Integration tests for the {@Link TradeResource} REST controller.
  */
-@SpringBootTest(classes = RsnsalesApp.class)
+@SpringBootTest(classes = OsrsnamesApp.class)
 public class TradeResourceIT {
 
     private static final TradeStatus DEFAULT_LISTING_OWNER_STATUS = TradeStatus.PENDING;
@@ -64,15 +59,6 @@ public class TradeResourceIT {
 
     @Autowired
     private RatingService ratingService;
-
-
-    /**
-     * This repository is mocked in the io.github.jhipster.application.repository.search test package.
-     *
-     * @see io.github.jhipster.application.repository.search.TradeSearchRepositoryMockConfiguration
-     */
-    @Autowired
-    private TradeSearchRepository mockTradeSearchRepository;
 
     @Autowired
     private TradeQueryService tradeQueryService;
@@ -178,9 +164,6 @@ public class TradeResourceIT {
 
         // Validate the id for MapsId, the ids must be same
         assertThat(testTrade.getId()).isEqualTo(testTrade.getOffer().getId());
-
-        // Validate the Trade in Elasticsearch
-        verify(mockTradeSearchRepository, times(1)).save(testTrade);
     }
 
     @Test
@@ -200,9 +183,6 @@ public class TradeResourceIT {
         // Validate the Trade in the database
         List<Trade> tradeList = tradeRepository.findAll();
         assertThat(tradeList).hasSize(databaseSizeBeforeCreate);
-
-        // Validate the Trade in Elasticsearch
-        verify(mockTradeSearchRepository, times(0)).save(trade);
     }
 
     @Test
@@ -240,9 +220,6 @@ public class TradeResourceIT {
         // Uncomment the following line for assertion. However, please note that there is a known issue and uncommenting will fail the test.
         // Please look at https://github.com/jhipster/generator-jhipster/issues/9100. You can modify this test as necessary.
         // assertThat(testTrade.getId()).isEqualTo(testTrade.getOffer().getId());
-
-        // Validate the Trade in Elasticsearch
-        verify(mockTradeSearchRepository, times(2)).save(trade);
     }
 
     @Test
@@ -417,8 +394,6 @@ public class TradeResourceIT {
     public void updateTrade() throws Exception {
         // Initialize the database
         tradeService.save(trade);
-        // As the test used the service layer, reset the Elasticsearch mock repository
-        reset(mockTradeSearchRepository);
 
         int databaseSizeBeforeUpdate = tradeRepository.findAll().size();
 
@@ -441,9 +416,6 @@ public class TradeResourceIT {
         Trade testTrade = tradeList.get(tradeList.size() - 1);
         assertThat(testTrade.getListingOwnerStatus()).isEqualTo(UPDATED_LISTING_OWNER_STATUS);
         assertThat(testTrade.getOfferOwnerStatus()).isEqualTo(UPDATED_OFFER_OWNER_STATUS);
-
-        // Validate the Trade in Elasticsearch
-        verify(mockTradeSearchRepository, times(1)).save(testTrade);
     }
 
     @Test
@@ -462,9 +434,6 @@ public class TradeResourceIT {
         // Validate the Trade in the database
         List<Trade> tradeList = tradeRepository.findAll();
         assertThat(tradeList).hasSize(databaseSizeBeforeUpdate);
-
-        // Validate the Trade in Elasticsearch
-        verify(mockTradeSearchRepository, times(0)).save(trade);
     }
 
     @Test
@@ -483,25 +452,6 @@ public class TradeResourceIT {
         // Validate the database contains one less item
         List<Trade> tradeList = tradeRepository.findAll();
         assertThat(tradeList).hasSize(databaseSizeBeforeDelete - 1);
-
-        // Validate the Trade in Elasticsearch
-        verify(mockTradeSearchRepository, times(1)).deleteById(trade.getId());
-    }
-
-    @Test
-    @Transactional
-    public void searchTrade() throws Exception {
-        // Initialize the database
-        tradeService.save(trade);
-        when(mockTradeSearchRepository.search(queryStringQuery("id:" + trade.getId()), PageRequest.of(0, 20)))
-            .thenReturn(new PageImpl<>(Collections.singletonList(trade), PageRequest.of(0, 1), 1));
-        // Search the trade
-        restTradeMockMvc.perform(get("/api/_search/trades?query=id:" + trade.getId()))
-            .andExpect(status().isOk())
-            .andExpect(content().contentType(MediaType.APPLICATION_JSON_UTF8_VALUE))
-            .andExpect(jsonPath("$.[*].id").value(hasItem(trade.getId().intValue())))
-            .andExpect(jsonPath("$.[*].listingOwnerStatus").value(hasItem(DEFAULT_LISTING_OWNER_STATUS.toString())))
-            .andExpect(jsonPath("$.[*].offerOwnerStatus").value(hasItem(DEFAULT_OFFER_OWNER_STATUS.toString())));
     }
 
     @Test

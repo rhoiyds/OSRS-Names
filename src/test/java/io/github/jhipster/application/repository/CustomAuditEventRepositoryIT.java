@@ -1,6 +1,6 @@
 package io.github.jhipster.application.repository;
 
-import io.github.jhipster.application.RsnsalesApp;
+import io.github.jhipster.application.OsrsnamesApp;
 import io.github.jhipster.application.config.Constants;
 import io.github.jhipster.application.config.audit.AuditEventConverter;
 import io.github.jhipster.application.domain.PersistentAuditEvent;
@@ -27,7 +27,7 @@ import static io.github.jhipster.application.repository.CustomAuditEventReposito
 /**
  * Integration tests for {@link CustomAuditEventRepository}.
  */
-@SpringBootTest(classes = RsnsalesApp.class)
+@SpringBootTest(classes = OsrsnamesApp.class)
 @Transactional
 public class CustomAuditEventRepositoryIT {
 

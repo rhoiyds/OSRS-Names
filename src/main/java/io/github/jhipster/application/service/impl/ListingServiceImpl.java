@@ -3,7 +3,6 @@ package io.github.jhipster.application.service.impl;
 import io.github.jhipster.application.service.ListingService;
 import io.github.jhipster.application.domain.Listing;
 import io.github.jhipster.application.repository.ListingRepository;
-import io.github.jhipster.application.repository.search.ListingSearchRepository;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -13,8 +12,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Optional;
-
-import static org.elasticsearch.index.query.QueryBuilders.*;
 
 /**
  * Service Implementation for managing {@link Listing}.
@@ -27,11 +24,8 @@ public class ListingServiceImpl implements ListingService {
 
     private final ListingRepository listingRepository;
 
-    private final ListingSearchRepository listingSearchRepository;
-
-    public ListingServiceImpl(ListingRepository listingRepository, ListingSearchRepository listingSearchRepository) {
+    public ListingServiceImpl(ListingRepository listingRepository) {
         this.listingRepository = listingRepository;
-        this.listingSearchRepository = listingSearchRepository;
     }
 
     /**
@@ -43,9 +37,7 @@ public class ListingServiceImpl implements ListingService {
     @Override
     public Listing save(Listing listing) {
         log.debug("Request to save Listing : {}", listing);
-        Listing result = listingRepository.save(listing);
-        listingSearchRepository.save(result);
-        return result;
+        return listingRepository.save(listing);
     }
 
     /**
@@ -61,6 +53,12 @@ public class ListingServiceImpl implements ListingService {
         return listingRepository.findAllActive(pageable);
     }
 
+    @Override
+    public Page<Listing> findAllWithEagerRelationships(Pageable pageable) {
+        log.debug("Request to get all Listings with eager relationship");
+        return listingRepository.findAllWithEagerRelationships(pageable);
+    }
+
 
     /**
      * Get one listing by id.
@@ -72,7 +70,7 @@ public class ListingServiceImpl implements ListingService {
     @Transactional(readOnly = true)
     public Optional<Listing> findOne(Long id) {
         log.debug("Request to get Listing : {}", id);
-        return listingRepository.findById(id);
+        return listingRepository.findOneWithEagerRelationships(id);
     }
 
     /**
@@ -84,19 +82,5 @@ public class ListingServiceImpl implements ListingService {
     public void delete(Long id) {
         log.debug("Request to delete Listing : {}", id);
         listingRepository.deleteById(id);
-        listingSearchRepository.deleteById(id);
     }
-
-    /**
-     * Search for the listing corresponding to the query.
-     *
-     * @param query the query of the search.
-     * @param pageable the pagination information.
-     * @return the list of entities.
-     */
-    @Override
-    @Transactional(readOnly = true)
-    public Page<Listing> search(String query, Pageable pageable) {
-        log.debug("Request to search for a page of Listings for query {}", query);
-        return listingSearchRepository.search(queryStringQuery(query), pageable);    }
 }
