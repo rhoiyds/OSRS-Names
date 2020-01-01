@@ -135,6 +135,7 @@ public class MailService {
         log.debug("Sending new offer email to '{}'", offer.getOwner().getEmail());
         Context context = getNewContext(offer.getOwner());
         context.setVariable(OFFER, offer);
+        context.setVariable("action", offer.getStatus().toString().toLowerCase());
         sendEmailFromTemplate(context, "mail/answeredOfferEmail", "email.answeredOffer.title");
     }
 

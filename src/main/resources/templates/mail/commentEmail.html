@@ -9,11 +9,11 @@
         <p th:text="#{email.comment.greeting(${user.username})}">
             Dear
         </p>
-        <p th:text="#{email.comment.text1(${offer.listing.rsn})}">
+        <p th:text="#{email.comment.text1(${comment.offer.listing.rsn})}">
             You have a new comment on the listing
         </p>
         <p>
-            <a th:with="url=(@{|${baseUrl}/listing/${comment.offer.listing.id}|})" th:href="${url}"
+            <a th:with="url=(@{|${baseUrl}/listing/${comment.offer.listing.id}/view|})" th:href="${url}"
             th:text="${url}">Login link</a>
         </p>
         <p>

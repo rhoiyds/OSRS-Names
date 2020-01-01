@@ -13,7 +13,7 @@
             You have a new offer on your listing
         </p>
         <p>
-            <a th:with="url=(@{|${baseUrl}/listing/${offer.listing.id}|})" th:href="${url}"
+            <a th:with="url=(@{|${baseUrl}/listing/${offer.listing.id}/view|})" th:href="${url}"
             th:text="${url}">Login link</a>
         </p>
         <p>
