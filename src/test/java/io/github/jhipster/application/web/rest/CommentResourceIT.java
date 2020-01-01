@@ -8,7 +8,6 @@ import io.github.jhipster.application.repository.CommentRepository;
 import io.github.jhipster.application.service.CommentService;
 import io.github.jhipster.application.service.MailService;
 import io.github.jhipster.application.web.rest.errors.ExceptionTranslator;
-import io.github.jhipster.application.service.dto.CommentCriteria;
 import io.github.jhipster.application.service.CommentQueryService;
 import io.github.jhipster.application.service.UserService;
 
