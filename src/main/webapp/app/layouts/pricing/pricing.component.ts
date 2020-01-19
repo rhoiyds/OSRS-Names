@@ -1,6 +1,7 @@
-import { Component, OnInit, AfterViewInit, ViewChild, ElementRef } from '@angular/core';
+import { Component, OnInit, AfterViewInit, ViewChild, ElementRef, TemplateRef } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
-import { HttpClient } from '@angular/common/http';
+import { NgbModal, NgbModalRef } from '@ng-bootstrap/ng-bootstrap';
+import { PayPalModalComponent } from 'app/shared/components/paypal-modal/paypal-modal.component';
 
 declare var paypal;
 
@@ -9,39 +10,23 @@ declare var paypal;
   templateUrl: './pricing.component.html',
   styleUrls: ['pricing.component.scss']
 })
-export class PricingComponent implements OnInit, AfterViewInit {
+export class PricingComponent implements OnInit {
   @ViewChild('paypal', { static: true }) paypalElement: ElementRef;
 
-  constructor(protected activatedRoute: ActivatedRoute, private http: HttpClient) {}
+  @ViewChild('templateRef', { static: true, read: TemplateRef }) templateRef: TemplateRef<any>;
+
+  selectedAmount: String;
+
+  protected ngbModalRef: NgbModalRef;
+
+  constructor(protected activatedRoute: ActivatedRoute, private modalService: NgbModal) {}
 
   ngOnInit() {}
 
-  ngAfterViewInit() {
-    paypal
-      .Buttons({
-        createOrder: function(data, actions) {
-          return actions.order.create({
-            purchase_units: [
-              {
-                amount: {
-                  value: '0.01'
-                }
-              }
-            ]
-          });
-        },
-        onApprove: (data, actions) => {
-          return actions.order.capture().then(details => {
-            console.log('Transaction completed by ' + details.payer.name.given_name);
-            const obj = {
-              id: data.orderID
-            };
-            this.http.post<string>('/api/paypal-transaction-complete', obj, { observe: 'response' }).subscribe(data => {
-              return data;
-            });
-          });
-        }
-      })
-      .render(this.paypalElement.nativeElement);
+  onBuyTierClick(amount, title) {
+    this.selectedAmount = amount;
+    this.ngbModalRef = this.modalService.open(PayPalModalComponent as Component, { size: 'lg', backdrop: 'static' });
+    this.ngbModalRef.componentInstance.selectedAmount = this.selectedAmount;
+    this.ngbModalRef.componentInstance.title = title;
   }
 }

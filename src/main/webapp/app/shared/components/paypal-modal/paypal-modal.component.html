@@ -1,0 +1,16 @@
+<div class="modal-header">
+    <h4 class="modal-title">Upgrade to {{title}} tier</h4>
+    <button type="button" class="close" data-dismiss="modal" aria-hidden="true"
+            (click)="clear()">&times;</button>
+</div>
+<div class="modal-body">
+    <p *ngIf="!successfullTransaction">One off payment. No subscriptions. One step away!</p>
+    <div class="alert alert-success" *ngIf="successfullTransaction">
+        <h5>You legend!</h5>
+        <p>
+            You have upgraded to the {{title}} tier. Now go ahead and enjoy the best publicity for selling and buying
+            Old School Runescape names!
+        </p>
+    </div>
+    <div #paypal [hidden]="successfullTransaction"></div>
+</div>
