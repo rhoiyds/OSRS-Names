@@ -31,6 +31,10 @@ import { RouterModule } from '@angular/router';
       {
         path: 'rating',
         loadChildren: './rating/rating.module#OsrsnamesRatingModule'
+      },
+      {
+        path: 'payment',
+        loadChildren: './payment/payment.module#OsrsnamesPaymentModule'
       }
       /* jhipster-needle-add-entity-route - JHipster will add entity modules routes here */
     ])
