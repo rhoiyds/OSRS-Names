@@ -3,6 +3,7 @@ package io.github.jhipster.application.web.rest;
 import io.github.jhipster.application.OsrsnamesApp;
 import io.github.jhipster.application.domain.Payment;
 import io.github.jhipster.application.repository.PaymentRepository;
+import io.github.jhipster.application.service.PayPalClientService;
 import io.github.jhipster.application.service.PaymentService;
 import io.github.jhipster.application.service.UserService;
 import io.github.jhipster.application.web.rest.errors.ExceptionTranslator;
@@ -53,6 +54,9 @@ public class PaymentResourceIT {
     private UserService userService;
 
     @Autowired
+    private PayPalClientService payPalClientService;
+
+    @Autowired
     private MappingJackson2HttpMessageConverter jacksonMessageConverter;
 
     @Autowired
@@ -74,7 +78,7 @@ public class PaymentResourceIT {
     @BeforeEach
     public void setup() {
         MockitoAnnotations.initMocks(this);
-        final PaymentResource paymentResource = new PaymentResource(paymentService, userService);
+        final PaymentResource paymentResource = new PaymentResource(paymentService, userService, payPalClientService);
         this.restPaymentMockMvc = MockMvcBuilders.standaloneSetup(paymentResource)
             .setCustomArgumentResolvers(pageableArgumentResolver)
             .setControllerAdvice(exceptionTranslator)

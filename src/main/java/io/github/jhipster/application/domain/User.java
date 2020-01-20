@@ -1,6 +1,7 @@
 package io.github.jhipster.application.domain;
 
 import io.github.jhipster.application.config.Constants;
+import io.github.jhipster.application.domain.enumeration.TierType;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import org.apache.commons.lang3.StringUtils;
@@ -82,6 +83,10 @@ public class User extends AbstractAuditingEntity implements Serializable {
 
     @Column(name = "reset_date")
     private Instant resetDate = null;
+
+    @Enumerated(EnumType.STRING)
+    @Column(name = "tier")
+    private TierType tier;
 
     @JsonIgnore
     @ManyToMany
@@ -190,6 +195,14 @@ public class User extends AbstractAuditingEntity implements Serializable {
         this.langKey = langKey;
     }
 
+    public TierType getTier() {
+        return tier;
+    }
+
+    public void setTier(TierType tier) {
+        this.tier = tier;
+    }
+
     public Set<Authority> getAuthorities() {
         return authorities;
     }
@@ -225,6 +238,7 @@ public class User extends AbstractAuditingEntity implements Serializable {
             ", activated='" + activated + '\'' +
             ", langKey='" + langKey + '\'' +
             ", activationKey='" + activationKey + '\'' +
+            ", tier='" + tier + '\'' +
             "}";
     }
 }

@@ -3,6 +3,7 @@ package io.github.jhipster.application.service;
 import io.github.jhipster.application.config.Constants;
 import io.github.jhipster.application.domain.Authority;
 import io.github.jhipster.application.domain.User;
+import io.github.jhipster.application.domain.enumeration.TierType;
 import io.github.jhipster.application.repository.AuthorityRepository;
 import io.github.jhipster.application.repository.UserRepository;
 import io.github.jhipster.application.security.AuthoritiesConstants;
@@ -150,6 +151,7 @@ public class UserService {
         user.setResetKey(RandomUtil.generateResetKey());
         user.setResetDate(Instant.now());
         user.setActivated(true);
+        user.setTier(TierType.FREE);
         if (userDTO.getAuthorities() != null) {
             Set<Authority> authorities = userDTO.getAuthorities().stream()
                 .map(authorityRepository::findById)
@@ -207,6 +209,7 @@ public class UserService {
                 user.setImageUrl(userDTO.getImageUrl());
                 user.setActivated(userDTO.isActivated());
                 user.setLangKey(userDTO.getLangKey());
+                user.setTier(userDTO.getTier());
                 Set<Authority> managedAuthorities = user.getAuthorities();
                 managedAuthorities.clear();
                 userDTO.getAuthorities().stream()
