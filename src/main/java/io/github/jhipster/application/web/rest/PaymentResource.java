@@ -152,12 +152,4 @@ public class PaymentResource {
         return ResponseEntity.noContent().headers(HeaderUtil.createEntityDeletionAlert(applicationName, false, ENTITY_NAME, id.toString())).build();
     }
 
-    // @PostMapping("/paypal-transaction-complete")
-    // public ResponseEntity<PayPalOrder> completeTransaction(@Valid @RequestBody PayPalOrder order) throws IOException {
-    //     log.debug("REST request to complete transation: {}", order);
-    //     OrdersGetRequest request = new OrdersGetRequest(order.getId());
-    //     HttpResponse<Order> response = this.payPalClientService.client().execute(request);
-    //     log.debug("Respone from order details from paypal {}", response.result().toString());
-    //     return ResponseEntity.ok().body(order);
-    // }
 }
