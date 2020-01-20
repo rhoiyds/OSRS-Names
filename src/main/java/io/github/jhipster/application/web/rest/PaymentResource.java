@@ -2,8 +2,11 @@ package io.github.jhipster.application.web.rest;
 
 import io.github.jhipster.application.domain.Payment;
 import io.github.jhipster.application.domain.User;
+import io.github.jhipster.application.domain.enumeration.TierType;
+import io.github.jhipster.application.service.PayPalClientService;
 import io.github.jhipster.application.service.PaymentService;
 import io.github.jhipster.application.service.UserService;
+import io.github.jhipster.application.service.dto.UserDTO;
 import io.github.jhipster.application.web.rest.errors.BadRequestAlertException;
 
 import io.github.jhipster.web.util.HeaderUtil;
@@ -14,11 +17,17 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.io.IOException;
 import java.net.URI;
 import java.net.URISyntaxException;
 
 import java.util.List;
 import java.util.Optional;
+
+import com.paypal.http.HttpResponse;
+import com.paypal.orders.Order;
+import com.paypal.orders.OrdersGetRequest;
+
 import java.time.Instant;
 
 
@@ -40,9 +49,12 @@ public class PaymentResource {
 
     private final UserService userService;
 
-    public PaymentResource(PaymentService paymentService, UserService userService) {
+    private final PayPalClientService payPalClientService;
+
+    public PaymentResource(PaymentService paymentService, UserService userService, PayPalClientService payPalClientService) {
         this.userService = userService;
         this.paymentService = paymentService;
+        this.payPalClientService = payPalClientService;
     }
 
     /**
@@ -53,7 +65,7 @@ public class PaymentResource {
      * @throws URISyntaxException if the Location URI syntax is incorrect.
      */
     @PostMapping("/payments")
-    public ResponseEntity<Payment> createPayment(@RequestBody Payment payment) throws URISyntaxException {
+    public ResponseEntity<Payment> createPayment(@RequestBody Payment payment) throws URISyntaxException, IOException {
         log.debug("REST request to save Payment : {}", payment);
         if (payment.getId() != null) {
             throw new BadRequestAlertException("A new payment cannot already have an ID", ENTITY_NAME, "idexists");
@@ -64,6 +76,18 @@ public class PaymentResource {
         }
         payment.setUser(user.get());
         payment.setTimestamp(Instant.now());
+        OrdersGetRequest request = new OrdersGetRequest(payment.getOrderId());
+        HttpResponse<Order> response = this.payPalClientService.client().execute(request);
+        String amount = response.result().purchaseUnits().get(0).amountWithBreakdown().value();
+        log.debug("User paid amount {}", amount);
+        Optional<UserDTO> userDTO = user.map(UserDTO::new);
+        if (amount.equals("99.00")) {
+            userDTO.get().setTier(TierType.POWERSELLER);
+        }
+        if (amount.equals("49.00")) {
+            userDTO.get().setTier(TierType.PREMIUM);
+        }
+        userService.updateUser(userDTO.get());
         Payment result = paymentService.save(payment);
         return ResponseEntity.created(new URI("/api/payments/" + result.getId()))
             .headers(HeaderUtil.createEntityCreationAlert(applicationName, false, ENTITY_NAME, result.getId().toString()))

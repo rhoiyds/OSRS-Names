@@ -2,6 +2,7 @@ package io.github.jhipster.application.web.rest;
 
 import io.github.jhipster.application.config.Constants;
 import io.github.jhipster.application.domain.User;
+import io.github.jhipster.application.domain.enumeration.TierType;
 import io.github.jhipster.application.repository.UserRepository;
 import io.github.jhipster.application.security.AuthoritiesConstants;
 import io.github.jhipster.application.service.MailService;
@@ -73,7 +74,6 @@ public class UserResource {
     private final MailService mailService;
 
     public UserResource(UserService userService, UserRepository userRepository, MailService mailService) {
-
         this.userService = userService;
         this.userRepository = userRepository;
         this.mailService = mailService;
@@ -104,6 +104,7 @@ public class UserResource {
         } else if (userRepository.findOneByEmailIgnoreCase(userDTO.getEmail()).isPresent()) {
             throw new EmailAlreadyUsedException();
         } else {
+            userDTO.setTier(TierType.FREE);
             User newUser = userService.createUser(userDTO);
             mailService.sendCreationEmail(newUser);
             return ResponseEntity.created(new URI("/api/users/" + newUser.getUsername()))

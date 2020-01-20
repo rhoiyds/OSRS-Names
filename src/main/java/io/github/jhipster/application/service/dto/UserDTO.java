@@ -4,6 +4,7 @@ import io.github.jhipster.application.config.Constants;
 
 import io.github.jhipster.application.domain.Authority;
 import io.github.jhipster.application.domain.User;
+import io.github.jhipster.application.domain.enumeration.TierType;
 
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotBlank;
@@ -55,6 +56,8 @@ public class UserDTO {
 
     private Instant lastModifiedDate;
 
+    private TierType tier;
+
     private Set<String> authorities;
 
     public UserDTO() {
@@ -77,6 +80,7 @@ public class UserDTO {
         this.authorities = user.getAuthorities().stream()
             .map(Authority::getName)
             .collect(Collectors.toSet());
+        this.tier = user.getTier();
     }
 
     public Long getId() {
@@ -183,6 +187,14 @@ public class UserDTO {
         this.authorities = authorities;
     }
 
+    public TierType getTier() {
+        return tier;
+    }
+
+    public void setTier(TierType tier) {
+        this.tier = tier;
+    }
+
     @Override
     public String toString() {
         return "UserDTO{" +
@@ -198,6 +210,7 @@ public class UserDTO {
             ", lastModifiedBy='" + lastModifiedBy + '\'' +
             ", lastModifiedDate=" + lastModifiedDate +
             ", authorities=" + authorities +
+            ", tier=" + tier +
             "}";
     }
 }

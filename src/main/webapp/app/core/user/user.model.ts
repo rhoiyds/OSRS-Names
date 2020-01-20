@@ -1,5 +1,11 @@
 import { GRAVATAR_AVATAR_PATH, GRAVATAR_BASE_URL, GRAVATAR_PARAMETERS } from 'app/shared/constants/gravatar.constants';
 
+export enum TierType {
+  FREE = 'FREE',
+  PREMIUM = 'PREMIUM',
+  POWERSELLER = 'POWERSELLER'
+}
+
 export interface IUser {
   id?: any;
   username?: string;
@@ -15,6 +21,7 @@ export interface IUser {
   lastModifiedDate?: Date;
   password?: string;
   imageUrl?: string;
+  tier?: TierType;
 }
 
 export class User implements IUser {
@@ -32,7 +39,8 @@ export class User implements IUser {
     public lastModifiedBy?: string,
     public lastModifiedDate?: Date,
     public password?: string,
-    public imageUrl?: string
+    public imageUrl?: string,
+    public tier?: TierType
   ) {
     this.id = id ? id : null;
     this.username = username ? username : null;
@@ -48,5 +56,6 @@ export class User implements IUser {
     this.lastModifiedDate = lastModifiedDate ? lastModifiedDate : null;
     this.password = password ? password : null;
     this.imageUrl = imageUrl ? GRAVATAR_BASE_URL + GRAVATAR_AVATAR_PATH + imageUrl + GRAVATAR_PARAMETERS : null;
+    this.tier = tier ? tier : null;
   }
 }

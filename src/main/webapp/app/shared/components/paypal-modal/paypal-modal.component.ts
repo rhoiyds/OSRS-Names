@@ -9,7 +9,8 @@ declare var paypal;
 
 @Component({
   selector: 'jhi-paypal-modal',
-  templateUrl: './paypal-modal.component.html'
+  templateUrl: './paypal-modal.component.html',
+  styleUrls: ['./paypal-modal.component.scss']
 })
 export class PayPalModalComponent implements OnInit, AfterViewInit {
   @ViewChild('paypal', { static: true }) paypalElement: ElementRef;
@@ -17,6 +18,7 @@ export class PayPalModalComponent implements OnInit, AfterViewInit {
   selectedAmount: string;
   title: string;
   successfullTransaction = false;
+  processing = false;
 
   constructor(
     protected activatedRoute: ActivatedRoute,
@@ -42,9 +44,11 @@ export class PayPalModalComponent implements OnInit, AfterViewInit {
           });
         },
         onApprove: (data, actions) => {
+          this.processing = true;
           return actions.order.capture().then(details => {
             this.paymentService.create({ ...new Payment(), orderId: data.orderID }).subscribe(payment => {
               this.successfullTransaction = true;
+              this.processing = false;
               return payment;
             });
           });

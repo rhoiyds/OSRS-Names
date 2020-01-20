@@ -1,3 +1,7 @@
+<div class="c-processing" *ngIf="processing">
+    <span class="c-text">Processing</span>
+    <fa-icon [icon]="'sync'" [spin]="true"></fa-icon>
+</div>
 <div class="modal-header">
     <h4 class="modal-title">Upgrade to {{title}} tier</h4>
     <button type="button" class="close" data-dismiss="modal" aria-hidden="true"
