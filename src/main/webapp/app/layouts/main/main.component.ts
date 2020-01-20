@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { Router, ActivatedRouteSnapshot, NavigationEnd, NavigationError } from '@angular/router';
 
 import { Title } from '@angular/platform-browser';
+import { PAYPAL_CLIENT_ID } from 'app/app.constants';
 
 @Component({
   selector: 'jhi-main',
@@ -27,5 +28,13 @@ export class JhiMainComponent implements OnInit {
         this.router.navigate(['/404']);
       }
     });
+    this.initPaypal();
+  }
+
+  private initPaypal() {
+    const PAYPAL_SCRIPT = `https://www.paypal.com/sdk/js?client-id=${PAYPAL_CLIENT_ID}`;
+    const script = document.createElement('script');
+    script.setAttribute('src', PAYPAL_SCRIPT);
+    document.head.appendChild(script);
   }
 }

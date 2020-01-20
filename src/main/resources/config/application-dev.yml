@@ -122,4 +122,9 @@ jhipster:
 # https://www.jhipster.tech/common-application-properties/
 # ===================================================================
 
-# application:
+application:
+  paypal:
+    clientId: AVJk5bNa4XCwHpSEChshThGLK8OAbieI6EfNVu-1SM9lDI6oexVnkBTJ3JZ6lMUISujG1IopXFeNqghZ
+    secretId: EHxOlSALqTEXksnXvnecx6s3ghNCdJloLYmbet8M0TYFuoW-W5phYoCz0FYDhRl2G5fPEqURxpGhCs42
+    webUrl: https://www.sandbox.paypal.com
+    baseUrl: https://api.sandbox.paypal.com
