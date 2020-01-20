@@ -123,6 +123,11 @@ module.exports = webpackMerge(commonConfig({ env: ENV }), {
         ]
     },
     plugins: [
+        new webpack.DefinePlugin({
+            'process.env': {
+                PAYPAL_CLIENT_ID: `'ARM9QtN9sz76VOVLdZEN4DeL2nxCj2jDN7PKYsCYpOX-a4qZPPZwPn6dLtmcitD_4Jnrqp-85I_6pjAd'`
+            }
+        }),
         new MiniCssExtractPlugin({
             // Options similar to the same options in webpackOptions.output
             // both options are optional

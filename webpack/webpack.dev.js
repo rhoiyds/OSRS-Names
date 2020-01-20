@@ -109,6 +109,11 @@ module.exports = (options) => webpackMerge(commonConfig({ env: ENV }), {
             : new SimpleProgressWebpackPlugin({
                 format: options.stats === 'minimal' ? 'compact' : 'expanded'
               }),
+        new webpack.DefinePlugin({
+            'process.env': {
+                PAYPAL_CLIENT_ID: `'AVJk5bNa4XCwHpSEChshThGLK8OAbieI6EfNVu-1SM9lDI6oexVnkBTJ3JZ6lMUISujG1IopXFeNqghZ'`
+            }
+        }),
         new FriendlyErrorsWebpackPlugin(),
         new ForkTsCheckerWebpackPlugin(),
         new BrowserSyncPlugin({

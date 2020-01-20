@@ -2,19 +2,29 @@ package io.github.jhipster.application.service;
 
 import com.paypal.core.PayPalEnvironment;
 import com.paypal.core.PayPalHttpClient;
-import org.springframework.stereotype.Service;
 
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.stereotype.Service;
 
 @Service
 public class PayPalClientService {
 
+  @Value("${application.paypal.clientId}")
+  private String clientId;
+
+  @Value("${application.paypal.secretId}")
+  private String secretId;
+
+  @Value("${application.paypal.baseUrl}")
+  private String baseUrl;
+
+  @Value("${application.paypal.webUrl}")
+  private String webUrl;
+
   /**
    *Set up the PayPal Java SDK environment with PayPal access credentials.  
-   *This sample uses SandboxEnvironment. In production, use LiveEnvironment.
    */
-  private PayPalEnvironment environment = new PayPalEnvironment.Sandbox(
-    "ARwEW4CwV1LibQSbCy1uEBcV56-F8UynTe3bs0vPGxJjh56oTCXQdNFPOBWdTvZEFqrWeSRfqsMP4VO1",
-    "EHW5Kb2G7sl8vcqqQyliG3I5nSBF5imwKKHWDCNyQJn3Ac-oDo7491r6FvN2R1_jVab5fkzgooBTObdH");
+  private PayPalEnvironment environment = new PayPalEnvironment(clientId, secretId, baseUrl, webUrl);
 
   /**
    *PayPal HTTP client instance with environment that has access
