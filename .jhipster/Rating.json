@@ -22,7 +22,8 @@
             "relationshipName": "trade",
             "otherEntityName": "trade",
             "relationshipType": "many-to-one",
-            "otherEntityField": "id"
+            "otherEntityField": "id",
+            "otherEntityRelationshipName": "rating"
         }
     ],
     "fields": [
@@ -55,7 +56,7 @@
     ],
     "changelogDate": "20191219075421",
     "dto": "no",
-    "searchEngine": "elasticsearch",
+    "searchEngine": false,
     "service": "serviceClass",
     "entityTableName": "rating",
     "databaseType": "sql",

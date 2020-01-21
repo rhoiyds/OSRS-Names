@@ -5,11 +5,13 @@ import { Subscription } from 'rxjs';
 import { filter, map } from 'rxjs/operators';
 import { JhiEventManager, JhiParseLinks, JhiAlertService } from 'ng-jhipster';
 
+import { ITag } from 'app/shared/model/tag.model';
 import { IListing, ListingType } from 'app/shared/model/listing.model';
 import { AccountService } from 'app/core';
 
 import { ITEMS_PER_PAGE } from 'app/shared';
 import { ListingService } from './listing.service';
+import { TagService } from '../tag';
 
 @Component({
   selector: 'jhi-listing',
@@ -35,7 +37,8 @@ export class ListingComponent implements OnInit, OnDestroy {
     protected eventManager: JhiEventManager,
     protected parseLinks: JhiParseLinks,
     protected activatedRoute: ActivatedRoute,
-    protected accountService: AccountService
+    protected accountService: AccountService,
+    protected tagService: TagService
   ) {
     this.listings = [];
     this.itemsPerPage = ITEMS_PER_PAGE;
@@ -51,18 +54,24 @@ export class ListingComponent implements OnInit, OnDestroy {
 
   loadAll() {
     if (this.currentSearch) {
-      const criteria = {
-        'rsn.contains': this.currentSearch,
-        page: this.page,
-        size: this.itemsPerPage,
-        sort: this.sort()
-      };
-      this.listingService
-        .query(criteria)
-        .subscribe(
-          (res: HttpResponse<IListing[]>) => this.paginateListings(res.body, res.headers),
-          (res: HttpErrorResponse) => this.onError(res.message)
-        );
+      this.tagService.query({ 'name.contains': this.currentSearch }).subscribe(
+        (res: HttpResponse<ITag[]>) => {
+          const criteria = {
+            'tagsId.in': [res.body.map(tag => tag.id)],
+            'rsn.contains': this.currentSearch,
+            page: this.page,
+            size: this.itemsPerPage,
+            sort: this.sort()
+          };
+          this.listingService
+            .query(criteria)
+            .subscribe(
+              (listingRes: HttpResponse<IListing[]>) => this.paginateListings(listingRes.body, listingRes.headers),
+              (listingRes: HttpErrorResponse) => this.onError(listingRes.message)
+            );
+        },
+        (res: HttpErrorResponse) => this.onError(res.message)
+      );
       return;
     }
     this.listingService

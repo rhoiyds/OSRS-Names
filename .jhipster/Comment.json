@@ -40,7 +40,7 @@
     ],
     "changelogDate": "20191210062302",
     "dto": "no",
-    "searchEngine": "elasticsearch",
+    "searchEngine": false,
     "service": "serviceClass",
     "entityTableName": "comment",
     "databaseType": "sql",

@@ -59,10 +59,10 @@
     ],
     "changelogDate": "20190721035731",
     "dto": "no",
-    "searchEngine": "elasticsearch",
+    "searchEngine": false,
     "service": "serviceImpl",
     "entityTableName": "listing",
     "databaseType": "sql",
-    "jpaMetamodelFiltering": false,
+    "jpaMetamodelFiltering": true,
     "pagination": "infinite-scroll"
 }

@@ -41,7 +41,7 @@
     ],
     "changelogDate": "20190721035732",
     "dto": "no",
-    "searchEngine": "elasticsearch",
+    "searchEngine": false,
     "service": "serviceImpl",
     "entityTableName": "offer",
     "databaseType": "sql",
