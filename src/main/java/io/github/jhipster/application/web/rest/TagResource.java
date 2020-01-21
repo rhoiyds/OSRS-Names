@@ -3,6 +3,8 @@ package io.github.jhipster.application.web.rest;
 import io.github.jhipster.application.domain.Tag;
 import io.github.jhipster.application.service.TagService;
 import io.github.jhipster.application.web.rest.errors.BadRequestAlertException;
+import io.github.jhipster.application.service.dto.TagCriteria;
+import io.github.jhipster.application.service.TagQueryService;
 
 import io.github.jhipster.web.util.HeaderUtil;
 import io.github.jhipster.web.util.PaginationUtil;
@@ -42,8 +44,11 @@ public class TagResource {
 
     private final TagService tagService;
 
-    public TagResource(TagService tagService) {
+    private final TagQueryService tagQueryService;
+
+    public TagResource(TagService tagService, TagQueryService tagQueryService) {
         this.tagService = tagService;
+        this.tagQueryService = tagQueryService;
     }
 
     /**
@@ -92,14 +97,27 @@ public class TagResource {
      * @param pageable the pagination information.
      * @param queryParams a {@link MultiValueMap} query parameters.
      * @param uriBuilder a {@link UriComponentsBuilder} URI builder.
+     * @param criteria the criteria which the requested entities should match.
      * @return the {@link ResponseEntity} with status {@code 200 (OK)} and the list of tags in body.
      */
     @GetMapping("/tags")
-    public ResponseEntity<List<Tag>> getAllTags(Pageable pageable, @RequestParam MultiValueMap<String, String> queryParams, UriComponentsBuilder uriBuilder) {
-        log.debug("REST request to get a page of Tags");
-        Page<Tag> page = tagService.findAll(pageable);
+    public ResponseEntity<List<Tag>> getAllTags(TagCriteria criteria, Pageable pageable, @RequestParam MultiValueMap<String, String> queryParams, UriComponentsBuilder uriBuilder) {
+        log.debug("REST request to get Tags by criteria: {}", criteria);
+        Page<Tag> page = tagQueryService.findByCriteria(criteria, pageable);
         HttpHeaders headers = PaginationUtil.generatePaginationHttpHeaders(uriBuilder.queryParams(queryParams), page);
         return ResponseEntity.ok().headers(headers).body(page.getContent());
+    }
+
+    /**
+    * {@code GET  /tags/count} : count all the tags.
+    *
+    * @param criteria the criteria which the requested entities should match.
+    * @return the {@link ResponseEntity} with status {@code 200 (OK)} and the count in body.
+    */
+    @GetMapping("/tags/count")
+    public ResponseEntity<Long> countTags(TagCriteria criteria) {
+        log.debug("REST request to count Tags by criteria: {}", criteria);
+        return ResponseEntity.ok().body(tagQueryService.countByCriteria(criteria));
     }
 
     /**
