@@ -8,13 +8,21 @@
             (click)="clear()">&times;</button>
 </div>
 <div class="modal-body">
-    <p *ngIf="!successfullTransaction">One off payment. No subscriptions. One step away!</p>
-    <div class="alert alert-success" *ngIf="successfullTransaction">
+    <p *ngIf="!transactionComplete">One off payment. No subscriptions. One step away!</p>
+    <div class="alert alert-success" *ngIf="transactionComplete && transactionSuccessful">
         <h5>You legend!</h5>
         <p>
             You have upgraded to the {{title}} tier. Now go ahead and enjoy the best publicity for selling and buying
             Old School Runescape names!
         </p>
     </div>
-    <div #paypal [hidden]="successfullTransaction"></div>
+    <div class="alert alert-danger" *ngIf="transactionComplete && !transactionSuccessful">
+        <h5>Oh no!</h5>
+        <p>
+            An error was encountered when attempting to upgrade tier.
+            We're very sorry to see this. Double check you have sufficient funds and then perhaps 
+            try and discuss this problem in our handy <a href="https://discord.gg/sZgV6E4" target="_blank">Discord community.</a>
+        </p>
+    </div>
+    <div #paypal [hidden]="transactionComplete"></div>
 </div>
