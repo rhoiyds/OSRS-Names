@@ -17,7 +17,8 @@ export class PayPalModalComponent implements OnInit, AfterViewInit {
 
   selectedAmount: string;
   title: string;
-  successfullTransaction = false;
+  transactionComplete = false;
+  transactionSuccessful = false;
   processing = false;
 
   constructor(
@@ -47,11 +48,18 @@ export class PayPalModalComponent implements OnInit, AfterViewInit {
           this.processing = true;
           return actions.order.capture().then(details => {
             this.paymentService.create({ ...new Payment(), orderId: data.orderID }).subscribe(payment => {
-              this.successfullTransaction = true;
+              this.transactionComplete = true;
+              this.transactionSuccessful = true;
               this.processing = false;
               return payment;
             });
           });
+        },
+        onError: err => {
+          this.transactionComplete = true;
+          this.processing = false;
+          this.transactionSuccessful = false;
+          console.log(err);
         }
       })
       .render(this.paypalElement.nativeElement);
