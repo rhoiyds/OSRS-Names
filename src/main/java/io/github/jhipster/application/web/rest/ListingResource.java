@@ -5,6 +5,7 @@ import io.github.jhipster.application.domain.User;
 import io.github.jhipster.application.security.SecurityUtils;
 import io.github.jhipster.application.service.ListingQueryService;
 import io.github.jhipster.application.service.ListingService;
+import io.github.jhipster.application.service.TagService;
 import io.github.jhipster.application.service.UserService;
 import io.github.jhipster.application.service.dto.ListingCriteria;
 import io.github.jhipster.application.web.rest.errors.BadRequestAlertException;
@@ -31,6 +32,7 @@ import java.net.URISyntaxException;
 import java.time.Instant;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 /**
  * REST controller for managing {@link io.github.jhipster.application.domain.Listing}.
@@ -52,10 +54,13 @@ public class ListingResource {
 
     private final UserService userService;
 
-    public ListingResource(ListingService listingService, UserService userService, ListingQueryService listingQueryService) {
+    private final TagService tagService;
+
+    public ListingResource(ListingService listingService, UserService userService, ListingQueryService listingQueryService, TagService tagService) {
         this.listingService = listingService;
         this.userService = userService;
         this.listingQueryService = listingQueryService;
+        this.tagService = tagService;
     }
 
     /**
@@ -77,6 +82,7 @@ public class ListingResource {
         }
         listing.setOwner(owner.get());
         listing.setTimestamp(Instant.now());
+        listing.setTags(listing.getTags().stream().map(tag -> tagService.createIfNotExist(tag)).collect(Collectors.toSet()));
         Listing result = listingService.save(listing);
         return ResponseEntity.created(new URI("/api/listings/" + result.getId()))
             .headers(HeaderUtil.createEntityCreationAlert(applicationName, false, ENTITY_NAME, result.getId().toString()))

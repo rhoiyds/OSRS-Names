@@ -43,4 +43,11 @@ public interface TagService {
      * @param id the id of the entity.
      */
     void delete(Long id);
+
+    /**
+     * If a tag exists with the name, return it, else create it.
+     *
+     * @param name the name of the tag to find/save.
+     */
+    Tag createIfNotExist(Tag tag);
 }

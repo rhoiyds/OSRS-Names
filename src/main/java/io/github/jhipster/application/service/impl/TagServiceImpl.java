@@ -77,4 +77,11 @@ public class TagServiceImpl implements TagService {
         log.debug("Request to delete Tag : {}", id);
         tagRepository.deleteById(id);
     }
+
+    @Override
+    public Tag createIfNotExist(Tag tag) {
+        log.debug("Request to find or create Tag : {}", tag.getName());
+        Optional<Tag> existingTag = tagRepository.findByName(tag.getName());
+        return existingTag.isPresent() ? existingTag.get() : this.save(tag);
+    }
 }

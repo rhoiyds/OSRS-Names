@@ -40,9 +40,7 @@
                 </div>
                 <div class="form-group">
                     <label for="field_tags">Tags</label>
-                    <select class="form-control" id="field_tags" multiple name="tags" formControlName="tags">
-                        <option [ngValue]="getSelected(editForm.get('tags').value, tagOption)" *ngFor="let tagOption of tags; trackBy: trackTagById">{{tagOption.name}}</option>
-                    </select>
+                    <tag-input [(ngModel)]="editForm.get('tags').value" [onAdding]="onAdding" [ngModelOptions]="{standalone: true}" [identifyBy]="'name'" [displayBy]="'name'"></tag-input>
                 </div>
             </div>
             <div>
