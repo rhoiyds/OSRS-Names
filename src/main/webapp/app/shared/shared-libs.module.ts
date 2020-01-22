@@ -7,9 +7,10 @@ import { InfiniteScrollModule } from 'ngx-infinite-scroll';
 import { CookieModule } from 'ngx-cookie';
 import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 import { RouterModule } from '@angular/router';
+import { TagInputModule } from 'ngx-chips';
 
 @NgModule({
-  imports: [NgbModule, InfiniteScrollModule, CookieModule.forRoot(), FontAwesomeModule, ReactiveFormsModule, RouterModule],
+  imports: [NgbModule, InfiniteScrollModule, CookieModule.forRoot(), FontAwesomeModule, ReactiveFormsModule, RouterModule, TagInputModule],
   exports: [
     FormsModule,
     CommonModule,
@@ -18,7 +19,8 @@ import { RouterModule } from '@angular/router';
     InfiniteScrollModule,
     FontAwesomeModule,
     ReactiveFormsModule,
-    RouterModule
+    RouterModule,
+    TagInputModule
   ]
 })
 export class OsrsnamesSharedLibsModule {
