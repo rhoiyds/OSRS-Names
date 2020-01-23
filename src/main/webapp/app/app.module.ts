@@ -21,6 +21,7 @@ import { OsrsnamesEntityModule } from './entities/entity.module';
 import * as moment from 'moment';
 // jhipster-needle-angular-add-module-import JHipster will add new module here
 import { JhiMainComponent, NavbarComponent, FooterComponent, PageRibbonComponent, ErrorComponent, PricingComponent } from './layouts';
+import { UserComponent } from './user/user.component';
 
 @NgModule({
   imports: [
@@ -40,7 +41,7 @@ import { JhiMainComponent, NavbarComponent, FooterComponent, PageRibbonComponent
     // jhipster-needle-angular-add-module JHipster will add new module here
     OsrsnamesAppRoutingModule
   ],
-  declarations: [JhiMainComponent, NavbarComponent, ErrorComponent, PageRibbonComponent, FooterComponent, PricingComponent],
+  declarations: [JhiMainComponent, NavbarComponent, ErrorComponent, PageRibbonComponent, FooterComponent, PricingComponent, UserComponent],
   providers: [
     {
       provide: HTTP_INTERCEPTORS,

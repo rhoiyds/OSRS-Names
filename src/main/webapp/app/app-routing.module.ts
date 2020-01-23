@@ -1,9 +1,11 @@
 import { NgModule } from '@angular/core';
 import { RouterModule } from '@angular/router';
-import { errorRoute, navbarRoute, pricingRoute } from './layouts';
+import { errorRoute, navbarRoute } from './layouts';
 import { DEBUG_INFO_ENABLED } from 'app/app.constants';
+import { userRoute } from './user/user.route';
+import { pricingRoute } from './pricing/pricing.route';
 
-const LAYOUT_ROUTES = [navbarRoute, ...pricingRoute, ...errorRoute];
+const LAYOUT_ROUTES = [navbarRoute, ...pricingRoute, ...userRoute, ...errorRoute];
 
 @NgModule({
   imports: [
