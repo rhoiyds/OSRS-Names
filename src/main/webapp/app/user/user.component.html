@@ -1,0 +1,68 @@
+<div class="row justify-content-center">
+    <div class="col-md-8">
+        <ng-container *ngIf="user">
+            <img class="rounded-circle mx-auto d-block" src="{{getGravatarImageURL()}}" width="125" height="125"/>
+            <p class="lead text-center">
+                {{user.username}}
+            </p>
+            <p class="text-center text-muted" *ngIf="averageRating && ratings">
+                {{ratings.length}} trade{{ratings.length === 1 ? '' : 's'}}<br />
+                {{averageRating}} <fa-icon class="star" [icon]="'star'"></fa-icon> average
+            </p>
+        </ng-container>
+        <ul class="nav nav-tabs" id="myTab" role="tablist">
+            <li class="nav-item" (click)="showTab = 'ratings'">
+              <a class="nav-link" [ngClass]="{'active': showTab == 'ratings'}" id="rating-tab" data-toggle="tab" role="tab" aria-controls="rating" aria-selected="true">Ratings</a>
+            </li>
+            <li class="nav-item" (click)="showTab = 'listings'">
+              <a class="nav-link" [ngClass]="{'active': showTab == 'listings'}" id="listing-tab" data-toggle="tab" role="tab" aria-controls="listing" aria-selected="false">Listings</a>
+            </li>
+          </ul>
+          <div class="tab-content" id="myTabContent">
+            <div class="tab-pane fade" [ngClass]="{'show active': showTab == 'ratings'}" id="rating" role="tabpanel" aria-labelledby="rating-tab">
+                <div class="alert alert-warning" *ngIf="ratings?.length === 0">
+                    <span>{{user?.username}} has yet to be invovled in any trades.</span>
+                </div>
+                <div class="table-responsive" *ngIf="ratings?.length > 0">
+                    <table class="table table-borderless">
+                        <tbody>
+                            <tr *ngFor="let rating of ratings">
+                                <td>
+                                    <jhi-user-profile [user]="rating.owner"></jhi-user-profile>
+                                </td>
+                                <td>{{rating.score}}<fa-icon class="star" [icon]="'star'"></fa-icon></td>
+                                <td>{{rating.message}}</td>
+                                <td>{{rating.timestamp.toDate().toDateString() | timeAgo}}</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+            <div class="tab-pane fade" [ngClass]="{'show active': showTab == 'listings'}" id="listing" role="tabpanel" aria-labelledby="listing-tab">
+                <div class="alert alert-warning" *ngIf="listings?.length === 0">
+                    <span>{{user?.username}} has not created any listings.</span>
+                </div>
+                <div class="table-responsive" *ngIf="listings?.length > 0">
+                    <table class="table table-borderless table-hover">
+                        <tbody>
+                            <tr *ngFor="let listing of listings" [routerLink]="['/listing', listing.id, 'view']" style="cursor: pointer">
+                                <td>
+                                    <img alt="{{listing.type === listingType.WANT ? 'Buying' : 'Selling'}}"
+                                         src="/content/images/{{listing.type === listingType.WANT ? 'buying' : 'selling'}}-icon.png"
+                                         title="{{listing.type === listingType.WANT ? 'Buying' : 'Selling'}}"
+                                         width="40px">
+                                </td>
+                                <td>
+                                    <jhi-user-profile [user]="listing.owner"></jhi-user-profile>
+                                </td>
+                                <td>{{listing.rsn}}</td>
+                                <td>{{listing.amount | osrsCurrency}}</td>
+                                <td>{{listing.timestamp.toDate().toDateString() | timeAgo}}</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+          </div>
+    </div>
+</div>

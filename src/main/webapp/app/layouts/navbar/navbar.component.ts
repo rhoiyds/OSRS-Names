@@ -22,7 +22,7 @@ export class NavbarComponent implements OnInit {
 
   constructor(
     private loginService: LoginService,
-    private accountService: AccountService,
+    public accountService: AccountService,
     private loginModalService: LoginModalService,
     private profileService: ProfileService,
     private router: Router
