@@ -5,10 +5,10 @@
             <div>
                 <jhi-alert-error></jhi-alert-error>
                 <div class="form-group">
-                    <label class="form-control-label" for="field_type">Type</label>
+                    <label class="form-control-label" for="field_type">Buying or selling?</label>
                     <select class="form-control" name="type" formControlName="type" id="field_type">
-                        <option value="WANT">Selling</option>
-                        <option value="HAVE">Buying</option>
+                        <option value="WANT">Buying</option>
+                        <option value="HAVE">Selling</option>
                     </select>
                     <div *ngIf="editForm.get('type').invalid && (editForm.get('type').dirty || editForm.get('type').touched)">
                         <small class="form-text text-danger"
@@ -18,7 +18,9 @@
                     </div>
                 </div>
                 <div class="form-group">
-                    <label class="form-control-label" for="field_rsn">Rsn</label>
+                    <label class="form-control-label" for="field_rsn">
+                        {{getRsnLabel()}}
+                    </label>
                     <input type="text" class="form-control" name="rsn" id="field_rsn"
                            formControlName="rsn"/>
                     <div *ngIf="editForm.get('rsn').invalid && (editForm.get('rsn').dirty || editForm.get('rsn').touched)">
@@ -29,14 +31,14 @@
                     </div>
                 </div>
                 <div class="form-group">
-                    <label class="form-control-label" for="field_amount">Amount</label>
+                    <label class="form-control-label" for="field_amount">{{getAmountLabel()}}</label>
                     <input type="number" class="form-control" name="amount" id="field_amount"
                            formControlName="amount"/>
                 </div>
                 <div class="form-group">
-                    <label class="form-control-label" for="field_description">Description</label>
-                    <input type="text" class="form-control" name="description" id="field_description"
-                           formControlName="description"/>
+                    <label class="form-control-label" for="field_description">Extra information</label>
+                    <textarea type="text" class="form-control" name="description" id="field_description"
+                           formControlName="description" rows="3"></textarea>
                 </div>
                 <div class="form-group">
                     <label for="field_tags">Tags</label>

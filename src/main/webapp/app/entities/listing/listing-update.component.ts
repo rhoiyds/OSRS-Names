@@ -7,7 +7,7 @@ import { filter, map } from 'rxjs/operators';
 import * as moment from 'moment';
 import { DATE_TIME_FORMAT } from 'app/shared/constants/input.constants';
 import { JhiAlertService } from 'ng-jhipster';
-import { IListing, Listing } from 'app/shared/model/listing.model';
+import { IListing, Listing, ListingType } from 'app/shared/model/listing.model';
 import { ListingService } from './listing.service';
 import { IUser, UserService } from 'app/core';
 import { ITag } from 'app/shared/model/tag.model';
@@ -133,6 +133,26 @@ export class ListingUpdateComponent implements OnInit {
       }
     }
     return option;
+  }
+
+  getRsnLabel() {
+    if (!this.editForm.get(['type']).value) {
+      return 'RSN';
+    }
+    if (this.editForm.get(['type']).value === ListingType.HAVE) {
+      return 'What RSN are you selling?';
+    }
+    return 'What RSN are you buying?';
+  }
+
+  getAmountLabel() {
+    if (!this.editForm.get(['type']).value) {
+      return 'How much GP?';
+    }
+    if (this.editForm.get(['type']).value === ListingType.HAVE) {
+      return 'How much GP will you sell this name for?';
+    }
+    return 'How much GP will you buy this name for?';
   }
 
   public onAdding(tag: string) {
