@@ -1,9 +1,5 @@
-import { Component, OnInit, AfterViewInit, ViewChild, ElementRef, TemplateRef } from '@angular/core';
-import { ActivatedRoute } from '@angular/router';
-import { NgbModal, NgbModalRef } from '@ng-bootstrap/ng-bootstrap';
-import { PayPalModalComponent } from 'app/shared/components/paypal-modal/paypal-modal.component';
-
-declare var paypal;
+import { Component, OnInit } from '@angular/core';
+import { TierType } from 'app/core';
 
 @Component({
   selector: 'jhi-pricing',
@@ -11,22 +7,9 @@ declare var paypal;
   styleUrls: ['pricing.component.scss']
 })
 export class PricingComponent implements OnInit {
-  @ViewChild('paypal', { static: true }) paypalElement: ElementRef;
+  tierType = TierType;
 
-  @ViewChild('templateRef', { static: true, read: TemplateRef }) templateRef: TemplateRef<any>;
-
-  selectedAmount: String;
-
-  protected ngbModalRef: NgbModalRef;
-
-  constructor(protected activatedRoute: ActivatedRoute, private modalService: NgbModal) {}
+  constructor() {}
 
   ngOnInit() {}
-
-  onBuyTierClick(amount, title) {
-    this.selectedAmount = amount;
-    this.ngbModalRef = this.modalService.open(PayPalModalComponent as Component, { size: 'lg', backdrop: 'static' });
-    this.ngbModalRef.componentInstance.selectedAmount = this.selectedAmount;
-    this.ngbModalRef.componentInstance.title = title;
-  }
 }
