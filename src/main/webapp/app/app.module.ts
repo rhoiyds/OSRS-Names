@@ -20,7 +20,7 @@ import { OsrsnamesAccountModule } from './account/account.module';
 import { OsrsnamesEntityModule } from './entities/entity.module';
 import * as moment from 'moment';
 // jhipster-needle-angular-add-module-import JHipster will add new module here
-import { JhiMainComponent, NavbarComponent, FooterComponent, PageRibbonComponent, ErrorComponent, PricingComponent } from './layouts';
+import { JhiMainComponent, NavbarComponent, FooterComponent, PageRibbonComponent, ErrorComponent } from './layouts';
 import { UserComponent } from './user/user.component';
 
 @NgModule({
@@ -41,7 +41,7 @@ import { UserComponent } from './user/user.component';
     // jhipster-needle-angular-add-module JHipster will add new module here
     OsrsnamesAppRoutingModule
   ],
-  declarations: [JhiMainComponent, NavbarComponent, ErrorComponent, PageRibbonComponent, FooterComponent, PricingComponent, UserComponent],
+  declarations: [JhiMainComponent, NavbarComponent, ErrorComponent, PageRibbonComponent, FooterComponent, UserComponent],
   providers: [
     {
       provide: HTTP_INTERCEPTORS,

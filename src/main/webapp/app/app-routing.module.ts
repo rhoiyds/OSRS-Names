@@ -3,9 +3,8 @@ import { RouterModule } from '@angular/router';
 import { errorRoute, navbarRoute } from './layouts';
 import { DEBUG_INFO_ENABLED } from 'app/app.constants';
 import { userRoute } from './user/user.route';
-import { pricingRoute } from './pricing/pricing.route';
 
-const LAYOUT_ROUTES = [navbarRoute, ...pricingRoute, ...userRoute, ...errorRoute];
+const LAYOUT_ROUTES = [navbarRoute, ...userRoute, ...errorRoute];
 
 @NgModule({
   imports: [
@@ -14,6 +13,10 @@ const LAYOUT_ROUTES = [navbarRoute, ...pricingRoute, ...userRoute, ...errorRoute
         {
           path: 'admin',
           loadChildren: './admin/admin.module#OsrsnamesAdminModule'
+        },
+        {
+          path: 'pricing',
+          loadChildren: './pricing/pricing.module#OsrsnamesPricingModule'
         },
         ...LAYOUT_ROUTES
       ],

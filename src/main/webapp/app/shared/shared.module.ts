@@ -5,7 +5,7 @@ import { UserProfileComponent } from './components/user-profile/user-profile.com
 import { OsrsCurrencyPipe } from './osrs-currency.pipe';
 import { RatingSelectionDialogComponent } from 'app/shared/components/rating-selection/rating-selection-dialog.component';
 import { TimeAgoPipe } from 'time-ago-pipe';
-import { PayPalModalComponent } from './components/paypal-modal/paypal-modal.component';
+import { PayPalDialogComponent, PayPalPopupComponent } from './components/paypal-dialog/paypal-dialog.component';
 
 @NgModule({
   imports: [OsrsnamesSharedCommonModule],
@@ -17,9 +17,10 @@ import { PayPalModalComponent } from './components/paypal-modal/paypal-modal.com
     OsrsCurrencyPipe,
     RatingSelectionDialogComponent,
     TimeAgoPipe,
-    PayPalModalComponent
+    PayPalDialogComponent,
+    PayPalPopupComponent
   ],
-  entryComponents: [JhiLoginModalComponent, RatingSelectionDialogComponent, PayPalModalComponent],
+  entryComponents: [JhiLoginModalComponent, RatingSelectionDialogComponent, PayPalPopupComponent, PayPalDialogComponent],
   exports: [
     OsrsnamesSharedCommonModule,
     JhiLoginModalComponent,
@@ -29,7 +30,8 @@ import { PayPalModalComponent } from './components/paypal-modal/paypal-modal.com
     OsrsCurrencyPipe,
     RatingSelectionDialogComponent,
     TimeAgoPipe,
-    PayPalModalComponent
+    PayPalDialogComponent,
+    PayPalPopupComponent
   ],
   schemas: [CUSTOM_ELEMENTS_SCHEMA]
 })

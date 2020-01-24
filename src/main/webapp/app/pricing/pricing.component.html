@@ -32,7 +32,7 @@
                     <li>Reputation</li>
                     <li class="text-muted"><s>Store page</s></li>
                 </ul>
-                <button type="button" class="btn btn-lg btn-block btn-primary" (click)="onBuyTierClick('49.0', 'premium')">Buy now</button>
+                <button type="button" class="btn btn-lg btn-block btn-primary" [routerLink]="['/', 'pricing', { outlets: { popup: tierType.PREMIUM} }]">Buy now</button>
             </div>
         </div>
         <div class="card mb-4 shadow-sm">
@@ -46,7 +46,7 @@
                     <li>Reputation</li>
                     <li>Store page</li>
                 </ul>
-                <button type="button" class="btn btn-lg btn-block btn-primary" (click)="onBuyTierClick('99.0', 'power seller')">Buy now</button>
+                <button type="button" class="btn btn-lg btn-block btn-primary" [routerLink]="['/', 'pricing', { outlets: { popup: tierType.POWERSELLER} }]">Buy now</button>
             </div>
         </div>
     </div>
