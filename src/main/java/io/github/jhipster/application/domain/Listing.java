@@ -52,7 +52,7 @@ public class Listing implements Serializable {
     @JsonIgnoreProperties("listings")
     private User owner;
 
-    @ManyToMany(fetch = FetchType.EAGER)
+    @ManyToMany(fetch = FetchType.EAGER, cascade = {CascadeType.ALL})
     @Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)
     @JoinTable(name = "listing_tags",
                joinColumns = @JoinColumn(name = "listing_id", referencedColumnName = "id"),
