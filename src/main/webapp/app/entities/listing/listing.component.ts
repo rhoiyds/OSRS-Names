@@ -57,12 +57,14 @@ export class ListingComponent implements OnInit, OnDestroy {
       this.tagService.query({ 'name.contains': this.currentSearch }).subscribe(
         (res: HttpResponse<ITag[]>) => {
           const criteria = {
-            'tagsId.in': [res.body.map(tag => tag.id)],
             'rsn.contains': this.currentSearch,
             page: this.page,
             size: this.itemsPerPage,
             sort: this.sort()
           };
+          if (res.body.length > 0) {
+            criteria['tagsId.in'] = res.body.map(tag => tag.id);
+          }
           this.listingService
             .query(criteria)
             .subscribe(

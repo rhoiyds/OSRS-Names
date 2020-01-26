@@ -9,7 +9,7 @@ import io.github.jhipster.application.service.TagService;
 import io.github.jhipster.application.service.UserService;
 import io.github.jhipster.application.service.dto.ListingCriteria;
 import io.github.jhipster.application.web.rest.errors.BadRequestAlertException;
-
+import io.github.jhipster.service.filter.BooleanFilter;
 import io.github.jhipster.web.util.HeaderUtil;
 import io.github.jhipster.web.util.PaginationUtil;
 import io.github.jhipster.web.util.ResponseUtil;
@@ -131,6 +131,9 @@ public class ListingResource {
     @GetMapping("/listings")
     public ResponseEntity<List<Listing>> getAllListings(ListingCriteria criteria, Pageable pageable, @RequestParam MultiValueMap<String, String> queryParams, UriComponentsBuilder uriBuilder) {
         log.debug("REST request to get Listings by criteria: {}", criteria);
+        BooleanFilter activeBooleanFilter = new BooleanFilter();
+        activeBooleanFilter.setEquals(true);
+        criteria.setActive(activeBooleanFilter);
         Page<Listing> page = listingQueryService.findByCriteria(criteria, pageable);
         HttpHeaders headers = PaginationUtil.generatePaginationHttpHeaders(uriBuilder.queryParams(queryParams), page);
         return ResponseEntity.ok().headers(headers).body(page.getContent());
