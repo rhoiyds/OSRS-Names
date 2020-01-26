@@ -32,7 +32,7 @@
                                 </td>
                                 <td>{{rating.score}}<fa-icon class="star" [icon]="'star'"></fa-icon></td>
                                 <td>{{rating.message}}</td>
-                                <td>{{rating.timestamp.toDate().toDateString() | timeAgo}}</td>
+                                <td>{{rating.timestamp | timeAgo}}</td>
                             </tr>
                         </tbody>
                     </table>
@@ -57,7 +57,7 @@
                                 </td>
                                 <td>{{listing.rsn}}</td>
                                 <td>{{listing.amount | osrsCurrency}}</td>
-                                <td>{{listing.timestamp.toDate().toDateString() | timeAgo}}</td>
+                                <td>{{listing.timestamp | timeAgo}}</td>
                             </tr>
                         </tbody>
                     </table>
