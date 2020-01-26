@@ -2,6 +2,7 @@ package io.github.jhipster.application.web.rest;
 
 
 import io.github.jhipster.application.domain.User;
+import io.github.jhipster.application.domain.enumeration.TierType;
 import io.github.jhipster.application.repository.UserRepository;
 import io.github.jhipster.application.security.SecurityUtils;
 import io.github.jhipster.application.service.MailService;
@@ -67,6 +68,7 @@ public class AccountResource {
         }
         String md5Hex = DigestUtils.md5DigestAsHex(managedUserVM.getEmail().toLowerCase().getBytes());
         managedUserVM.setImageUrl(md5Hex);
+        managedUserVM.setTier(TierType.FREE);
         User user = userService.registerUser(managedUserVM, managedUserVM.getPassword());
         mailService.sendActivationEmail(user);
     }
