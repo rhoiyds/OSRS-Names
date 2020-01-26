@@ -11,7 +11,7 @@
                 {{rating}} <fa-icon class="star" [icon]="'star'"></fa-icon>
             </ng-container>
             <ng-container *ngIf="timestamp">
-                {{timestamp.toLocaleString() | timeAgo}}
+                {{timestamp | timeAgo}}
             </ng-container>
         </div>
     </div>
