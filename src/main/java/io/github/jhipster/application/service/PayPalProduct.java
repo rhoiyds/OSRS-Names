@@ -61,8 +61,8 @@ public class PayPalProduct {
     @SerializedName("create_time")
     String createTime;
 
-    @SerializedName("links")
-    LinkDescriptionList links;
+    @SerializedName(value="links", listClass = LinkDescription.class)
+    List<LinkDescription> links;
 
     public PayPalProduct() {}
 
@@ -102,12 +102,12 @@ public class PayPalProduct {
         return description;
     }
 
-    PayPalProduct setLinks(LinkDescriptionList links) {
+    PayPalProduct setLinks(List<LinkDescription> links) {
         this.links = links;
         return this;
     }
 
-    LinkDescriptionList getLinks() {
+    List<LinkDescription> getLinks() {
         return links;
     }
 
