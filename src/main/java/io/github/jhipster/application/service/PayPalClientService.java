@@ -12,6 +12,7 @@ import com.paypal.http.HttpResponse;
 import com.paypal.http.annotations.ListOf;
 import com.paypal.http.annotations.Model;
 import com.paypal.http.annotations.SerializedName;
+import com.paypal.orders.LinkDescription;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -127,7 +128,6 @@ public class PayPalClientService implements InitializingBean {
 }
 
     @Model
-    @ListOf
     public static class ProductListResponse {
 
         // @SerializedName("total_items")
@@ -136,8 +136,11 @@ public class PayPalClientService implements InitializingBean {
         // @SerializedName("total_pages")
         // private int totalPages = 0;
 
-        @SerializedName("products")
-        private PayPalProductList products;
+        @SerializedName(value = "links", listClass=LinkDescription.class)
+        private List<LinkDescription> links;
+
+        @SerializedName(value = "products", listClass=PayPalProduct.class)
+        private List<PayPalProduct> products;
 
         public ProductListResponse() {}
 
@@ -159,14 +162,23 @@ public class PayPalClientService implements InitializingBean {
         //     return this;
         // }
 
-        public PayPalProductList getProducts() {
+        public List<PayPalProduct> getProducts() {
             return products;
         }
 
-        public ProductListResponse setProducts(PayPalProductList products) {
+        public ProductListResponse setProducts(List<PayPalProduct> products) {
             this.products = products;
             return this;
         }
+
+      public List<LinkDescription> getLinks() {
+          return links;
+      }
+
+      public ProductListResponse setLinks(List<LinkDescription> links) {
+          this.links = links;
+          return this;
+      }
 
         @Override
         public String toString() {
