@@ -101,7 +101,7 @@ jhipster:
         token-validity-in-seconds-for-remember-me: 2592000
   mail: # specific JHipster mail property, for standard properties see MailProperties
     from: osrsnames@localhost
-    base-url: http://127.0.0.1:8080
+    base-url: http://localhost:9000
   metrics:
     logs: # Reports metrics in the logs
       enabled: false
@@ -124,7 +124,8 @@ jhipster:
 
 application:
   paypal:
-    clientId: AVJk5bNa4XCwHpSEChshThGLK8OAbieI6EfNVu-1SM9lDI6oexVnkBTJ3JZ6lMUISujG1IopXFeNqghZ
-    secretId: EHxOlSALqTEXksnXvnecx6s3ghNCdJloLYmbet8M0TYFuoW-W5phYoCz0FYDhRl2G5fPEqURxpGhCs42
-    webUrl: https://www.sandbox.paypal.com
-    baseUrl: https://api.sandbox.paypal.com
+    credentials:
+      clientId: AVJk5bNa4XCwHpSEChshThGLK8OAbieI6EfNVu-1SM9lDI6oexVnkBTJ3JZ6lMUISujG1IopXFeNqghZ
+      secretId: EHxOlSALqTEXksnXvnecx6s3ghNCdJloLYmbet8M0TYFuoW-W5phYoCz0FYDhRl2G5fPEqURxpGhCs42
+      webUrl: https://www.sandbox.paypal.com
+      baseUrl: https://api.sandbox.paypal.com

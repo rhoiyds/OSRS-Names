@@ -149,4 +149,12 @@ jhipster:
 # https://www.jhipster.tech/common-application-properties/
 # ===================================================================
 
-# application:
+application:
+  paypal:
+    product:
+      name: OSRS Names premium
+      description: Extra account features for improving buying and selling of Old School Runescape names
+      type: SERVICE
+      category: ONLINE_SERVICES
+      imageUrl: https://example.com/streaming.jpg
+      homeUrl: https://example.com/home
