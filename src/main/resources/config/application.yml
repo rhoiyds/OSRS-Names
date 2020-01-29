@@ -158,3 +158,8 @@ application:
       category: ONLINE_SERVICES
       imageUrl: https://example.com/streaming.jpg
       homeUrl: https://example.com/home
+    plans:
+      - name: Starter
+        cost: '1.99'
+      - name: Pro
+        cost: '4.99'
