@@ -4,7 +4,7 @@ import com.paypal.http.HttpRequest;
 public class PlanUpdateRequest extends HttpRequest<PayPalPlan> {
 
     public PlanUpdateRequest(String id) {
-        super("/v1/payments/billing-plans/" + id, "PATCH", PayPalPlan.class);
+        super("/v1/billing/plans" + id, "PATCH", PayPalPlan.class);
         header("Content-Type", "application/json");
     }
     public PlanUpdateRequest authorization(String authorization) {

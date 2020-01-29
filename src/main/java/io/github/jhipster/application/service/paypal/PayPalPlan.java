@@ -11,24 +11,36 @@ public class PayPalPlan {
     @SerializedName("id")
     String id;
 
+    @SerializedName("product_id")
+    String productId;
+
     @SerializedName("name")
     String name;
 
     @SerializedName("description")
     String description;
 
-    @SerializedName("type")
-    String type;
+    public PaymentPreferences getPaymentPreferences() {
+        return paymentPreferences;
+    }
 
-    @SerializedName("state")
-    String state;
+    public PayPalPlan setPaymentPreferences(PaymentPreferences paymentPreferences) {
+        this.paymentPreferences = paymentPreferences;
+        return this;
+    }
 
-    @SerializedName(value="payment_definitions", listClass = PaymentDefinition.class)
-    List<PaymentDefinition> paymentDefinitions;
+    @SerializedName("status")
+    String status;
+
+    @SerializedName(value="billing_cycles", listClass = BillingCycle.class)
+    List<BillingCycle> billingCycles;
+
+    @SerializedName("payment_preferences")
+    PaymentPreferences paymentPreferences;
 
     public PayPalPlan() {}
 
-    PayPalPlan setId(String id) {
+    public PayPalPlan setId(String id) {
         this.id = id;
         return this;
     }
@@ -37,13 +49,13 @@ public class PayPalPlan {
         return id;
     }
 
-    public PayPalPlan setType(String type) {
-        this.type = type;
+    public PayPalPlan setProductId(String productId) {
+        this.productId = productId;
         return this;
     }
 
-    public String getType() {
-        return type;
+    public String getProductId() {
+        return productId;
     }
 
     public PayPalPlan setName(String name) {
@@ -64,23 +76,23 @@ public class PayPalPlan {
         return description;
     }
 
-    public PayPalPlan setState(String state) {
-        this.state = state;
+    public PayPalPlan setStatus(String status) {
+        this.status = status;
         return this;
     }
 
-    public String getState() {
-        return state;
+    public String getStatus() {
+        return status;
     }
 
 
-    public PayPalPlan setPaymentDefinitions(List<PaymentDefinition> paymentDefinitions) {
-        this.paymentDefinitions = paymentDefinitions;
+    public PayPalPlan setBillingCycles(List<BillingCycle> billingCycles) {
+        this.billingCycles = billingCycles;
         return this;
     }
 
-    public List<PaymentDefinition> getPaymentDefinitions() {
-        return paymentDefinitions;
+    public List<BillingCycle> getBillingCycles() {
+        return billingCycles;
     }
 
     @Override
@@ -89,7 +101,7 @@ public class PayPalPlan {
             "id=" + getId() +
             ", name='" + getName() + "'" +
             ", description='" + getDescription() + "'" +
-            ", state='" + getState() + "'" +
+            ", status='" + getStatus() + "'" +
             "}";
     }
 
