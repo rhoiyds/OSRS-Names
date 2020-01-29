@@ -5,7 +5,7 @@ import com.paypal.http.HttpRequest;
 public class PlanListRequest extends HttpRequest<PlanListResponse> {
 
     public PlanListRequest() {
-        super("/v1/payments/billing-plans", "GET", PlanListResponse.class);
+        super("/v1/billing/plans", "GET", PlanListResponse.class);
         header("Content-Type", "application/json");
     }
     public PlanListRequest authorization(String authorization) {

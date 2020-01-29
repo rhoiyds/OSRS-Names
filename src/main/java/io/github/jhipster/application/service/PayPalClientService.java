@@ -9,23 +9,13 @@ import com.paypal.core.PayPalEnvironment;
 import com.paypal.core.PayPalHttpClient;
 import com.paypal.http.HttpResponse;
 
+import io.github.jhipster.application.service.paypal.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.InitializingBean;
 import org.springframework.stereotype.Component;
 
 import io.github.jhipster.application.config.ApplicationProperties;
-import io.github.jhipster.application.service.paypal.PayPalPlan;
-import io.github.jhipster.application.service.paypal.PaymentDefinition;
-import io.github.jhipster.application.service.paypal.PlanCreateRequest;
-import io.github.jhipster.application.service.paypal.PlanListRequest;
-import io.github.jhipster.application.service.paypal.PlanListResponse;
-import io.github.jhipster.application.service.paypal.PlanPatch;
-import io.github.jhipster.application.service.paypal.PlanUpdateRequest;
-import io.github.jhipster.application.service.paypal.Product;
-import io.github.jhipster.application.service.paypal.ProductCreateRequest;
-import io.github.jhipster.application.service.paypal.ProductListRequest;
-import io.github.jhipster.application.service.paypal.ProductListResponse;
 
 @Component
 public class PayPalClientService implements InitializingBean {
@@ -70,6 +60,11 @@ public class PayPalClientService implements InitializingBean {
     log.debug("PayPalClientService initialized and running products init");
     Product product = this.applicationProperties.getPayPal().getProduct();
 
+  List<String> tierPrices = new ArrayList<String>();
+  tierPrices.add("1.99");
+  tierPrices.add("2.99");
+  tierPrices.add("4.99");
+
     ProductListRequest productListRequest = new ProductListRequest();
     productListRequest.contentType("application/json");
     HttpResponse<ProductListResponse> productListResponse = this.client.execute(productListRequest);
@@ -82,11 +77,10 @@ public class PayPalClientService implements InitializingBean {
       HttpResponse<Product> response = this.client.execute(productCreateRequest);
       product.setId(response.result().getId());
       log.debug("Created new product on PayPal");
-    } else if (productListResponse.result().getProducts().size() == 1) {
+    } else if (!productListResponse.result().getProducts().isEmpty()) {
       product.setId(productListResponse.result().getProducts().get(0).getId());
       log.debug("Got product from PayPal");
     }
-
     List<PayPalPlan> plans = new ArrayList<PayPalPlan>();
 
     PlanListRequest planListRequest = new PlanListRequest();
@@ -94,38 +88,61 @@ public class PayPalClientService implements InitializingBean {
     HttpResponse<PlanListResponse> planListResponse = this.client.execute(planListRequest);
     log.debug("Getting plans result is {}", planListResponse.result());
 
-    if (planListResponse.result() != null ) {
+    if (planListResponse.result() != null && !planListResponse.result().getPlans().isEmpty()) {
       plans = planListResponse.result().getPlans();
       this.plans.addAll(plans);
       log.debug("There were existing plans they were, {}", plans.toString());
     }
 
-    List<Integer> tierPrices = List.of(2, 4, 7);
-
-    PaymentDefinition genericPaymentDefinition = new PaymentDefinition();
-
     Map<String, String> amountObject = new HashMap<>();
     amountObject.put("value", "test");
     amountObject.put("currency", "USD");
 
-    genericPaymentDefinition.setName("Regular payment definition");
-    genericPaymentDefinition.setCycles("0");
-    genericPaymentDefinition.setFrequency("MONTH");
-    genericPaymentDefinition.setFrequencyInterval("1");
+    Frequency genericFrequency = new Frequency();
+    genericFrequency.setIntervalCount(1);
+    genericFrequency.setIntervalUnit("MONTH");
+
+
+    FixedPrice genericFixedPrice = new FixedPrice().setCurrencyCode("USD").setValue("1.99");
+      PricingScheme genericPricingScheme = new PricingScheme();
+      genericPricingScheme.setFixedPrice(genericFixedPrice);
+
+      FixedPrice genericFreePrice = new FixedPrice().setCurrencyCode("USD").setValue("0");
+
+      PaymentPreferences genericPaymentPreferences = new PaymentPreferences()
+          .setAutoBillOutstanding(true)
+          .setSetupFee(genericFreePrice)
+          .setSetupFeeFailureAction("CANCEL")
+          .setPaymentFailureThreshold(0);
+
+      BillingCycle genericBillingCycle = new BillingCycle();
+      genericBillingCycle.setTenureType("REGULAR");
+      genericBillingCycle.setTotalCycles(0);
+      genericBillingCycle.setFrequency(genericFrequency);
+      genericBillingCycle.setSequence(1);
+      genericBillingCycle.setPricingScheme(genericPricingScheme);
+
+      List<BillingCycle> billingCycleList = new ArrayList<>();
+      billingCycleList.add(genericBillingCycle);
 
     PayPalPlan genericPayPalPlan = new PayPalPlan();
-    genericPayPalPlan.setType("INFINITE");
+    genericPayPalPlan.setStatus("ACTIVE");
+    genericPayPalPlan.setBillingCycles(billingCycleList);
+    genericPayPalPlan.setProductId(product.getId());
+    genericPayPalPlan.setPaymentPreferences(genericPaymentPreferences);
 
     PlanPatch genericPlanPatch = new PlanPatch();
     genericPlanPatch.setPath("/");
     genericPlanPatch.setOp("replace");
-    genericPlanPatch.setValue(Map.of("state", "ACTIVE"));
+    Map<String, String> value = new HashMap<String, String>();
+    value.put("state", "ACTIVE");
+    genericPlanPatch.setValue(value);
 
-    for (Integer amount : tierPrices) {
+    for (String amount : tierPrices) {
       if (plans.stream().noneMatch(plan -> plan.getName().equals("$" + amount + " per month"))) {
         amountObject.put("value", amount + "");
-        genericPaymentDefinition.setAmount(amountObject);
-        genericPayPalPlan.setPaymentDefinitions(List.of(genericPaymentDefinition));
+        genericPayPalPlan.getBillingCycles().get(0).getPricingScheme().getFixedPrice().setValue(amount);
+
         genericPayPalPlan.setName("$" + amount + " per month");
         genericPayPalPlan.setDescription("$" + amount + " per month");
         log.debug("Creating plan {}", genericPayPalPlan.toString());
@@ -136,14 +153,14 @@ public class PayPalClientService implements InitializingBean {
         HttpResponse<PayPalPlan> planCreateResponse = this.client.execute(createPlanRequest);
         log.debug("Created plan {}", planCreateResponse.result().toString());
 
-        log.debug("Updating plan");
-        PlanUpdateRequest updatePlanRequest = new PlanUpdateRequest(planCreateResponse.result().getId());
-        updatePlanRequest.contentType("application/json");
-        updatePlanRequest.requestBody(genericPlanPatch);
-        HttpResponse<PayPalPlan> planUpdateResponse = this.client.execute(updatePlanRequest);
-        log.debug("Updated plan");
-        
-        this.plans.add(planUpdateResponse.result());
+//        log.debug("Updating plan");
+//        PlanUpdateRequest updatePlanRequest = new PlanUpdateRequest(planCreateResponse.result().getId());
+//        updatePlanRequest.contentType("application/json");
+//        updatePlanRequest.requestBody(genericPlanPatch);
+//        HttpResponse<PayPalPlan> planUpdateResponse = this.client.execute(updatePlanRequest);
+//        log.debug("Updated plan");
+//
+//        this.plans.add(planUpdateResponse.result());
       }
     }
 

@@ -4,7 +4,7 @@ import com.paypal.http.HttpRequest;
 public class PlanCreateRequest extends HttpRequest<PayPalPlan> {
 
     public PlanCreateRequest() {
-        super("/v1/payments/billing-plans", "POST", PayPalPlan.class);
+        super("/v1/billing/plans", "POST", PayPalPlan.class);
         header("Content-Type", "application/json");
     }
     public PlanCreateRequest authorization(String authorization) {
