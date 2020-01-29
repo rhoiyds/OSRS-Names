@@ -1,9 +1,10 @@
 package io.github.jhipster.application.service;
 
+import java.io.IOException;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
+import java.util.Optional;
+import java.util.stream.Collectors;
 
 import com.paypal.core.PayPalEnvironment;
 import com.paypal.core.PayPalHttpClient;
@@ -14,6 +15,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.InitializingBean;
 import org.springframework.stereotype.Component;
+import org.springframework.util.StringUtils;
 
 import io.github.jhipster.application.config.ApplicationProperties;
 
@@ -22,26 +24,16 @@ public class PayPalClientService implements InitializingBean {
 
   private final Logger log = LoggerFactory.getLogger(PayPalClientService.class);
 
-  /**
-   * Set up the PayPal Java SDK environment with PayPal access credentials.
-   */
   public PayPalEnvironment environment;
 
   private ApplicationProperties applicationProperties;
 
-  /**
-   * PayPal HTTP client instance with environment that has access credentials
-   * context. Use to invoke PayPal APIs.
-   */
   PayPalHttpClient client;
 
-  List<PayPalPlan> plans = new ArrayList<PayPalPlan>();
+  List<Plan> plans = new ArrayList<Plan>();
 
-  /**
-   * Method to get client object
-   *
-   * @return PayPalHttpClient client
-   */
+  Product product;
+
   public PayPalHttpClient client() {
     return this.client;
   }
@@ -56,116 +48,97 @@ public class PayPalClientService implements InitializingBean {
   }
 
   @Override
-  public void afterPropertiesSet() throws Exception {
-    log.debug("PayPalClientService initialized and running products init");
-    Product product = this.applicationProperties.getPayPal().getProduct();
+  public void afterPropertiesSet() throws IOException {
+    log.debug("PayPalClientService initializing products and plans");
+    this.initializeProduct();
+    this.initializePlans();
+  }
 
-  List<String> tierPrices = new ArrayList<String>();
-  tierPrices.add("1.99");
-  tierPrices.add("2.99");
-  tierPrices.add("4.99");
-
+  private void initializeProduct() throws IOException {
+    this.product = this.applicationProperties.getPayPal().getProduct();
     ProductListRequest productListRequest = new ProductListRequest();
     productListRequest.contentType("application/json");
     HttpResponse<ProductListResponse> productListResponse = this.client.execute(productListRequest);
-    
+
     if (productListResponse.result().getProducts().isEmpty()) {
       ProductCreateRequest productCreateRequest = new ProductCreateRequest();
       productCreateRequest.requestBody(product);
       productCreateRequest.contentType("application/json");
       productCreateRequest.prefer("prefer=representation");
       HttpResponse<Product> response = this.client.execute(productCreateRequest);
-      product.setId(response.result().getId());
-      log.debug("Created new product on PayPal");
+      this.product.setId(response.result().getId());
+      log.debug("Created new product on PayPal {}", response.result().toString());
     } else if (!productListResponse.result().getProducts().isEmpty()) {
-      product.setId(productListResponse.result().getProducts().get(0).getId());
-      log.debug("Got product from PayPal");
+      this.product.setId(productListResponse.result().getProducts().get(0).getId());
+      log.debug("Retrieved existing product {} from PayPal and set id {}", this.product.getName(), productListResponse.result().getProducts().get(0).getId());
     }
-    List<PayPalPlan> plans = new ArrayList<PayPalPlan>();
+  }
+
+  private void initializePlans() throws IOException {
+    this.plans = this.applicationProperties.getPayPal().getPlans();
 
     PlanListRequest planListRequest = new PlanListRequest();
     planListRequest.contentType("application/json");
     HttpResponse<PlanListResponse> planListResponse = this.client.execute(planListRequest);
-    log.debug("Getting plans result is {}", planListResponse.result());
 
-    if (planListResponse.result() != null && !planListResponse.result().getPlans().isEmpty()) {
-      plans = planListResponse.result().getPlans();
-      this.plans.addAll(plans);
-      log.debug("There were existing plans they were, {}", plans.toString());
-    }
-
-    Map<String, String> amountObject = new HashMap<>();
-    amountObject.put("value", "test");
-    amountObject.put("currency", "USD");
-
-    Frequency genericFrequency = new Frequency();
-    genericFrequency.setIntervalCount(1);
-    genericFrequency.setIntervalUnit("MONTH");
-
-
-    FixedPrice genericFixedPrice = new FixedPrice().setCurrencyCode("USD").setValue("1.99");
-      PricingScheme genericPricingScheme = new PricingScheme();
-      genericPricingScheme.setFixedPrice(genericFixedPrice);
-
-      FixedPrice genericFreePrice = new FixedPrice().setCurrencyCode("USD").setValue("0");
-
-      PaymentPreferences genericPaymentPreferences = new PaymentPreferences()
-          .setAutoBillOutstanding(true)
-          .setSetupFee(genericFreePrice)
-          .setSetupFeeFailureAction("CANCEL")
-          .setPaymentFailureThreshold(0);
-
-      BillingCycle genericBillingCycle = new BillingCycle();
-      genericBillingCycle.setTenureType("REGULAR");
-      genericBillingCycle.setTotalCycles(0);
-      genericBillingCycle.setFrequency(genericFrequency);
-      genericBillingCycle.setSequence(1);
-      genericBillingCycle.setPricingScheme(genericPricingScheme);
-
-      List<BillingCycle> billingCycleList = new ArrayList<>();
-      billingCycleList.add(genericBillingCycle);
-
-    PayPalPlan genericPayPalPlan = new PayPalPlan();
-    genericPayPalPlan.setStatus("ACTIVE");
-    genericPayPalPlan.setBillingCycles(billingCycleList);
-    genericPayPalPlan.setProductId(product.getId());
-    genericPayPalPlan.setPaymentPreferences(genericPaymentPreferences);
-
-    PlanPatch genericPlanPatch = new PlanPatch();
-    genericPlanPatch.setPath("/");
-    genericPlanPatch.setOp("replace");
-    Map<String, String> value = new HashMap<String, String>();
-    value.put("state", "ACTIVE");
-    genericPlanPatch.setValue(value);
-
-    for (String amount : tierPrices) {
-      if (plans.stream().noneMatch(plan -> plan.getName().equals("$" + amount + " per month"))) {
-        amountObject.put("value", amount + "");
-        genericPayPalPlan.getBillingCycles().get(0).getPricingScheme().getFixedPrice().setValue(amount);
-
-        genericPayPalPlan.setName("$" + amount + " per month");
-        genericPayPalPlan.setDescription("$" + amount + " per month");
-        log.debug("Creating plan {}", genericPayPalPlan.toString());
-        
-        PlanCreateRequest createPlanRequest = new PlanCreateRequest();
-        createPlanRequest.contentType("application/json");
-        createPlanRequest.requestBody(genericPayPalPlan);
-        HttpResponse<PayPalPlan> planCreateResponse = this.client.execute(createPlanRequest);
-        log.debug("Created plan {}", planCreateResponse.result().toString());
-
-//        log.debug("Updating plan");
-//        PlanUpdateRequest updatePlanRequest = new PlanUpdateRequest(planCreateResponse.result().getId());
-//        updatePlanRequest.contentType("application/json");
-//        updatePlanRequest.requestBody(genericPlanPatch);
-//        HttpResponse<PayPalPlan> planUpdateResponse = this.client.execute(updatePlanRequest);
-//        log.debug("Updated plan");
-//
-//        this.plans.add(planUpdateResponse.result());
+    for (Plan plan : this.plans) {
+      Optional<PayPalPlan> payPalPlan = planListResponse.result().getPlans().stream()
+          .filter(ppp -> ppp.getName().equals(plan.getName())).findFirst();
+      if (payPalPlan.isPresent()) {
+        plan.setId(payPalPlan.get().getId());
+        log.debug("Retrieved existing plan {} from PayPal and set id {}", plan.getName(), plan.getId());
       }
     }
 
+    for (Plan plan : this.plans.stream().filter(plan -> StringUtils.isEmpty(plan.getId())).collect(Collectors.toList())) {
+        plan.setId(this.createNewPlan(plan).getId());
+    }
 
-    
+    this.plans = this.plans.stream().filter(plan -> !StringUtils.isEmpty(plan.getId())).collect(Collectors.toList());
   }
-  
+
+  private PayPalPlan createNewPlan(Plan plan) throws IOException {
+
+    Frequency frequency = new Frequency();
+    frequency.setIntervalCount(1);
+    frequency.setIntervalUnit("MONTH");
+
+    FixedPrice fixedPrice = new FixedPrice().setCurrencyCode("USD").setValue(plan.getCost());
+    PricingScheme pricingScheme = new PricingScheme();
+    pricingScheme.setFixedPrice(fixedPrice);
+
+    FixedPrice freePrice = new FixedPrice().setCurrencyCode("USD").setValue("0");
+
+    PaymentPreferences paymentPreferences = new PaymentPreferences()
+        .setAutoBillOutstanding(true)
+        .setSetupFee(freePrice)
+        .setSetupFeeFailureAction("CANCEL")
+        .setPaymentFailureThreshold(0);
+
+    BillingCycle billingCycle = new BillingCycle();
+    billingCycle.setTenureType("REGULAR");
+    billingCycle.setTotalCycles(0);
+    billingCycle.setFrequency(frequency);
+    billingCycle.setSequence(1);
+    billingCycle.setPricingScheme(pricingScheme);
+
+    List<BillingCycle> billingCycleList = new ArrayList<>();
+    billingCycleList.add(billingCycle);
+
+    PayPalPlan payPalPlan = new PayPalPlan();
+    payPalPlan.setStatus("ACTIVE");
+    payPalPlan.setBillingCycles(billingCycleList);
+    payPalPlan.setProductId(this.product.getId());
+    payPalPlan.setPaymentPreferences(paymentPreferences);
+
+    payPalPlan.setName(plan.getName());
+    payPalPlan.setDescription("Costing $" + plan.getCost() + "USD per month");
+
+    PlanCreateRequest createPlanRequest = new PlanCreateRequest();
+    createPlanRequest.contentType("application/json");
+    createPlanRequest.requestBody(payPalPlan);
+    HttpResponse<PayPalPlan> planCreateResponse = this.client.execute(createPlanRequest);
+    log.debug("Created new plan {} on PayPal with id {}", plan.getName(), planCreateResponse.result().getId());
+    return planCreateResponse.result();
+  }
 }
