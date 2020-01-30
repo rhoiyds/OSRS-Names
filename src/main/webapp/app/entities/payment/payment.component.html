@@ -20,6 +20,7 @@
             <th><span>ID</span></th>
             <th><span>Order Id</span></th>
             <th><span>Timestamp</span></th>
+            <th><span>Subscription Id</span></th>
             <th><span>User</span></th>
             <th></th>
             </tr>
@@ -29,6 +30,7 @@
                 <td><a [routerLink]="['/payment', payment.id, 'view' ]">{{payment.id}}</a></td>
                 <td>{{payment.orderId}}</td>
                 <td>{{payment.timestamp | date:'medium'}}</td>
+                <td>{{payment.subscriptionId}}</td>
                 <td>
                     {{payment.user?.login}}
                 </td>

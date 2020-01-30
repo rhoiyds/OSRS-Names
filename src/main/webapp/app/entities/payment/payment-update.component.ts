@@ -24,6 +24,7 @@ export class PaymentUpdateComponent implements OnInit {
     id: [],
     orderId: [],
     timestamp: [],
+    subscriptionId: [],
     user: []
   });
 
@@ -54,6 +55,7 @@ export class PaymentUpdateComponent implements OnInit {
       id: payment.id,
       orderId: payment.orderId,
       timestamp: payment.timestamp != null ? payment.timestamp.format(DATE_TIME_FORMAT) : null,
+      subscriptionId: payment.subscriptionId,
       user: payment.user
     });
   }
@@ -79,6 +81,7 @@ export class PaymentUpdateComponent implements OnInit {
       orderId: this.editForm.get(['orderId']).value,
       timestamp:
         this.editForm.get(['timestamp']).value != null ? moment(this.editForm.get(['timestamp']).value, DATE_TIME_FORMAT) : undefined,
+      subscriptionId: this.editForm.get(['subscriptionId']).value,
       user: this.editForm.get(['user']).value
     };
   }

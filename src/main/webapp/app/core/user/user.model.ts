@@ -2,8 +2,8 @@ import { GRAVATAR_AVATAR_PATH, GRAVATAR_BASE_URL, GRAVATAR_PARAMETERS } from 'ap
 
 export enum TierType {
   FREE = 'FREE',
-  PREMIUM = 'PREMIUM',
-  POWERSELLER = 'POWERSELLER'
+  STARTER = 'STARTER',
+  PRO = 'PRO'
 }
 
 export interface IUser {

@@ -20,6 +20,10 @@
             "fieldName": "timestamp",
             "fieldType": "Instant",
             "fieldValidateRules": []
+        },
+        {
+            "fieldName": "subscriptionId",
+            "fieldType": "String"
         }
     ],
     "changelogDate": "20200119041814",

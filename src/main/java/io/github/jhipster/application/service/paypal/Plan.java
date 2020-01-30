@@ -1,5 +1,6 @@
 package io.github.jhipster.application.service.paypal;
 
+
 public class Plan {
 
     private String id;

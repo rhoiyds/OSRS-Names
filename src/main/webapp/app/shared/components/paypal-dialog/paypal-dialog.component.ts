@@ -4,7 +4,7 @@ import { HttpClient } from '@angular/common/http';
 import { NgbActiveModal, NgbModalRef, NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { PaymentService } from 'app/entities/payment';
 import { Payment } from 'app/shared/model/payment.model';
-import { TierType } from 'app/core';
+import { Plan } from 'app/shared/model/plan.model';
 
 declare var paypal;
 
@@ -18,11 +18,10 @@ export class PayPalPopupComponent implements OnInit, OnDestroy {
   constructor(protected activatedRoute: ActivatedRoute, protected router: Router, protected modalService: NgbModal) {}
 
   ngOnInit() {
-    this.activatedRoute.params.subscribe(routeParams => {
+    this.activatedRoute.data.subscribe(({ plan }) => {
       setTimeout(() => {
         this.ngbModalRef = this.modalService.open(PayPalDialogComponent as Component, { size: 'lg', backdrop: 'static' });
-        this.ngbModalRef.componentInstance.title = this.getTitleFromTier(routeParams.tier);
-        this.ngbModalRef.componentInstance.selectedAmount = this.getAmountFromTier(routeParams.tier);
+        this.ngbModalRef.componentInstance.plan = plan;
         this.ngbModalRef.result.then(
           result => {
             this.router.navigate(['/pricing', { outlets: { popup: null } }]);
@@ -40,28 +39,6 @@ export class PayPalPopupComponent implements OnInit, OnDestroy {
   ngOnDestroy() {
     this.ngbModalRef = null;
   }
-
-  getTitleFromTier(tierType) {
-    switch (tierType) {
-      case TierType.POWERSELLER:
-        return 'Power Seller';
-      case TierType.PREMIUM:
-        return 'Premium';
-      default:
-        return '';
-    }
-  }
-
-  getAmountFromTier(tierType) {
-    switch (tierType) {
-      case TierType.POWERSELLER:
-        return '99.00';
-      case TierType.PREMIUM:
-        return '49.00';
-      default:
-        return '0.00';
-    }
-  }
 }
 
 @Component({
@@ -70,8 +47,7 @@ export class PayPalPopupComponent implements OnInit, OnDestroy {
   styleUrls: ['./paypal-dialog.component.scss']
 })
 export class PayPalDialogComponent implements OnInit, AfterViewInit {
-  selectedAmount: string;
-  title: string;
+  plan: Plan;
   transactionComplete = false;
   transactionSuccessful = false;
   processing = false;
@@ -89,26 +65,23 @@ export class PayPalDialogComponent implements OnInit, AfterViewInit {
   ngAfterViewInit() {
     paypal
       .Buttons({
-        createOrder: (data, actions) => {
-          return actions.order.create({
-            purchase_units: [
-              {
-                amount: {
-                  value: this.selectedAmount
-                }
-              }
-            ]
+        createSubscription: (data, actions) => {
+          return actions.subscription.create({
+            plan_id: this.plan.id
           });
         },
         onApprove: (data, actions) => {
+          console.log(data);
           this.processing = true;
           return actions.order.capture().then(details => {
-            this.paymentService.create({ ...new Payment(), orderId: data.orderID }).subscribe(payment => {
-              this.transactionComplete = true;
-              this.transactionSuccessful = true;
-              this.processing = false;
-              return payment;
-            });
+            this.paymentService
+              .create({ ...new Payment(), orderId: data.orderID, subscriptionId: data.subscriptionID })
+              .subscribe(payment => {
+                this.transactionComplete = true;
+                this.transactionSuccessful = true;
+                this.processing = false;
+                return payment;
+              });
           });
         },
         onError: err => {

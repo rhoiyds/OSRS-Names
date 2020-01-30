@@ -38,6 +38,10 @@ public class PayPalClientService implements InitializingBean {
     return this.client;
   }
 
+  public List<Plan> getPlans() {
+    return this.plans;
+  }
+
   public PayPalClientService(ApplicationProperties applicationProperties) {
     this.applicationProperties = applicationProperties;
     this.environment = new PayPalEnvironment(applicationProperties.getPayPal().getCredentials().getClientId(),

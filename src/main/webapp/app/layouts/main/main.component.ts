@@ -32,7 +32,7 @@ export class JhiMainComponent implements OnInit {
   }
 
   private initPaypal() {
-    const PAYPAL_SCRIPT = `https://www.paypal.com/sdk/js?client-id=${PAYPAL_CLIENT_ID}`;
+    const PAYPAL_SCRIPT = `https://www.paypal.com/sdk/js?client-id=${PAYPAL_CLIENT_ID}&vault=true`;
     const script = document.createElement('script');
     script.setAttribute('src', PAYPAL_SCRIPT);
     document.head.appendChild(script);
