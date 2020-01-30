@@ -28,6 +28,9 @@ public class Payment implements Serializable {
     @Column(name = "timestamp")
     private Instant timestamp;
 
+    @Column(name = "subscription_id")
+    private String subscriptionId;
+
     @ManyToOne
     @JsonIgnoreProperties("payments")
     private User user;
@@ -67,6 +70,19 @@ public class Payment implements Serializable {
         this.timestamp = timestamp;
     }
 
+    public String getSubscriptionId() {
+        return subscriptionId;
+    }
+
+    public Payment subscriptionId(String subscriptionId) {
+        this.subscriptionId = subscriptionId;
+        return this;
+    }
+
+    public void setSubscriptionId(String subscriptionId) {
+        this.subscriptionId = subscriptionId;
+    }
+
     public User getUser() {
         return user;
     }
@@ -103,6 +119,7 @@ public class Payment implements Serializable {
             "id=" + getId() +
             ", orderId='" + getOrderId() + "'" +
             ", timestamp='" + getTimestamp() + "'" +
+            ", subscriptionId='" + getSubscriptionId() + "'" +
             "}";
     }
 }
