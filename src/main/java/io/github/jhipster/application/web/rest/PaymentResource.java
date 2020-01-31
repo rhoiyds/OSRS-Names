@@ -7,6 +7,8 @@ import io.github.jhipster.application.service.PayPalClientService;
 import io.github.jhipster.application.service.PaymentService;
 import io.github.jhipster.application.service.UserService;
 import io.github.jhipster.application.service.dto.UserDTO;
+import io.github.jhipster.application.service.paypal.SubscriptionGetRequest;
+import io.github.jhipster.application.service.paypal.SubscriptionGetResponse;
 import io.github.jhipster.application.web.rest.errors.BadRequestAlertException;
 
 import io.github.jhipster.web.util.HeaderUtil;
@@ -76,17 +78,14 @@ public class PaymentResource {
         }
         payment.setUser(user.get());
         payment.setTimestamp(Instant.now());
-        OrdersGetRequest request = new OrdersGetRequest(payment.getOrderId());
-        HttpResponse<Order> response = this.payPalClientService.client().execute(request);
-        String amount = response.result().purchaseUnits().get(0).amountWithBreakdown().value();
-        log.debug("User paid amount {}", amount);
+        SubscriptionGetRequest request = new SubscriptionGetRequest(payment.getSubscriptionId());
+        HttpResponse<SubscriptionGetResponse> response = this.payPalClientService.client().execute(request);
+        String tierName = this.payPalClientService.getPlans().stream().filter(plan -> {
+           return plan.getId().equals(response.result().getPlanId());
+        }).map(plan -> plan.getName()).findFirst().get().toUpperCase();
         Optional<UserDTO> userDTO = user.map(UserDTO::new);
-        if (amount.equals("99.00")) {
-            userDTO.get().setTier(TierType.POWERSELLER);
-        }
-        if (amount.equals("49.00")) {
-            userDTO.get().setTier(TierType.PREMIUM);
-        }
+        log.debug("Response Tier from PayPal {}", TierType.valueOf(tierName));
+        userDTO.get().setTier(TierType.valueOf(tierName));
         userService.updateUser(userDTO.get());
         Payment result = paymentService.save(payment);
         return ResponseEntity.created(new URI("/api/payments/" + result.getId()))

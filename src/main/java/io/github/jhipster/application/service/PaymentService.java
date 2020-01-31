@@ -70,4 +70,14 @@ public class PaymentService {
         log.debug("Request to delete Payment : {}", id);
         paymentRepository.deleteById(id);
     }
+
+     /**
+     * Get subscriptionId of the last payment by id.
+     *
+     * @param id the id of the entity.
+     */
+    public Optional<String> getCurrentSubscriptionForUser() {
+        log.debug("Request to find current subscription for currently logged user");
+        return paymentRepository.getCurrentSubscriptionForUser();
+    }
 }

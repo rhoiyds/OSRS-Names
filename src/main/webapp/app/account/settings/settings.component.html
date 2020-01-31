@@ -1,11 +1,7 @@
 <div>
     <div class="row justify-content-center">
         <div class="col-md-8">
-            <h2  *ngIf="settingsForm.get('username').value">Settings for <b>{{settingsForm.get('username').value}}</b></h2>
-
-            <div class="alert alert-success" *ngIf="success">
-                <strong>Settings saved!</strong>
-            </div>
+            <h2  *ngIf="account">Settings for <b>{{account.username}}</b></h2>
 
             <jhi-alert-error></jhi-alert-error>
 
@@ -14,48 +10,7 @@
                 <img src="{{getGravatarImageURL()}}" class="rounded-circle" style="margin-bottom: 16px; margin-top: -8px;"/>
             </a>
 
-            <form name="form" role="form" (ngSubmit)="save()" [formGroup]="settingsForm" *ngIf="settingsForm.get('username').value" novalidate>
-
-                <div class="form-group">
-                    <label class="form-control-label" for="firstName">First Name</label>
-                    <input type="text" class="form-control" id="firstName" name="firstName" placeholder="Your first name"
-                           formControlName="firstName">
-                    <div *ngIf="settingsForm.get('firstName').invalid && (settingsForm.get('firstName').dirty || settingsForm.get('firstName').touched)">
-                        <small class="form-text text-danger"
-                           *ngIf="settingsForm.get('firstName').errors.required">
-                            Your first name is required.
-                        </small>
-                        <small class="form-text text-danger"
-                           *ngIf="settingsForm.get('firstName').errors.minlength">
-                            Your first name is required to be at least 1 character.
-                        </small>
-                        <small class="form-text text-danger"
-                           *ngIf="settingsForm.get('firstName').errors.maxlength">
-                            Your first name cannot be longer than 50 characters.
-                        </small>
-                    </div>
-                </div>
-                <div class="form-group">
-                    <label class="form-control-label" for="lastName">Last Name</label>
-                    <input type="text" class="form-control" id="lastName" name="lastName" placeholder="Your last name"
-                           formControlName="lastName">
-                    <div *ngIf="settingsForm.get('lastName').invalid && (settingsForm.get('lastName').dirty || settingsForm.get('lastName').touched)">
-                        <small class="form-text text-danger"
-                           *ngIf="settingsForm.get('lastName').errors.required">
-                            Your last name is required.
-                        </small>
-                        <small class="form-text text-danger"
-                           *ngIf="settingsForm.get('lastName').errors.minlength">
-                            Your last name is required to be at least 1 character.
-                        </small>
-                        <small class="form-text text-danger"
-                           *ngIf="settingsForm.get('lastName').errors.maxlength">
-                            Your last name cannot be longer than 50 characters.
-                        </small>
-                    </div>
-                </div>
-                <button type="submit" [disabled]="settingsForm.invalid" class="btn btn-primary">Save</button>
-            </form>
+           <button class="btn btn-primary" (click)="cancelSubscription()">Unsubscribe</button>
         </div>
     </div>
 
