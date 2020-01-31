@@ -58,6 +58,13 @@ public class PayPalClientService implements InitializingBean {
     this.client.execute(subscriptionCancelRequest);
   }
 
+  public void reviseSubscription(String subscriptionId, String planId) throws IOException {
+    SubscriptionReviseRequest subscriptionReviseRequest = new SubscriptionReviseRequest(subscriptionId);
+    subscriptionReviseRequest.contentType("application/json");
+    subscriptionReviseRequest.requestBody(new SubscriptionRevise().setPlanId(planId));
+    this.client.execute(subscriptionReviseRequest);
+  }
+
   @Override
   public void afterPropertiesSet() throws IOException {
     log.debug("PayPalClientService initializing products and plans");

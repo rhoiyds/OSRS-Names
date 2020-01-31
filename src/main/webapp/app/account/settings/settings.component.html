@@ -10,7 +10,19 @@
                 <img src="{{getGravatarImageURL()}}" class="rounded-circle" style="margin-bottom: 16px; margin-top: -8px;"/>
             </a>
 
-           <button class="btn btn-primary" (click)="cancelSubscription()">Unsubscribe</button>
+            <div *ngIf="account && account.tier !== tierType.FREE">
+                Manage subscription: 
+                <div class="dropdown" ngbDropdown>
+                    <button class="btn btn-secondary dropdown-toggle" type="button" ngbDropdownToggle aria-haspopup="true" aria-expanded="false">
+                      {{account.tier}}
+                    </button>
+                    <div class="dropdown-menu" ngbDropdownMenu aria-labelledby="dropdownMenuButton" ngbDropdownD>
+                      <a class="dropdown-item" (click)="reviseSubscription(tierType.PRO)" *ngIf="account.tier === tierType.STARTER">Upgrade to Pro tier</a>
+                      <a class="dropdown-item" (click)="reviseSubscription(tierType.STARTER)" *ngIf="account.tier === tierType.PRO">Downgrade to Starter tier</a>
+                      <a class="dropdown-item" (click)="cancelSubscription()">Cancel subscription</a>
+                    </div>
+                  </div>            
+            </div>
         </div>
     </div>
 

@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { TierType } from 'app/core';
+import { TierType, AccountService, Account } from 'app/core';
 
 @Component({
   selector: 'jhi-pricing',
@@ -8,8 +8,13 @@ import { TierType } from 'app/core';
 })
 export class PricingComponent implements OnInit {
   tierType = TierType;
+  account: Account;
 
-  constructor() {}
+  constructor(private accountService: AccountService) {}
 
-  ngOnInit() {}
+  ngOnInit() {
+    this.accountService.identity().then(account => {
+      this.account = account;
+    });
+  }
 }
