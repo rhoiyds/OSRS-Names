@@ -51,6 +51,13 @@ public class PayPalClientService implements InitializingBean {
     this.client = new PayPalHttpClient(this.environment);
   }
 
+  public void cancelSubscription(String subscriptionId) throws IOException {
+    SubscriptionCancelRequest subscriptionCancelRequest = new SubscriptionCancelRequest(subscriptionId);
+    subscriptionCancelRequest.contentType("application/json");
+    subscriptionCancelRequest.requestBody(new SubscriptionCancelReason().setReason("Unsubscribe"));
+    this.client.execute(subscriptionCancelRequest);
+  }
+
   @Override
   public void afterPropertiesSet() throws IOException {
     log.debug("PayPalClientService initializing products and plans");

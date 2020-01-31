@@ -109,4 +109,8 @@ export class AccountService {
   getUsername(): string {
     return this.isIdentityResolved() ? this.userIdentity.username : null;
   }
+
+  cancelSubscription() {
+    return this.http.post(SERVER_API_URL + 'api/subscription/cancel', { observe: 'response' });
+  }
 }

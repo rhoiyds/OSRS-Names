@@ -71,18 +71,15 @@ export class PayPalDialogComponent implements OnInit, AfterViewInit {
           });
         },
         onApprove: (data, actions) => {
-          console.log(data);
           this.processing = true;
-          return actions.order.capture().then(details => {
-            this.paymentService
-              .create({ ...new Payment(), orderId: data.orderID, subscriptionId: data.subscriptionID })
-              .subscribe(payment => {
-                this.transactionComplete = true;
-                this.transactionSuccessful = true;
-                this.processing = false;
-                return payment;
-              });
-          });
+          this.paymentService
+            .create({ ...new Payment(), orderId: data.orderID, subscriptionId: data.subscriptionID })
+            .subscribe(payment => {
+              this.transactionComplete = true;
+              this.transactionSuccessful = true;
+              this.processing = false;
+              return payment;
+            });
         },
         onError: err => {
           this.transactionComplete = true;
