@@ -4,6 +4,7 @@ import { Observable, Subject } from 'rxjs';
 
 import { SERVER_API_URL } from 'app/app.constants';
 import { Account } from 'app/core/user/account.model';
+import { TierType } from '../user/user.model';
 
 @Injectable({ providedIn: 'root' })
 export class AccountService {
@@ -112,5 +113,9 @@ export class AccountService {
 
   cancelSubscription() {
     return this.http.post(SERVER_API_URL + 'api/subscription/cancel', { observe: 'response' });
+  }
+
+  reviseSubscription(tier: TierType) {
+    return this.http.post(SERVER_API_URL + 'api/subscription/revise/' + tier, { observe: 'response' });
   }
 }

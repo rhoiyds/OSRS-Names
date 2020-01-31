@@ -1,3 +1,5 @@
+import { TierType } from './user.model';
+
 export class Account {
   constructor(
     public activated: boolean,
@@ -7,6 +9,7 @@ export class Account {
     public langKey: string,
     public lastName: string,
     public username: string,
-    public imageUrl: string
+    public imageUrl: string,
+    public tier: TierType
   ) {}
 }

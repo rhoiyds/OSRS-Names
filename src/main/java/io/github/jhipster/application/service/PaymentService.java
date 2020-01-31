@@ -4,7 +4,7 @@ import io.github.jhipster.application.domain.Payment;
 import io.github.jhipster.application.repository.PaymentRepository;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
+import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -78,6 +78,7 @@ public class PaymentService {
      */
     public Optional<String> getCurrentSubscriptionForUser() {
         log.debug("Request to find current subscription for currently logged user");
-        return paymentRepository.getCurrentSubscriptionForUser();
+        List<String> results = paymentRepository.getCurrentSubscriptionForUser(new PageRequest(0,1));
+        return Optional.of(results.get(0));
     }
 }

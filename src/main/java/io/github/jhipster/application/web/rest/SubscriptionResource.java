@@ -5,6 +5,7 @@ import io.github.jhipster.application.service.PayPalClientService;
 import io.github.jhipster.application.service.PaymentService;
 import io.github.jhipster.application.service.UserService;
 import io.github.jhipster.application.service.dto.UserDTO;
+import io.github.jhipster.application.service.paypal.Plan;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -52,6 +53,21 @@ public class SubscriptionResource {
         this.payPalClientService.cancelSubscription(subscriptionId.get());
         UserDTO userDTO = userService.getUserWithAuthorities().map(UserDTO::new).orElseThrow();
         userDTO.setTier(TierType.FREE);
+        userService.updateUser(userDTO);
+    }
+
+    /**
+     * {@code GET  /subscription/revise/tier} : cancel current subscription for active user
+     *
+     */
+    @PostMapping("/subscription/revise/{tier}")
+    public void reviseSubscription(@PathVariable("tier") TierType tier) throws IOException {
+        log.debug("REST request to change users current subscription to {}", tier);
+        Optional<String> subscriptionId = this.paymentService.getCurrentSubscriptionForUser();
+        Plan plan = this.payPalClientService.getPlans().stream().filter(p -> p.getName().toLowerCase().equals(tier.toString().toLowerCase())).findFirst().get();
+        this.payPalClientService.reviseSubscription(subscriptionId.get(), plan.getId());
+        UserDTO userDTO = userService.getUserWithAuthorities().map(UserDTO::new).orElseThrow();
+        userDTO.setTier(tier);
         userService.updateUser(userDTO);
     }
 
