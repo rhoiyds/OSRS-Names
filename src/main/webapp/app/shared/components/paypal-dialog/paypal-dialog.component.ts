@@ -5,6 +5,7 @@ import { NgbActiveModal, NgbModalRef, NgbModal } from '@ng-bootstrap/ng-bootstra
 import { PaymentService } from 'app/entities/payment';
 import { Payment } from 'app/shared/model/payment.model';
 import { Plan } from 'app/shared/model/plan.model';
+import { AccountService } from 'app/core';
 
 declare var paypal;
 
@@ -57,7 +58,8 @@ export class PayPalDialogComponent implements OnInit, AfterViewInit {
     protected activatedRoute: ActivatedRoute,
     protected http: HttpClient,
     protected activeModal: NgbActiveModal,
-    protected paymentService: PaymentService
+    protected paymentService: PaymentService,
+    protected accountService: AccountService
   ) {}
 
   ngOnInit() {}
@@ -78,6 +80,7 @@ export class PayPalDialogComponent implements OnInit, AfterViewInit {
               this.transactionComplete = true;
               this.transactionSuccessful = true;
               this.processing = false;
+              this.accountService.identity(true);
               return payment;
             });
         },

@@ -13,7 +13,7 @@ export class PricingComponent implements OnInit {
   constructor(private accountService: AccountService) {}
 
   ngOnInit() {
-    this.accountService.identity().then(account => {
+    this.accountService.getAuthenticationState().subscribe(account => {
       this.account = account;
     });
   }

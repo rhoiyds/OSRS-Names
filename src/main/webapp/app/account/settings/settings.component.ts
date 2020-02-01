@@ -18,6 +18,9 @@ export class SettingsComponent implements OnInit {
     this.accountService.identity().then(account => {
       this.account = account;
     });
+    this.accountService.getAuthenticationState().subscribe(account => {
+      this.account = account;
+    });
   }
 
   getGravatarImageURL() {
@@ -26,13 +29,13 @@ export class SettingsComponent implements OnInit {
 
   cancelSubscription() {
     this.accountService.cancelSubscription().subscribe(res => {
-      console.log(res);
+      this.accountService.identity(true);
     });
   }
 
   reviseSubscription(tier: TierType) {
     this.accountService.reviseSubscription(tier).subscribe(res => {
-      console.log(res);
+      this.accountService.identity(true);
     });
   }
 }
