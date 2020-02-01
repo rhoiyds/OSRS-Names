@@ -1,8 +1,10 @@
 package io.github.jhipster.application.web.rest;
 
 import io.github.jhipster.application.domain.enumeration.TierType;
+import io.github.jhipster.application.service.ListingService;
 import io.github.jhipster.application.service.PayPalClientService;
 import io.github.jhipster.application.service.PaymentService;
+import io.github.jhipster.application.service.TradeService;
 import io.github.jhipster.application.service.UserService;
 import io.github.jhipster.application.service.dto.UserDTO;
 import io.github.jhipster.application.service.paypal.Plan;
@@ -35,11 +37,16 @@ public class SubscriptionResource {
 
     private final PaymentService paymentService;
 
+    private final ListingService listingService;
 
-    public SubscriptionResource(PayPalClientService payPalClientService, UserService userService, PaymentService paymentService) {
+    private final TradeService tradeService;
+
+    public SubscriptionResource(PayPalClientService payPalClientService, UserService userService, PaymentService paymentService, ListingService listingService, TradeService tradeService) {
         this.payPalClientService = payPalClientService;
         this.userService = userService;
         this.paymentService = paymentService;
+        this.listingService = listingService;
+        this.tradeService = tradeService;
     }
 
     /**
@@ -54,6 +61,7 @@ public class SubscriptionResource {
         UserDTO userDTO = userService.getUserWithAuthorities().map(UserDTO::new).orElseThrow();
         userDTO.setTier(TierType.FREE);
         userService.updateUser(userDTO);
+        listingService.changeOutstandingListingsStatus(this.tradeService.getAllCompletedTrades(), false);
     }
 
     /**

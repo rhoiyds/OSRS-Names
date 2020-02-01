@@ -5,6 +5,7 @@ import io.github.jhipster.application.domain.Listing;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 
+import java.util.List;
 import java.util.Optional;
 
 /**
@@ -49,4 +50,6 @@ public interface ListingService {
      * @param id the id of the entity.
      */
     void delete(Long id);
+
+    void changeOutstandingListingsStatus(List<Listing> completedListings, Boolean status);
 }
