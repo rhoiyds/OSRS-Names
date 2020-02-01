@@ -3,8 +3,10 @@ package io.github.jhipster.application.web.rest;
 import io.github.jhipster.application.domain.Payment;
 import io.github.jhipster.application.domain.User;
 import io.github.jhipster.application.domain.enumeration.TierType;
+import io.github.jhipster.application.service.ListingService;
 import io.github.jhipster.application.service.PayPalClientService;
 import io.github.jhipster.application.service.PaymentService;
+import io.github.jhipster.application.service.TradeService;
 import io.github.jhipster.application.service.UserService;
 import io.github.jhipster.application.service.dto.UserDTO;
 import io.github.jhipster.application.service.paypal.SubscriptionGetRequest;
@@ -27,8 +29,6 @@ import java.util.List;
 import java.util.Optional;
 
 import com.paypal.http.HttpResponse;
-import com.paypal.orders.Order;
-import com.paypal.orders.OrdersGetRequest;
 
 import java.time.Instant;
 
@@ -53,10 +53,16 @@ public class PaymentResource {
 
     private final PayPalClientService payPalClientService;
 
-    public PaymentResource(PaymentService paymentService, UserService userService, PayPalClientService payPalClientService) {
+    private final TradeService tradeService;
+
+    private final ListingService listingService;
+
+    public PaymentResource(PaymentService paymentService, UserService userService, PayPalClientService payPalClientService, TradeService tradeService, ListingService listingService) {
         this.userService = userService;
         this.paymentService = paymentService;
         this.payPalClientService = payPalClientService;
+        this.tradeService = tradeService;
+        this.listingService = listingService;
     }
 
     /**
@@ -88,6 +94,7 @@ public class PaymentResource {
         userDTO.get().setTier(TierType.valueOf(tierName));
         userService.updateUser(userDTO.get());
         Payment result = paymentService.save(payment);
+        this.listingService.changeOutstandingListingsStatus(tradeService.getAllCompletedTrades(), true);
         return ResponseEntity.created(new URI("/api/payments/" + result.getId()))
             .headers(HeaderUtil.createEntityCreationAlert(applicationName, false, ENTITY_NAME, result.getId().toString()))
             .body(result);

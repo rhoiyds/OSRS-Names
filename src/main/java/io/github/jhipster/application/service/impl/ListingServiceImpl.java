@@ -11,6 +11,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.List;
 import java.util.Optional;
 
 /**
@@ -82,5 +83,19 @@ public class ListingServiceImpl implements ListingService {
     public void delete(Long id) {
         log.debug("Request to delete Listing : {}", id);
         listingRepository.deleteById(id);
+    }
+
+    /**
+     * Change all non-finished listings activation status.
+     *
+     * @param status the status to change listings to.
+     */
+    @Override
+    public void changeOutstandingListingsStatus(List<Listing> completedListings, Boolean status) {
+        log.debug("Updating outstanding listings");
+        listingRepository.getOutstandingListings(completedListings).forEach(listing -> {
+            listing.setActive(status);
+            this.save(listing);
+        });
     }
 }

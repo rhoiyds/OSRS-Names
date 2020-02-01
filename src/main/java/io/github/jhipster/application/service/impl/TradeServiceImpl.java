@@ -1,7 +1,9 @@
 package io.github.jhipster.application.service.impl;
 
 import io.github.jhipster.application.service.TradeService;
+import io.github.jhipster.application.domain.Listing;
 import io.github.jhipster.application.domain.Trade;
+import io.github.jhipster.application.domain.enumeration.TradeStatus;
 import io.github.jhipster.application.repository.TradeRepository;
 import io.github.jhipster.application.repository.OfferRepository;
 import org.slf4j.Logger;
@@ -12,6 +14,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.List;
 import java.util.Optional;
 
 /**
@@ -59,7 +62,6 @@ public class TradeServiceImpl implements TradeService {
         return tradeRepository.findAll(pageable);
     }
 
-
     /**
      * Get one trade by id.
      *
@@ -82,5 +84,13 @@ public class TradeServiceImpl implements TradeService {
     public void delete(Long id) {
         log.debug("Request to delete Trade : {}", id);
         tradeRepository.deleteById(id);
+    }
+
+    /**
+     * Find all completed listings
+     */
+    @Override
+    public List<Listing> getAllCompletedTrades() {
+        return tradeRepository.findAllCompletedTrades(TradeStatus.PENDING);
     }
 }

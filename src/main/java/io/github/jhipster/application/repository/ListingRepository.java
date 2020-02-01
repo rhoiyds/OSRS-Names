@@ -32,4 +32,7 @@ public interface ListingRepository extends JpaRepository<Listing, Long>, JpaSpec
     @Query("select listing from Listing listing left join fetch listing.tags where listing.id =:id")
     Optional<Listing> findOneWithEagerRelationships(@Param("id") Long id);
 
+    @Query("select distinct listing from Listing listing left join fetch listing.tags where listing.owner.username = ?#{principal.username} and listing not in (:listings)")
+    List<Listing> getOutstandingListings(@Param("listings") List<Listing> listings);
+
 }

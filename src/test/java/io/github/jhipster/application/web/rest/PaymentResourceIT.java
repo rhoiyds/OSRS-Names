@@ -6,6 +6,8 @@ import io.github.jhipster.application.repository.PaymentRepository;
 import io.github.jhipster.application.service.PayPalClientService;
 import io.github.jhipster.application.service.PaymentService;
 import io.github.jhipster.application.service.UserService;
+import io.github.jhipster.application.service.TradeService;
+import io.github.jhipster.application.service.ListingService;
 import io.github.jhipster.application.web.rest.errors.ExceptionTranslator;
 
 import org.junit.jupiter.api.BeforeEach;
@@ -54,6 +56,12 @@ public class PaymentResourceIT {
     private UserService userService;
 
     @Autowired
+    private TradeService tradeService;
+
+    @Autowired
+    private ListingService listingService;
+
+    @Autowired
     private PayPalClientService payPalClientService;
 
     @Autowired
@@ -78,7 +86,7 @@ public class PaymentResourceIT {
     @BeforeEach
     public void setup() {
         MockitoAnnotations.initMocks(this);
-        final PaymentResource paymentResource = new PaymentResource(paymentService, userService, payPalClientService);
+        final PaymentResource paymentResource = new PaymentResource(paymentService, userService, payPalClientService, tradeService, listingService);
         this.restPaymentMockMvc = MockMvcBuilders.standaloneSetup(paymentResource)
             .setCustomArgumentResolvers(pageableArgumentResolver)
             .setControllerAdvice(exceptionTranslator)
