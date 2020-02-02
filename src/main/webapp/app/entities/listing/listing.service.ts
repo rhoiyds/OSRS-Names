@@ -49,6 +49,10 @@ export class ListingService {
     return this.http.delete<any>(`${this.resourceUrl}/${id}`, { observe: 'response' });
   }
 
+  getTotalListingsCount(): Observable<HttpResponse<number>> {
+    return this.http.get<any>(`${this.resourceUrl}/count`, { observe: 'response' });
+  }
+
   protected convertDateFromClient(listing: IListing): IListing {
     const copy: IListing = Object.assign({}, listing, {
       timestamp: listing.timestamp != null && listing.timestamp.isValid() ? listing.timestamp.toJSON() : null

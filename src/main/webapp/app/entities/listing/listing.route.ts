@@ -12,6 +12,7 @@ import { ListingUpdateComponent } from './listing-update.component';
 import { ListingDeletePopupComponent } from './listing-delete-dialog.component';
 import { IListing } from 'app/shared/model/listing.model';
 import { ListingOfferPopupComponent } from './listing-offer-dialog.component';
+import { TotalListingsAccessService } from 'app/core/auth/total-listings-access-service';
 
 @Injectable({ providedIn: 'root' })
 export class ListingResolve implements Resolve<IListing> {
@@ -61,7 +62,7 @@ export const listingRoute: Routes = [
       authorities: ['ROLE_USER'],
       pageTitle: 'Listings'
     },
-    canActivate: [UserRouteAccessService]
+    canActivate: [UserRouteAccessService, TotalListingsAccessService]
   },
   {
     path: ':id/edit',

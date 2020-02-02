@@ -111,6 +111,10 @@ export class AccountService {
     return this.isIdentityResolved() ? this.userIdentity.username : null;
   }
 
+  getTier(): string {
+    return this.isIdentityResolved() ? this.userIdentity.tier : null;
+  }
+
   cancelSubscription() {
     return this.http.post(SERVER_API_URL + 'api/subscription/cancel', { observe: 'response' });
   }
