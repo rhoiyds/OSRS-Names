@@ -2,6 +2,7 @@ import { Routes } from '@angular/router';
 
 import { UserComponent } from './user.component';
 import { UserRouteAccessService } from 'app/core/auth/user-route-access-service';
+import { UserStoreAccessService } from 'app/core/auth/user-store-access-service';
 
 export const userRoute: Routes = [
   {
@@ -11,6 +12,6 @@ export const userRoute: Routes = [
       authorities: [],
       pageTitle: 'OSRS Names'
     },
-    canActivate: [UserRouteAccessService]
+    canActivate: [UserRouteAccessService, UserStoreAccessService]
   }
 ];
