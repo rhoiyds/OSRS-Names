@@ -1,7 +1,7 @@
 import { Component, Input, OnInit } from '@angular/core';
 import { GRAVATAR_AVATAR_PATH, GRAVATAR_BASE_URL, GRAVATAR_PARAMETERS } from 'app/shared/constants/gravatar.constants';
 
-import { IUser } from 'app/core/user/user.model';
+import { IUser, TierType } from 'app/core/user/user.model';
 import { RatingService } from 'app/entities/rating';
 
 @Component({
@@ -10,6 +10,8 @@ import { RatingService } from 'app/entities/rating';
   styleUrls: ['./user-profile.component.scss']
 })
 export class UserProfileComponent implements OnInit {
+  tierType = TierType;
+
   @Input() user: IUser;
   @Input() timestamp;
   rating: number;
@@ -17,9 +19,11 @@ export class UserProfileComponent implements OnInit {
   constructor(protected ratingsService: RatingService) {}
 
   ngOnInit() {
-    this.ratingsService.getAverageRatingForUser(this.user.id).subscribe(response => {
-      this.rating = response.body;
-    });
+    if (this.user.tier !== TierType.FREE) {
+      this.ratingsService.getAverageRatingForUser(this.user.id).subscribe(response => {
+        this.rating = response.body;
+      });
+    }
   }
 
   getGravatarImageURL() {

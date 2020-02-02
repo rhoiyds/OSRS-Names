@@ -4,7 +4,8 @@
     </div>
     <div class="profile-name-time">
         <div class="profile-name" class="text-left text-nowrap">
-            <a [routerLink]="['/user', user.username]">{{user.username}}</a>
+            <a *ngIf="user.tier === tierType.PRO" [routerLink]="['/user', user.username]">{{user.username}}</a>
+            <p *ngIf="user.tier != tierType.PRO" class="mb-0">{{user.username}}</p>
         </div>
         <div class="profile-time text-left text-muted text-nowrap">
             <ng-container *ngIf="rating && rating > 0">
