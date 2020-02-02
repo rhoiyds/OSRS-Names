@@ -35,4 +35,7 @@ public interface ListingRepository extends JpaRepository<Listing, Long>, JpaSpec
     @Query("select distinct listing from Listing listing left join fetch listing.tags where listing.owner.username = ?#{principal.username} and listing not in (:listings)")
     List<Listing> getOutstandingListings(@Param("listings") List<Listing> listings);
 
+    @Query("select count(distinct listing) from Listing listing where listing.owner.username = ?#{principal.username}")
+    Integer countTotalListingsForUser();
+
 }

@@ -58,7 +58,7 @@ public class SubscriptionResource {
         log.debug("REST request to get cancel users current subscription");
         Optional<String> subscriptionId = this.paymentService.getCurrentSubscriptionForUser();
         this.payPalClientService.cancelSubscription(subscriptionId.get());
-        UserDTO userDTO = userService.getUserWithAuthorities().map(UserDTO::new).orElseThrow();
+        UserDTO userDTO = userService.getUserWithAuthorities().map(UserDTO::new).get();
         userDTO.setTier(TierType.FREE);
         userService.updateUser(userDTO);
         listingService.changeOutstandingListingsStatus(this.tradeService.getAllCompletedTrades(), false);
@@ -74,7 +74,7 @@ public class SubscriptionResource {
         Optional<String> subscriptionId = this.paymentService.getCurrentSubscriptionForUser();
         Plan plan = this.payPalClientService.getPlans().stream().filter(p -> p.getName().toLowerCase().equals(tier.toString().toLowerCase())).findFirst().get();
         this.payPalClientService.reviseSubscription(subscriptionId.get(), plan.getId());
-        UserDTO userDTO = userService.getUserWithAuthorities().map(UserDTO::new).orElseThrow();
+        UserDTO userDTO = userService.getUserWithAuthorities().map(UserDTO::new).get();
         userDTO.setTier(tier);
         userService.updateUser(userDTO);
     }

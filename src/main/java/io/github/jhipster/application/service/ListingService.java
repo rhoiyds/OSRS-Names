@@ -47,9 +47,12 @@ public interface ListingService {
     /**
      * Delete the "id" listing.
      *
-     * @param id the id of the entity.
+     * @param id the id of t
+     *           he entity.
      */
     void delete(Long id);
 
     void changeOutstandingListingsStatus(List<Listing> completedListings, Boolean status);
+
+    Integer getTotalListingsCount();
 }

@@ -2,6 +2,7 @@ package io.github.jhipster.application.web.rest;
 
 import io.github.jhipster.application.domain.Listing;
 import io.github.jhipster.application.domain.User;
+import io.github.jhipster.application.domain.enumeration.TierType;
 import io.github.jhipster.application.security.SecurityUtils;
 import io.github.jhipster.application.service.ListingQueryService;
 import io.github.jhipster.application.service.ListingService;
@@ -79,6 +80,10 @@ public class ListingResource {
         Optional<User> owner = this.userService.getUserWithAuthorities();
         if (!owner.isPresent()) {
             throw new BadRequestAlertException("You must create an entity as a logged user", ENTITY_NAME, "notloggeduser");
+        }
+        Integer totalCountForUser = this.listingService.getTotalListingsCount();
+        if ((owner.get().getTier().equals(TierType.FREE) && totalCountForUser >=3) || (owner.get().getTier().equals(TierType.STARTER) && totalCountForUser >=25)) {
+            throw new BadRequestAlertException("This user has reached their maximum allowed", ENTITY_NAME, "for their account tier");
         }
         listing.setOwner(owner.get());
         listing.setTimestamp(Instant.now());
@@ -173,5 +178,15 @@ public class ListingResource {
         listing.setActive(false);
         listingService.save(listing);
         return ResponseEntity.noContent().headers(HeaderUtil.createEntityDeletionAlert(applicationName, false, ENTITY_NAME, id.toString())).build();
+    }
+
+    /**
+     * {@code GET  /listings/count} : get the total number of listings for a user.
+     *
+     * @return the {@link ResponseEntity} with status {@code 200 (OK)} and with body the listing, or with status {@code 404 (Not Found)}.
+     */
+    @GetMapping("/listings/count")
+    public ResponseEntity<Integer> getTotalListingsCount() {
+        return ResponseEntity.ok(this.listingService.getTotalListingsCount());
     }
 }

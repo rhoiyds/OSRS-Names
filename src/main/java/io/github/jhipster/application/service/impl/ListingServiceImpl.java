@@ -98,4 +98,9 @@ public class ListingServiceImpl implements ListingService {
             this.save(listing);
         });
     }
+
+    @Override
+    public Integer getTotalListingsCount() {
+        return listingRepository.countTotalListingsForUser();
+    }
 }
