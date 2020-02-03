@@ -7,6 +7,8 @@ import { JhiAlertService } from 'ng-jhipster';
 
 @Injectable({ providedIn: 'root' })
 export class UserStoreAccessService implements CanActivate {
+  private ERROR_MESSAGE = ' does not have a Store.';
+
   constructor(
     private loginModalService: LoginModalService,
     private accountService: AccountService,
@@ -14,8 +16,6 @@ export class UserStoreAccessService implements CanActivate {
     private router: Router,
     private alertService: JhiAlertService
   ) {}
-
-  private ERROR_MESSAGE = ' does not have a Store.';
 
   canActivate(route: ActivatedRouteSnapshot, state: RouterStateSnapshot): boolean | Promise<boolean> {
     return this.checkIfUserIsProTier(route.params.username);

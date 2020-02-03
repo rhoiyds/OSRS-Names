@@ -1,28 +1,70 @@
-<div>
-    <div class="row justify-content-center">
-        <div class="col-md-8">
-            <h2  *ngIf="account">Settings for <b>{{account.username}}</b></h2>
-            <jhi-alert-error></jhi-alert-error>
+<div class="row justify-content-center">
+    <div class="col-md-8">
+        <h2  *ngIf="account">Settings for <b>{{account.username}}</b></h2>
+        <jhi-alert-error></jhi-alert-error>
 
-            <p class="form-control-label">Profile picture</p>
-            <a href="https://gravatar.com" target="_blank">
-                <img src="{{getGravatarImageURL()}}" class="rounded-circle" style="margin-bottom: 16px; margin-top: -8px;"/>
-            </a>
+        <p class="form-control-label">Profile picture</p>
+        <a href="https://gravatar.com" target="_blank">
+            <img src="{{getGravatarImageURL()}}" class="rounded-circle" style="margin-bottom: 16px; margin-top: -8px;"/>
+        </a>
 
-            <div *ngIf="account && account.tier !== tierType.FREE">
-                Manage subscription: 
-                <div class="dropdown" ngbDropdown>
-                    <button class="btn btn-secondary dropdown-toggle" type="button" ngbDropdownToggle aria-haspopup="true" aria-expanded="false">
-                      {{account.tier}}
-                    </button>
-                    <div class="dropdown-menu" ngbDropdownMenu aria-labelledby="dropdownMenuButton" ngbDropdownD>
-                      <a class="dropdown-item" (click)="reviseSubscription(tierType.PRO)" *ngIf="account.tier === tierType.STARTER">Upgrade to Pro tier</a>
-                      <a class="dropdown-item" (click)="reviseSubscription(tierType.STARTER)" *ngIf="account.tier === tierType.PRO">Downgrade to Starter tier</a>
-                      <a class="dropdown-item" (click)="cancelSubscription()">Cancel subscription</a>
-                    </div>
-                  </div>            
-            </div>
+        <div *ngIf="account && account.tier !== tierType.FREE">
+            Manage subscription: 
+            <div class="dropdown" ngbDropdown>
+                <button class="btn btn-secondary dropdown-toggle" type="button" ngbDropdownToggle aria-haspopup="true" aria-expanded="false">
+                  {{account.tier}}
+                </button>
+                <div class="dropdown-menu" ngbDropdownMenu aria-labelledby="dropdownMenuButton" ngbDropdownD>
+                  <a class="dropdown-item" (click)="reviseSubscription(tierType.PRO)" *ngIf="account.tier === tierType.STARTER">Upgrade to Pro tier</a>
+                  <a class="dropdown-item" (click)="reviseSubscription(tierType.STARTER)" *ngIf="account.tier === tierType.PRO">Downgrade to Starter tier</a>
+                  <a class="dropdown-item" (click)="cancelSubscription()">Cancel subscription</a>
+                </div>
+              </div>            
         </div>
     </div>
-
 </div>
+
+<ng-template #cancelTemplate>
+  <div class="modal-header">
+    <h4 class="modal-title">Cancel subscription?</h4>
+    <button type="button" class="close" data-dismiss="modal" aria-hidden="true"
+            (click)="clear()">&times;</button>
+  </div>
+  <div class="modal-body">
+    Thanks for giving OSRS Names a red-hot go. We're very sorry to see you cancel your subscription. 
+    <br />
+    Upon cancelling your subscription, all active listings will be deactivated and premium tier benefits removed from your account.
+    If you choose to subscribe once again in the future your previously removed listings will automatically be made active.
+    <br />
+    Please feel free to give us a few words for how we could have made your experience a little bit better.
+    <br /><br />
+    <textarea #cancelReason class="form-control" rows="2" placeholder="Reason for leaving and/or advice to the OSRS Names team for a better experience..."></textarea>
+  </div>
+  <div class="modal-footer">
+    <button type="button" class="btn btn-secondary" data-dismiss="modal" (click)="clear()">
+        <fa-icon [icon]="'ban'"></fa-icon>&nbsp;<span>Close</span>
+    </button>
+    <button type="button" class="btn btn-danger" (click)="ngbModalRef.close(cancelReason.value)">
+        <fa-icon [icon]="'times'"></fa-icon>&nbsp;<span>Cancel subscription</span>
+    </button>
+</div>
+</ng-template>
+
+<ng-template #changeTemplate>
+  <div class="modal-header">
+    <h4 class="modal-title">Change subscription?</h4>
+    <button type="button" class="close" data-dismiss="modal" aria-hidden="true"
+            (click)="clear()">&times;</button>
+  </div>
+  <div class="modal-body">
+    Are you sure you wish to change your subscription? Starting from now your monthly invoice will be updated to reflect the new cost per month, and you will have access to the new tier benefits instantly. 
+  </div>
+  <div class="modal-footer">
+    <button type="button" class="btn btn-secondary" data-dismiss="modal" (click)="clear()">
+        <fa-icon [icon]="'ban'"></fa-icon>&nbsp;<span>Cancel</span>
+    </button>
+    <button type="button" class="btn btn-success" (click)="ngbModalRef.close()">
+        <fa-icon [icon]="'check'"></fa-icon>&nbsp;<span>Change subscription</span>
+    </button>
+</div>
+</ng-template>

@@ -8,6 +8,9 @@ import { JhiAlertService } from 'ng-jhipster';
 
 @Injectable({ providedIn: 'root' })
 export class TotalListingsAccessService implements CanActivate {
+  private ERROR_MESSAGE =
+    'Maximum listings for your current account subscription tier has been reached. You will have to upgrade your plan to continue.';
+
   constructor(
     private loginModalService: LoginModalService,
     private accountService: AccountService,
@@ -15,9 +18,6 @@ export class TotalListingsAccessService implements CanActivate {
     private router: Router,
     private alertService: JhiAlertService
   ) {}
-
-  private ERROR_MESSAGE =
-    'Maximum listings for your current account subscription tier has been reached. You will have to upgrade your plan to continue.';
 
   canActivate(): boolean | Promise<boolean> {
     return this.checkTotalListings();
@@ -28,7 +28,6 @@ export class TotalListingsAccessService implements CanActivate {
       .getTotalListingsCount()
       .toPromise()
       .then(response => {
-        console.log('User has', response.body, 'listings and account is', this.accountService.getTier());
         const totalListingsCount = response.body;
         const tier = this.accountService.getTier();
         if (tier === TierType.FREE) {
