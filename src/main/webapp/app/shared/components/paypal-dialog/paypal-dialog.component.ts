@@ -48,11 +48,12 @@ export class PayPalPopupComponent implements OnInit, OnDestroy {
   styleUrls: ['./paypal-dialog.component.scss']
 })
 export class PayPalDialogComponent implements OnInit, AfterViewInit {
+  @ViewChild('paypal', { static: true }) paypalElement: ElementRef;
+
   plan: Plan;
   transactionComplete = false;
   transactionSuccessful = false;
   processing = false;
-  @ViewChild('paypal', { static: true }) paypalElement: ElementRef;
 
   constructor(
     protected activatedRoute: ActivatedRoute,

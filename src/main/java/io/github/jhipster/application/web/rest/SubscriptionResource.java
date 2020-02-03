@@ -8,6 +8,7 @@ import io.github.jhipster.application.service.TradeService;
 import io.github.jhipster.application.service.UserService;
 import io.github.jhipster.application.service.dto.UserDTO;
 import io.github.jhipster.application.service.paypal.Plan;
+import io.github.jhipster.application.service.paypal.SubscriptionCancelReason;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -54,10 +55,10 @@ public class SubscriptionResource {
      *
      */
     @PostMapping("/subscription/cancel")
-    public void cancelSubscription() throws IOException {
+    public void cancelSubscription(@RequestBody SubscriptionCancelReason reason) throws IOException {
         log.debug("REST request to get cancel users current subscription");
         Optional<String> subscriptionId = this.paymentService.getCurrentSubscriptionForUser();
-        this.payPalClientService.cancelSubscription(subscriptionId.get());
+        this.payPalClientService.cancelSubscription(subscriptionId.get(), reason.getReason());
         UserDTO userDTO = userService.getUserWithAuthorities().map(UserDTO::new).get();
         userDTO.setTier(TierType.FREE);
         userService.updateUser(userDTO);
