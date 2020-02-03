@@ -111,6 +111,10 @@ export class AccountService {
     return this.isIdentityResolved() ? this.userIdentity.username : null;
   }
 
+  isProTier(): boolean {
+    return this.userIdentity && this.userIdentity.tier && this.userIdentity.tier === TierType.PRO;
+  }
+
   getTier(): string {
     return this.isIdentityResolved() ? this.userIdentity.tier : null;
   }

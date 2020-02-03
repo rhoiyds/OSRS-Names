@@ -22,7 +22,8 @@ export class UserMgmtUpdateComponent implements OnInit {
     email: ['', [Validators.minLength(5), Validators.maxLength(254), Validators.email]],
     activated: [true],
     langKey: [],
-    authorities: []
+    authorities: [],
+    tier: null
   });
 
   constructor(private userService: UserService, private route: ActivatedRoute, private router: Router, private fb: FormBuilder) {}
@@ -48,7 +49,8 @@ export class UserMgmtUpdateComponent implements OnInit {
       email: user.email,
       activated: user.activated,
       langKey: user.langKey,
-      authorities: user.authorities
+      authorities: user.authorities,
+      tier: user.tier
     });
   }
 
@@ -75,6 +77,7 @@ export class UserMgmtUpdateComponent implements OnInit {
     user.activated = this.editForm.get(['activated']).value;
     user.langKey = this.editForm.get(['langKey']).value;
     user.authorities = this.editForm.get(['authorities']).value;
+    user.tier = this.editForm.get(['tier']).value;
   }
 
   private onSaveSuccess(result) {

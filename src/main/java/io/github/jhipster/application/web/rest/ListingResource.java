@@ -24,6 +24,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.util.MultiValueMap;
 import org.springframework.web.util.UriComponentsBuilder;
 import org.springframework.http.ResponseEntity;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
@@ -71,6 +72,7 @@ public class ListingResource {
      * @return the {@link ResponseEntity} with status {@code 201 (Created)} and with body the new listing, or with status {@code 400 (Bad Request)} if the listing has already an ID.
      * @throws URISyntaxException if the Location URI syntax is incorrect.
      */
+    @Transactional
     @PostMapping("/listings")
     public ResponseEntity<Listing> createListing(@Valid @RequestBody Listing listing) throws URISyntaxException {
         log.debug("REST request to save Listing : {}", listing);
@@ -103,6 +105,7 @@ public class ListingResource {
      * or with status {@code 500 (Internal Server Error)} if the listing couldn't be updated.
      * @throws URISyntaxException if the Location URI syntax is incorrect.
      */
+    @Transactional
     @PutMapping("/listings")
     public ResponseEntity<Listing> updateListing(@Valid @RequestBody Listing listing) throws URISyntaxException {
         log.debug("REST request to update Listing : {}", listing);
