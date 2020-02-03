@@ -1,2 +1,2 @@
-id;username;password_hash;first_name;last_name;email;image_url;activated;lang_key;created_by;last_modified_by;tier
-1;admin;$2a$10$rvt2Er38rXoptdDXr/TLKueNKmW8rDQMwiZev6MiZvp5WozFHBf2W;Administrator;Administrator;admin@osrsnames.com;;true;en;system;system;FREE
+id;username;password_hash;first_name;last_name;email;image_url;activated;lang_key;created_by;last_modified_by;tier;receive_notifications
+1;admin;$2a$10$rvt2Er38rXoptdDXr/TLKueNKmW8rDQMwiZev6MiZvp5WozFHBf2W;Administrator;Administrator;admin@osrsnames.com;;true;en;system;system;FREE;true

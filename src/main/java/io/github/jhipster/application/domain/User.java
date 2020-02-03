@@ -88,6 +88,9 @@ public class User extends AbstractAuditingEntity implements Serializable {
     @Column(name = "tier")
     private TierType tier;
 
+    @Column(name = "receive_notifications")
+    private Boolean receiveNotifications;
+
     @JsonIgnore
     @ManyToMany
     @JoinTable(
@@ -211,6 +214,15 @@ public class User extends AbstractAuditingEntity implements Serializable {
         this.authorities = authorities;
     }
 
+    public Boolean getReceiveNotifications() {
+        return receiveNotifications;
+    }
+
+    public void setReceiveNotifications(Boolean receiveNotifications) {
+        this.receiveNotifications = receiveNotifications;
+    }
+
+
     @Override
     public boolean equals(Object o) {
         if (this == o) {
@@ -239,6 +251,7 @@ public class User extends AbstractAuditingEntity implements Serializable {
             ", langKey='" + langKey + '\'' +
             ", activationKey='" + activationKey + '\'' +
             ", tier='" + tier + '\'' +
+            ", receiveNotifications='" + receiveNotifications  + '\'' +
             "}";
     }
 }

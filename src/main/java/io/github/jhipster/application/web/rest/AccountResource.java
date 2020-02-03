@@ -17,6 +17,7 @@ import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.util.DigestUtils;
 import org.springframework.web.bind.annotation.*;
 
@@ -185,16 +186,29 @@ public class AccountResource {
     /**
      * {@code POST   /account/notification} : Change the notifications
      *
-     * @param notificationSetting the generated key and the new password.
+     * @param notificationSetting whether or not to send emails to this user
      */
     @PostMapping(path = "/account/notification")
-    public void changeNotification(@RequestParam(value = "notificationSetting") String key) {
-        Optional<User> user =
-            userService.completePasswordReset(keyAndPassword.getNewPassword(), keyAndPassword.getKey());
-
+    public void changeNotification(@RequestParam(value = "notificationSetting") Boolean notificationSetting) {
+        String userLogin = SecurityUtils.getCurrentUserUsername().orElseThrow(() -> new AccountResourceException("Current user username not found"));
+        Optional<User> user = userRepository.findOneByUsername(userLogin);
         if (!user.isPresent()) {
-            throw new AccountResourceException("No user was found for this reset key");
+            throw new AccountResourceException("User could not be found");
         }
+        userService.changeNotificationsSetting(notificationSetting);
+    }
+
+    /**
+     * {@code GET  /account/notification} : Get current state of notifications
+     */
+    @GetMapping(path = "/account/notification")
+    public ResponseEntity<Boolean> getNotification() {
+        String userLogin = SecurityUtils.getCurrentUserUsername().orElseThrow(() -> new AccountResourceException("Current user username not found"));
+        Optional<User> user = userRepository.findOneByUsername(userLogin);
+        if (!user.isPresent()) {
+            throw new AccountResourceException("User could not be found");
+        }
+        return ResponseEntity.ok(user.get().getReceiveNotifications());
     }
 
     private static boolean checkPasswordLength(String password) {

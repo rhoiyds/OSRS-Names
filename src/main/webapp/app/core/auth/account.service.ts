@@ -22,8 +22,12 @@ export class AccountService {
     return this.http.post(SERVER_API_URL + 'api/account', account, { observe: 'response' });
   }
 
-  changeNotificationSettings(notificationSetting) {
-    return this.http.post(SERVER_API_URL + 'api/account/notification?notifications=' + notificationSetting, { observe: 'response' });
+  changeNotificationSetting(notificationSetting) {
+    return this.http.post(SERVER_API_URL + 'api/account/notification?notificationSetting=' + notificationSetting, { observe: 'response' });
+  }
+
+  getNotificationSetting(): Observable<any> {
+    return this.http.get(SERVER_API_URL + 'api/account/notification', { observe: 'response' });
   }
 
   authenticate(identity) {

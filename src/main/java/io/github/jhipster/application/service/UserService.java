@@ -114,6 +114,7 @@ public class UserService {
         // new user is not active
         newUser.setActivated(false);
         // new user gets registration key
+        newUser.setReceiveNotifications(true);
         newUser.setActivationKey(RandomUtil.generateActivationKey());
         Set<Authority> authorities = new HashSet<>();
         authorityRepository.findById(AuthoritiesConstants.USER).ifPresent(authorities::add);
@@ -153,6 +154,7 @@ public class UserService {
         user.setResetDate(Instant.now());
         user.setActivated(true);
         user.setTier(userDTO.getTier());
+        user.setReceiveNotifications(true);
         if (userDTO.getAuthorities() != null) {
             Set<Authority> authorities = userDTO.getAuthorities().stream()
                 .map(authorityRepository::findById)
@@ -296,5 +298,15 @@ public class UserService {
     private void clearUserCaches(User user) {
         Objects.requireNonNull(cacheManager.getCache(UserRepository.USERS_BY_USERNAME_CACHE)).evict(user.getUsername());
         Objects.requireNonNull(cacheManager.getCache(UserRepository.USERS_BY_EMAIL_CACHE)).evict(user.getEmail());
+    }
+
+    public void changeNotificationsSetting(Boolean notificationSetting) {
+        SecurityUtils.getCurrentUserUsername()
+            .flatMap(userRepository::findOneByUsername)
+            .ifPresent(user -> {
+                user.setReceiveNotifications(notificationSetting);
+                this.clearUserCaches(user);
+                log.debug("Changed notification setting for User: {}", user);
+            });
     }
 }
