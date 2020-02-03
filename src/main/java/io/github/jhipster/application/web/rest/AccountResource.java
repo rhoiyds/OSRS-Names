@@ -182,6 +182,21 @@ public class AccountResource {
         }
     }
 
+    /**
+     * {@code POST   /account/notification} : Change the notifications
+     *
+     * @param notificationSetting the generated key and the new password.
+     */
+    @PostMapping(path = "/account/notification")
+    public void changeNotification(@RequestParam(value = "notificationSetting") String key) {
+        Optional<User> user =
+            userService.completePasswordReset(keyAndPassword.getNewPassword(), keyAndPassword.getKey());
+
+        if (!user.isPresent()) {
+            throw new AccountResourceException("No user was found for this reset key");
+        }
+    }
+
     private static boolean checkPasswordLength(String password) {
         return !StringUtils.isEmpty(password) &&
             password.length() >= ManagedUserVM.PASSWORD_MIN_LENGTH &&

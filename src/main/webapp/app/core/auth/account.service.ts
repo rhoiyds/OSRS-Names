@@ -22,6 +22,10 @@ export class AccountService {
     return this.http.post(SERVER_API_URL + 'api/account', account, { observe: 'response' });
   }
 
+  changeNotificationSettings(notificationSetting) {
+    return this.http.post(SERVER_API_URL + 'api/account/notification?notifications=' + notificationSetting, { observe: 'response' });
+  }
+
   authenticate(identity) {
     this.userIdentity = identity;
     this.authenticated = identity !== null;
