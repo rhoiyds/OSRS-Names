@@ -7,12 +7,14 @@ import { NgbModalRef, NgbModal } from '@ng-bootstrap/ng-bootstrap';
 
 @Component({
   selector: 'jhi-settings',
-  templateUrl: './settings.component.html'
+  templateUrl: './settings.component.html',
+  styleUrls: ['./settings.component.scss']
 })
 export class SettingsComponent implements OnInit {
   account: Account;
   tierType = TierType;
   ngbModalRef: NgbModalRef;
+  notificationSetting: boolean;
   @ViewChild('cancelTemplate', { static: true }) cancelTemplate: TemplateRef<any>;
   @ViewChild('changeTemplate', { static: true }) changeTemplate: TemplateRef<any>;
 
@@ -24,6 +26,9 @@ export class SettingsComponent implements OnInit {
     });
     this.accountService.getAuthenticationState().subscribe(account => {
       this.account = account;
+    });
+    this.accountService.getNotificationSetting().subscribe(response => {
+      this.notificationSetting = response.body;
     });
   }
 
@@ -59,6 +64,12 @@ export class SettingsComponent implements OnInit {
         this.ngbModalRef = null;
       }
     );
+  }
+
+  changeNotification(notificationSetting) {
+    this.accountService.changeNotificationSetting(notificationSetting).subscribe(res => {
+      console.log('Turned off notifications');
+    });
   }
 
   clear() {

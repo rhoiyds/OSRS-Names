@@ -43,6 +43,9 @@
             <column name="last_modified_by" type="varchar(50)"/>
             <column name="last_modified_date" type="timestamp"/>
             <column name="tier" type="varchar(255)"/>
+            <column name="receive_notifications" type="boolean" valueBoolean="false">
+                <constraints nullable="false" />
+            </column>
         </createTable>
 
         <createTable tableName="jhi_authority">

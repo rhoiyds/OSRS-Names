@@ -86,6 +86,10 @@ public class MailService {
         Locale locale = Locale.forLanguageTag(user.getLangKey());
         String content = templateEngine.process(templateName, context);
         String subject = messageSource.getMessage(titleKey, null, locale);
+        if (!user.getReceiveNotifications()) {
+            log.debug("Receiver {} has opted out of receiving emails - not sending", user.toString());
+            return;
+        }
         sendEmail(user.getEmail(), subject, content, false, true);
     }
 
