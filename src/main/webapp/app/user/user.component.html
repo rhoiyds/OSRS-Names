@@ -45,8 +45,8 @@
                 <div class="table-responsive" *ngIf="listings?.length > 0">
                     <table class="table table-borderless table-hover">
                         <tbody>
-                            <tr *ngFor="let listing of listings" [routerLink]="['/listing', listing.id, 'view']" style="cursor: pointer">
-                                <td>
+                            <tr *ngFor="let listing of listings" style="cursor: pointer">
+                                <td [routerLink]="['/listing', listing.id, 'view']">
                                     <img alt="{{listing.type === listingType.WANT ? 'Buying' : 'Selling'}}"
                                          src="/content/images/{{listing.type === listingType.WANT ? 'buying' : 'selling'}}-icon.png"
                                          title="{{listing.type === listingType.WANT ? 'Buying' : 'Selling'}}"
@@ -55,9 +55,9 @@
                                 <td>
                                     <jhi-user-profile [user]="listing.owner"></jhi-user-profile>
                                 </td>
-                                <td>{{listing.rsn}}</td>
-                                <td>{{listing.amount | osrsCurrency}}</td>
-                                <td>{{listing.timestamp | timeAgo}}</td>
+                                <td [routerLink]="['/listing', listing.id, 'view']">{{listing.rsn}}</td>
+                                <td [routerLink]="['/listing', listing.id, 'view']">{{listing.amount | osrsCurrency}}</td>
+                                <td [routerLink]="['/listing', listing.id, 'view']">{{listing.timestamp | timeAgo}}</td>
                             </tr>
                         </tbody>
                     </table>
