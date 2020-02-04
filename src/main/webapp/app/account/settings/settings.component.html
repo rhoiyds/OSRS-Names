@@ -1,15 +1,15 @@
 <div class="row justify-content-center">
     <div class="col-md-8">
-        <h2  *ngIf="account">Settings for <b>{{account.username}}</b></h2>
+        <h2 *ngIf="account">Settings for <b>{{account.username}}</b></h2>
         <jhi-alert-error></jhi-alert-error>
 
         <p class="form-control-label">Profile picture</p>
         <a href="https://gravatar.com" target="_blank">
             <img src="{{getGravatarImageURL()}}" class="rounded-circle" style="margin-bottom: 16px; margin-top: -8px;"/>
         </a>
-
+        <br />
         <div *ngIf="account && account.tier !== tierType.FREE">
-            Manage subscription: 
+            Manage subscription
             <div class="dropdown" ngbDropdown>
                 <button class="btn btn-secondary dropdown-toggle" type="button" ngbDropdownToggle aria-haspopup="true" aria-expanded="false">
                   {{account.tier}}
@@ -21,13 +21,14 @@
                 </div>
               </div>            
         </div>
+        <br/>
         <div>
-          <p>Notification Settings</p>
+          Notification Settings
             <div class="btn-group btn-group-toggle" ngbRadioGroup name="radioBasic" [(ngModel)]="notificationSetting">
-                <label ngbButtonLabel class="btn btn-basic">
+                <label ngbButtonLabel class="btn btn-basic radio-btn">
                     <input ngbButton type="radio" [value]="true" (click)="changeNotification(true)"> Notify me
                 </label>
-                <label ngbButtonLabel class="btn btn-basic">
+                <label ngbButtonLabel class="btn btn-basic radio-btn">
                     <input ngbButton type="radio" [value]="false" (click)="changeNotification(false)"> Don't notify me
                 </label>
             </div>
