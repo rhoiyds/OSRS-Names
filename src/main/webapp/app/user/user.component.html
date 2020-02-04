@@ -48,7 +48,7 @@
                             <tr *ngFor="let listing of listings" style="cursor: pointer">
                                 <td [routerLink]="['/listing', listing.id, 'view']">
                                     <img alt="{{listing.type === listingType.WANT ? 'Buying' : 'Selling'}}"
-                                         src="/content/images/{{listing.type === listingType.WANT ? 'buying' : 'selling'}}-icon.png"
+                                         src="/content/images/{{listing.type === listingType.WANT ? 'buy' : 'sell'}}-arrow-svg"
                                          title="{{listing.type === listingType.WANT ? 'Buying' : 'Selling'}}"
                                          width="40px">
                                 </td>
