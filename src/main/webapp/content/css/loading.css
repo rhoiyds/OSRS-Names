@@ -73,7 +73,7 @@
 }
 
 #buy-arrow {
-  background-image: url('../images/buy-arrow.png');
+  background-image: url('../images/buy-arrow.svg');
   position: absolute;
   width: 115px;
   height: 140px;
@@ -85,7 +85,7 @@
 }
 
 #sell-arrow {
-  background-image: url('../images/sell-arrow.png');
+  background-image: url('../images/sell-arrow.svg');
   position: absolute;
   width: 115px;
   height: 140px;
@@ -99,7 +99,7 @@
 #backpack {
   position: absolute;
   z-index: 1;
-  background-image: url('../images/backpack.png');
+  background-image: url('../images/backpack.svg');
   width: 300px;
   height: 300px;
 }
