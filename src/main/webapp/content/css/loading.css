@@ -73,25 +73,19 @@
 }
 
 #buy-arrow {
-  background-image: url('../images/buy-arrow.svg');
   position: absolute;
   width: 115px;
   height: 140px;
   z-index: 10;
-  background-repeat: no-repeat;
-  background-size: cover;
   top: -85px;
   right: 25px;
 }
 
 #sell-arrow {
-  background-image: url('../images/sell-arrow.svg');
   position: absolute;
   width: 115px;
   height: 140px;
   z-index: 10;
-  background-repeat: no-repeat;
-  background-size: cover;
   top: -85px;
   right: 140px;
 }
@@ -99,7 +93,6 @@
 #backpack {
   position: absolute;
   z-index: 1;
-  background-image: url('../images/backpack.svg');
   width: 300px;
   height: 300px;
 }
