@@ -142,7 +142,8 @@ jhipster:
 
 application:
   paypal:
-    clientId: ARM9QtN9sz76VOVLdZEN4DeL2nxCj2jDN7PKYsCYpOX-a4qZPPZwPn6dLtmcitD_4Jnrqp-85I_6pjAd
-    secretId: EKKK8MkwKlBStOgcOiJZpLl2jHjafD-jO2tFjiblsKYWsbximTaudKUoS-bl9NTXl4HLQuWtsmSdtNbN
-    webUrl: https://www.paypal.com
-    baseUrl: https://api.paypal.com
+    credentials:
+      clientId: ARM9QtN9sz76VOVLdZEN4DeL2nxCj2jDN7PKYsCYpOX-a4qZPPZwPn6dLtmcitD_4Jnrqp-85I_6pjAd
+      secretId: EKKK8MkwKlBStOgcOiJZpLl2jHjafD-jO2tFjiblsKYWsbximTaudKUoS-bl9NTXl4HLQuWtsmSdtNbN
+      webUrl: https://www.paypal.com
+      baseUrl: https://api.paypal.com
