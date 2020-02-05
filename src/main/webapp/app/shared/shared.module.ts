@@ -6,6 +6,7 @@ import { OsrsCurrencyPipe } from './osrs-currency.pipe';
 import { RatingSelectionDialogComponent } from 'app/shared/components/rating-selection/rating-selection-dialog.component';
 import { TimeAgoPipe } from 'time-ago-pipe';
 import { PayPalDialogComponent, PayPalPopupComponent } from './components/paypal-dialog/paypal-dialog.component';
+import { SafePipe } from './safe.pipe';
 
 @NgModule({
   imports: [OsrsnamesSharedCommonModule],
@@ -15,6 +16,7 @@ import { PayPalDialogComponent, PayPalPopupComponent } from './components/paypal
     ListingOfferComponent,
     UserProfileComponent,
     OsrsCurrencyPipe,
+    SafePipe,
     RatingSelectionDialogComponent,
     TimeAgoPipe,
     PayPalDialogComponent,
@@ -28,6 +30,7 @@ import { PayPalDialogComponent, PayPalPopupComponent } from './components/paypal
     ListingOfferComponent,
     UserProfileComponent,
     OsrsCurrencyPipe,
+    SafePipe,
     RatingSelectionDialogComponent,
     TimeAgoPipe,
     PayPalDialogComponent,

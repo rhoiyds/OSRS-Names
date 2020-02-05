@@ -20,9 +20,9 @@
     <![endif]-->
     <jhi-main>
         <div class="app-loading">
-            <div id="buy-arrow" class="animated bounce"></div>
-            <div id="sell-arrow" class="animated bounce2"></div>
-            <div id="backpack"></div>
+            <embed id="buy-arrow" class="animated bounce" src="content/images/buy-arrow.svg"></embed>
+            <embed id="sell-arrow" class="animated bounce2" src="content/images/sell-arrow.svg"></embed>
+            <embed id="backpack" src="content/images/backpack.svg"></embed>
         </div>
         <div class="app-loading">
             <div id="jhipster-error" style="display:none">
@@ -81,18 +81,6 @@
             }
         }
     </script>
-    <!-- uncomment this for adding service worker
-        <script>
-            if ('serviceWorker' in navigator) {
-                window.addEventListener('load', function() {
-                    navigator.serviceWorker.register('/service-worker.js')
-                        .then(function () {
-                            console.log('Service Worker Registered');
-                        });
-                });
-            }
-        </script>
-    -->
     <script>
         (function(b,o,i,l,e,r){b.GoogleAnalyticsObject=l;b[l]||(b[l]=
         function(){(b[l].q=b[l].q||[]).push(arguments)});b[l].l=+new Date;
