@@ -54,7 +54,7 @@ export class RegisterComponent implements OnInit, AfterViewInit {
     if (password !== this.registerForm.get(['confirmPassword']).value) {
       this.doNotMatch = 'ERROR';
     } else {
-      registerAccount = { ...registerAccount, username: username, email, password };
+      registerAccount = { ...registerAccount, username, email, password };
       this.doNotMatch = null;
       this.error = null;
       this.errorUserExists = null;
