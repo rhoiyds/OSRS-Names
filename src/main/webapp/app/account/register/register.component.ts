@@ -1,7 +1,7 @@
-import { Component, OnInit, AfterViewInit, Renderer, ElementRef } from '@angular/core';
+import { Component, OnInit, AfterViewInit, Renderer, ElementRef, ViewChild, TemplateRef } from '@angular/core';
 import { HttpErrorResponse } from '@angular/common/http';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { NgbModalRef } from '@ng-bootstrap/ng-bootstrap';
+import { NgbModal, NgbModalRef } from '@ng-bootstrap/ng-bootstrap';
 
 import { EMAIL_ALREADY_USED_TYPE, USERNAME_ALREADY_USED_TYPE } from 'app/shared';
 import { LoginModalService } from 'app/core';
@@ -12,6 +12,8 @@ import { Register } from './register.service';
   templateUrl: './register.component.html'
 })
 export class RegisterComponent implements OnInit, AfterViewInit {
+  @ViewChild('termsAndConditionsTemplate', { static: true }) termsAndConditionsTemplate: TemplateRef<any>;
+
   doNotMatch: string;
   error: string;
   errorEmailExists: string;
@@ -23,7 +25,8 @@ export class RegisterComponent implements OnInit, AfterViewInit {
     username: ['', [Validators.required, Validators.minLength(1), Validators.maxLength(50), Validators.pattern('^[_.@A-Za-z0-9-]*$')]],
     email: ['', [Validators.required, Validators.minLength(5), Validators.maxLength(254), Validators.email]],
     password: ['', [Validators.required, Validators.minLength(4), Validators.maxLength(50)]],
-    confirmPassword: ['', [Validators.required, Validators.minLength(4), Validators.maxLength(50)]]
+    confirmPassword: ['', [Validators.required, Validators.minLength(4), Validators.maxLength(50)]],
+    termsAndConditions: [false, [Validators.required, Validators.requiredTrue]]
   });
 
   constructor(
@@ -31,7 +34,8 @@ export class RegisterComponent implements OnInit, AfterViewInit {
     private registerService: Register,
     private elementRef: ElementRef,
     private renderer: Renderer,
-    private fb: FormBuilder
+    private fb: FormBuilder,
+    private modalService: NgbModal
   ) {}
 
   ngOnInit() {
@@ -68,6 +72,14 @@ export class RegisterComponent implements OnInit, AfterViewInit {
 
   openLogin() {
     this.modalRef = this.loginModalService.open();
+  }
+
+  openTermsAndConditions() {
+    this.modalRef = this.modalService.open(this.termsAndConditionsTemplate);
+  }
+
+  clear() {
+    this.modalRef.dismiss();
   }
 
   private processError(response: HttpErrorResponse) {
