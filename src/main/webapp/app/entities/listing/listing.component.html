@@ -53,7 +53,7 @@
             <tbody infinite-scroll (scrolled)="loadPage(page + 1)" [infiniteScrollDisabled]="page >= links['last']"
                    [infiniteScrollDistance]="0">
             <tr *ngFor="let listing of listings ;trackBy: trackId" style="cursor: pointer">
-                <td [routerLink]="['listing', listing.id, 'view']" title="yeet">
+                <td [routerLink]="['listing', listing.id, 'view']">
                     <embed  [src]="'/content/images/' + (listing.type === listingType.WANT ? 'buy' : 'sell') + '-arrow.svg' | safe:'resourceUrl'" width="30px"></embed>
                 </td>
                 <td>
