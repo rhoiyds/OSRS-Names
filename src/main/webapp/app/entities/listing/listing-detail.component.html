@@ -1,7 +1,7 @@
 <div class="row justify-content-center">
     <div class="col-8">
         <div *ngIf="listing">
-            <h2><embed [src]="'/content/images/' + (listing.type === listingType.WANT ? 'buy' : 'sell') + '-arrow.svg' | safe:'resourceUrl'" width="40px"></embed>
+            <h2><embed [src]="'/content/images/' + (listing.type === listingType.WANT ? 'buy' : 'sell') + '-arrow.svg' | safe:'resourceUrl'" width="40px"  placement="top" ngbTooltip="{{listing.type === listingType.WANT ? 'Buying' : 'Selling'}}" container="body" width="20px"></embed>
                 {{listing.rsn}}</h2>
             <hr>
             <jhi-alert-error></jhi-alert-error>

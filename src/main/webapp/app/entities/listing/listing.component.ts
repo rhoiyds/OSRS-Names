@@ -1,13 +1,12 @@
-import { Component, OnInit, OnDestroy } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 import { HttpErrorResponse, HttpHeaders, HttpResponse } from '@angular/common/http';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { Subscription } from 'rxjs';
-import { filter, map } from 'rxjs/operators';
-import { JhiEventManager, JhiParseLinks, JhiAlertService } from 'ng-jhipster';
+import { JhiAlertService, JhiEventManager, JhiParseLinks } from 'ng-jhipster';
 
 import { ITag } from 'app/shared/model/tag.model';
 import { IListing, ListingType } from 'app/shared/model/listing.model';
-import { AccountService } from 'app/core';
+import { AccountService, TierType } from 'app/core';
 
 import { ITEMS_PER_PAGE } from 'app/shared';
 import { ListingService } from './listing.service';
@@ -28,6 +27,7 @@ export class ListingComponent implements OnInit, OnDestroy {
   reverse: any;
   totalItems: number;
   listingType = ListingType;
+  tierType = TierType;
 
   currentSearch: string;
 
@@ -38,7 +38,8 @@ export class ListingComponent implements OnInit, OnDestroy {
     protected parseLinks: JhiParseLinks,
     protected activatedRoute: ActivatedRoute,
     protected accountService: AccountService,
-    protected tagService: TagService
+    protected tagService: TagService,
+    protected router: Router
   ) {
     this.listings = [];
     this.itemsPerPage = ITEMS_PER_PAGE;
@@ -151,6 +152,14 @@ export class ListingComponent implements OnInit, OnDestroy {
       result.push('id');
     }
     return result;
+  }
+
+  onProfileClick(listing) {
+    if (listing.owner.tier === TierType.PRO) {
+      this.router.navigate(['/user', listing.owner.username]);
+      return;
+    }
+    this.router.navigate(['/listing', listing.id, 'view']);
   }
 
   protected paginateListings(data: IListing[], headers: HttpHeaders) {

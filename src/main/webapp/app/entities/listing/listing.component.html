@@ -53,10 +53,10 @@
             <tbody infinite-scroll (scrolled)="loadPage(page + 1)" [infiniteScrollDisabled]="page >= links['last']"
                    [infiniteScrollDistance]="0">
             <tr *ngFor="let listing of listings ;trackBy: trackId" style="cursor: pointer">
-                <td [routerLink]="['listing', listing.id, 'view']">
+                <td [routerLink]="['listing', listing.id, 'view']" placement="top" ngbTooltip="{{listing.type === listingType.WANT ? 'Buying' : 'Selling'}}" container="body">
                     <embed  [src]="'/content/images/' + (listing.type === listingType.WANT ? 'buy' : 'sell') + '-arrow.svg' | safe:'resourceUrl'" width="30px"></embed>
                 </td>
-                <td>
+                <td (click)="onProfileClick(listing)">
                     <jhi-user-profile [user]="listing.owner"></jhi-user-profile>
                 </td>
                 <td [routerLink]="['listing', listing.id, 'view']">{{listing.rsn}}</td>
