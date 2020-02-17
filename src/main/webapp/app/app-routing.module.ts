@@ -11,6 +11,10 @@ const LAYOUT_ROUTES = [navbarRoute, ...userRoute, ...errorRoute];
     RouterModule.forRoot(
       [
         {
+          path: '',
+          loadChildren: './dashboard/dashboard.module#OsrsnamesDashboardModule'
+        },
+        {
           path: 'admin',
           loadChildren: './admin/admin.module#OsrsnamesAdminModule'
         },

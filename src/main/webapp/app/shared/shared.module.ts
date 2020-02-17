@@ -7,6 +7,7 @@ import { RatingSelectionDialogComponent } from 'app/shared/components/rating-sel
 import { TimeAgoPipe } from 'time-ago-pipe';
 import { PayPalDialogComponent, PayPalPopupComponent } from './components/paypal-dialog/paypal-dialog.component';
 import { SafePipe } from './safe.pipe';
+import { ListingListComponent } from './components/listing-list/listing-list.component';
 
 @NgModule({
   imports: [OsrsnamesSharedCommonModule],
@@ -20,7 +21,8 @@ import { SafePipe } from './safe.pipe';
     RatingSelectionDialogComponent,
     TimeAgoPipe,
     PayPalDialogComponent,
-    PayPalPopupComponent
+    PayPalPopupComponent,
+    ListingListComponent
   ],
   entryComponents: [JhiLoginModalComponent, RatingSelectionDialogComponent, PayPalPopupComponent, PayPalDialogComponent],
   exports: [
@@ -34,7 +36,8 @@ import { SafePipe } from './safe.pipe';
     RatingSelectionDialogComponent,
     TimeAgoPipe,
     PayPalDialogComponent,
-    PayPalPopupComponent
+    PayPalPopupComponent,
+    ListingListComponent
   ],
   schemas: [CUSTOM_ELEMENTS_SCHEMA]
 })
