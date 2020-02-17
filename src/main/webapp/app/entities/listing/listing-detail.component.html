@@ -40,8 +40,12 @@
 
         </div>
     </div>
-    <div class="col-8">
+    <div class="col-8" *ngIf="listing?.type === listingType.WANT">
         <h1>Offers</h1>
         <jhi-listing-offer *ngFor="let offer of offers" [offer]="offer" [canAccept]="canAccept()"></jhi-listing-offer>
+    </div>
+    <div class="col-8" *ngIf="listing?.type === listingType.HAVE">
+        <h1>Matches</h1>
+        <jhi-listing-list [listings]="matches"></jhi-listing-list>
     </div>
 </div>

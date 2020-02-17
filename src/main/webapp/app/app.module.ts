@@ -22,6 +22,7 @@ import * as moment from 'moment';
 // jhipster-needle-angular-add-module-import JHipster will add new module here
 import { JhiMainComponent, NavbarComponent, FooterComponent, PageRibbonComponent, ErrorComponent } from './layouts';
 import { UserComponent } from './user/user.component';
+import { OsrsnamesDashboardModule } from './dashboard/dashboard.module';
 
 @NgModule({
   imports: [
@@ -35,6 +36,7 @@ import { UserComponent } from './user/user.component';
     }),
     OsrsnamesSharedModule.forRoot(),
     OsrsnamesCoreModule,
+    OsrsnamesDashboardModule,
     OsrsnamesHomeModule,
     OsrsnamesEntityModule,
     OsrsnamesAccountModule,
