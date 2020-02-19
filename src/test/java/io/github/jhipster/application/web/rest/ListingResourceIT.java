@@ -8,6 +8,7 @@ import io.github.jhipster.application.repository.ListingRepository;
 import io.github.jhipster.application.service.ListingService;
 import io.github.jhipster.application.service.UserService;
 import io.github.jhipster.application.service.TagService;
+import io.github.jhipster.application.service.MailService;
 import io.github.jhipster.application.web.rest.errors.ExceptionTranslator;
 import io.github.jhipster.application.service.dto.ListingCriteria;
 import io.github.jhipster.application.service.ListingQueryService;
@@ -91,6 +92,9 @@ public class ListingResourceIT {
     private TagService tagService;
 
     @Autowired
+    private MailService mailService;
+
+    @Autowired
     private MappingJackson2HttpMessageConverter jacksonMessageConverter;
 
     @Autowired
@@ -112,7 +116,7 @@ public class ListingResourceIT {
     @BeforeEach
     public void setup() {
         MockitoAnnotations.initMocks(this);
-        final ListingResource listingResource = new ListingResource(listingService, userService, listingQueryService, tagService);
+        final ListingResource listingResource = new ListingResource(listingService, userService, listingQueryService, tagService, mailService);
         this.restListingMockMvc = MockMvcBuilders.standaloneSetup(listingResource)
             .setCustomArgumentResolvers(pageableArgumentResolver)
             .setControllerAdvice(exceptionTranslator)
@@ -287,7 +291,7 @@ public class ListingResourceIT {
     
     @SuppressWarnings({"unchecked"})
     public void getAllListingsWithEagerRelationshipsIsEnabled() throws Exception {
-        ListingResource listingResource = new ListingResource(listingServiceMock, userServiceMock, listingQueryService, tagService);
+        ListingResource listingResource = new ListingResource(listingServiceMock, userServiceMock, listingQueryService, tagService, mailService);
         when(listingServiceMock.findAllWithEagerRelationships(any())).thenReturn(new PageImpl(new ArrayList<>()));
 
         MockMvc restListingMockMvc = MockMvcBuilders.standaloneSetup(listingResource)
@@ -304,7 +308,7 @@ public class ListingResourceIT {
 
     @SuppressWarnings({"unchecked"})
     public void getAllListingsWithEagerRelationshipsIsNotEnabled() throws Exception {
-        ListingResource listingResource = new ListingResource(listingServiceMock, userServiceMock, listingQueryService, tagService);
+        ListingResource listingResource = new ListingResource(listingServiceMock, userServiceMock, listingQueryService, tagService, mailService);
             when(listingServiceMock.findAllWithEagerRelationships(any())).thenReturn(new PageImpl(new ArrayList<>()));
             MockMvc restListingMockMvc = MockMvcBuilders.standaloneSetup(listingResource)
             .setCustomArgumentResolvers(pageableArgumentResolver)
