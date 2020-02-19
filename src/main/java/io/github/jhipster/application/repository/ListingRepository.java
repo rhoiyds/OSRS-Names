@@ -2,6 +2,7 @@ package io.github.jhipster.application.repository;
 
 import io.github.jhipster.application.domain.Listing;
 import io.github.jhipster.application.domain.Tag;
+import io.github.jhipster.application.domain.enumeration.ListingType;
 
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -43,4 +44,6 @@ public interface ListingRepository extends JpaRepository<Listing, Long>, JpaSpec
 
     List<Listing> findByRsnLikeOrTagsIn(String rsn, Set<Tag> tags);
 
+    Long countByTypeIsAndActiveTrue(ListingType type);
+    
 }

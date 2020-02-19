@@ -34,15 +34,6 @@ export class DashboardComponent implements OnInit {
       if (account) {
         this.loadAll(account.id);
       }
-      this.subscribeToAuthState();
-    });
-  }
-
-  subscribeToAuthState() {
-    this.accountService.getAuthenticationState().subscribe(account => {
-      if (account) {
-        this.loadAll(account.id);
-      }
     });
   }
 

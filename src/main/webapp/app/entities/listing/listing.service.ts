@@ -57,6 +57,10 @@ export class ListingService {
     return this.http.get<IListing[]>(`${this.resourceUrl}/${id}/matches`, { observe: 'response' });
   }
 
+  getStats() {
+    return this.http.get<any>(`${this.resourceUrl}/stats`, { observe: 'response' });
+  }
+
   protected convertDateFromClient(listing: IListing): IListing {
     const copy: IListing = Object.assign({}, listing, {
       timestamp: listing.timestamp != null && listing.timestamp.isValid() ? listing.timestamp.toJSON() : null
