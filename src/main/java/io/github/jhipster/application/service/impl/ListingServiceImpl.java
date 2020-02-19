@@ -107,7 +107,7 @@ public class ListingServiceImpl implements ListingService {
 
     @Override
     public List<Listing> getMatches(Listing listing) {
-        List<Listing> matches = listingRepository.findByRsnLikeOrTagsIn(listing.getRsn(), listing.getTags());
+        List<Listing> matches = listingRepository.findByRsnLikeOrTagsIn(listing.getRsn() != null ? listing.getRsn() : "", listing.getTags());
         matches = matches.stream().filter(l -> !l.equals(listing) && !l.getOwner().equals(listing.getOwner())).collect(Collectors.toList());
         return matches;
     }
