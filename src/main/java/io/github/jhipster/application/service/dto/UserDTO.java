@@ -36,7 +36,6 @@ public class UserDTO {
     private String lastName;
 
     @Email
-    @JsonProperty(access = Access.WRITE_ONLY)
     @Size(min = 5, max = 254)
     private String email;
 
