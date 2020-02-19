@@ -31,7 +31,18 @@ export class DashboardComponent implements OnInit {
 
   ngOnInit() {
     this.accountService.identity().then(account => {
-      this.loadAll(account.id);
+      if (account) {
+        this.loadAll(account.id);
+      }
+      this.subscribeToAuthState();
+    });
+  }
+
+  subscribeToAuthState() {
+    this.accountService.getAuthenticationState().subscribe(account => {
+      if (account) {
+        this.loadAll(account.id);
+      }
     });
   }
 
