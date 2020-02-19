@@ -2,10 +2,12 @@ package io.github.jhipster.application.web.rest;
 
 import io.github.jhipster.application.domain.Listing;
 import io.github.jhipster.application.domain.User;
+import io.github.jhipster.application.domain.enumeration.ListingType;
 import io.github.jhipster.application.domain.enumeration.TierType;
 import io.github.jhipster.application.security.SecurityUtils;
 import io.github.jhipster.application.service.ListingQueryService;
 import io.github.jhipster.application.service.ListingService;
+import io.github.jhipster.application.service.MailService;
 import io.github.jhipster.application.service.TagService;
 import io.github.jhipster.application.service.UserService;
 import io.github.jhipster.application.service.dto.ListingCriteria;
@@ -58,11 +60,14 @@ public class ListingResource {
 
     private final TagService tagService;
 
-    public ListingResource(ListingService listingService, UserService userService, ListingQueryService listingQueryService, TagService tagService) {
+    private final MailService mailService;
+
+    public ListingResource(ListingService listingService, UserService userService, ListingQueryService listingQueryService, TagService tagService, MailService mailService) {
         this.listingService = listingService;
         this.userService = userService;
         this.listingQueryService = listingQueryService;
         this.tagService = tagService;
+        this.mailService = mailService;
     }
 
     /**
@@ -91,6 +96,13 @@ public class ListingResource {
         listing.setTimestamp(Instant.now());
         listing.setTags(listing.getTags().stream().map(tag -> tagService.createIfNotExist(tag)).collect(Collectors.toSet()));
         Listing result = listingService.save(listing);
+        if (result.getType().equals(ListingType.WANT)) {
+            for (Listing l : listingService.getMatches(result)) {
+                if (l.getType().equals(ListingType.HAVE)) {
+                    mailService.sendNewMatchMail(l);
+                }
+            }
+        }
         return ResponseEntity.created(new URI("/api/listings/" + result.getId()))
             .headers(HeaderUtil.createEntityCreationAlert(applicationName, false, ENTITY_NAME, result.getId().toString()))
             .body(result);
@@ -191,5 +203,19 @@ public class ListingResource {
     @GetMapping("/listings/count")
     public ResponseEntity<Integer> getTotalListingsCount() {
         return ResponseEntity.ok(this.listingService.getTotalListingsCount());
+    }
+
+    /**
+     * {@code GET  /listings/{id}/matches} : get the matches for a user.
+     *
+     * @return the {@link ResponseEntity} with status {@code 200 (OK)} and with body the listing, or with status {@code 404 (Not Found)}.
+     */
+    @GetMapping("/listings/{id}/matches")
+    public ResponseEntity<List<Listing>> getMatchesForListing(@PathVariable Long id) {
+        log.debug("REST request to get matches for Listing : {}", id);
+        Optional<Listing> listing = listingService.findOne(id);
+        List<Listing> matches = this.listingService.getMatches(listing.get());
+        matches = matches.stream().filter(l -> l.getType().equals(ListingType.WANT)).collect(Collectors.toList());
+        return ResponseEntity.ok(matches);
     }
 }

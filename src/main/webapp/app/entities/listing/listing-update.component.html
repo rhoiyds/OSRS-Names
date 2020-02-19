@@ -23,12 +23,10 @@
                     </label>
                     <input type="text" class="form-control" name="rsn" id="field_rsn"
                            formControlName="rsn"/>
-                    <div *ngIf="editForm.get('rsn').invalid && (editForm.get('rsn').dirty || editForm.get('rsn').touched)">
-                        <small class="form-text text-danger"
-                               *ngIf="editForm.get('rsn').errors.required">
-                        This field is required.
-                        </small>
-                    </div>
+                </div>
+                <div class="form-group">
+                    <label for="field_tags">{{getCategoryLabel()}}</label>
+                    <tag-input formControlName="tags" name="tags" id="field_tags" [onAdding]="onAdding" [identifyBy]="'name'" [displayBy]="'name'" [maxItems]="getMaxItems()"></tag-input>
                 </div>
                 <div class="form-group">
                     <label class="form-control-label" for="field_amount">{{getAmountLabel()}}</label>
@@ -39,10 +37,6 @@
                     <label class="form-control-label" for="field_description">Extra information</label>
                     <textarea type="text" class="form-control" name="description" id="field_description"
                            formControlName="description" rows="3"></textarea>
-                </div>
-                <div class="form-group">
-                    <label for="field_tags">Tags</label>
-                    <tag-input formControlName="tags" name="tags" id="field_tags" [onAdding]="onAdding" [identifyBy]="'name'" [displayBy]="'name'"></tag-input>
                 </div>
             </div>
             <div>

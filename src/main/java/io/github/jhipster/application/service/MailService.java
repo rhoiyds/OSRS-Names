@@ -1,6 +1,7 @@
 package io.github.jhipster.application.service;
 
 import io.github.jhipster.application.domain.Comment;
+import io.github.jhipster.application.domain.Listing;
 import io.github.jhipster.application.domain.User;
 import io.github.jhipster.application.domain.Offer;
 
@@ -36,6 +37,8 @@ public class MailService {
     private static final String OFFER = "offer";
 
     private static final String COMMENT = "comment";
+
+    private static final String LISTING = "listing";
 
     private static final String BASE_URL = "baseUrl";
 
@@ -141,6 +144,14 @@ public class MailService {
         context.setVariable(OFFER, offer);
         context.setVariable("action", offer.getStatus().toString().toLowerCase());
         sendEmailFromTemplate(context, "mail/answeredOfferEmail", "email.answeredOffer.title");
+    }
+
+    @Async
+    public void sendNewMatchMail(Listing listing) {
+        log.debug("Sending new match email to '{}'", listing.getOwner().getEmail());
+        Context context = getNewContext(listing.getOwner());
+        context.setVariable(LISTING, listing);
+        sendEmailFromTemplate(context, "mail/newMatchEmail", "email.newMatch.title");
     }
 
     public Context getNewContext(User user) {

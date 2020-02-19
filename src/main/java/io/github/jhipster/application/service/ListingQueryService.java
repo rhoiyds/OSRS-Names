@@ -92,7 +92,7 @@ public class ListingQueryService extends QueryService<Listing> {
                 specification = specification.and(buildSpecification(criteria.getType(), Listing_.type));
             }
             if (criteria.getRsn() != null) {
-                specification = specification.or(buildStringSpecification(criteria.getRsn(), Listing_.rsn));
+                specification = specification.and(buildStringSpecification(criteria.getRsn(), Listing_.rsn));
             }
             if (criteria.getAmount() != null) {
                 specification = specification.and(buildRangeSpecification(criteria.getAmount(), Listing_.amount));
@@ -108,7 +108,7 @@ public class ListingQueryService extends QueryService<Listing> {
                     root -> root.join(Listing_.owner, JoinType.LEFT).get(User_.id)));
             }
             if (criteria.getTagsId() != null) {
-                specification = specification.or(buildSpecification(criteria.getTagsId(),
+                specification = specification.and(buildSpecification(criteria.getTagsId(),
                     root -> root.join(Listing_.tags, JoinType.LEFT).get(Tag_.id)));
             }
         }

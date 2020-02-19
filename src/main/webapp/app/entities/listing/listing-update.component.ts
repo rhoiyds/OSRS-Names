@@ -27,7 +27,7 @@ export class ListingUpdateComponent implements OnInit {
   editForm = this.fb.group({
     id: [],
     type: [null, [Validators.required]],
-    rsn: [null, [Validators.required]],
+    rsn: [],
     amount: [],
     description: [],
     tags: []
@@ -143,6 +143,26 @@ export class ListingUpdateComponent implements OnInit {
       return 'What RSN are you selling?';
     }
     return 'What RSN are you buying?';
+  }
+
+  getCategoryLabel() {
+    if (!this.editForm.get(['type']).value) {
+      return 'Categories';
+    }
+    if (this.editForm.get(['type']).value === ListingType.HAVE) {
+      return 'What categories does this name fall under?';
+    }
+    return 'What category are you interested in?';
+  }
+
+  getMaxItems() {
+    if (!this.editForm.get(['type']).value) {
+      return 10;
+    }
+    if (this.editForm.get(['type']).value === ListingType.HAVE) {
+      return 10;
+    }
+    return 1;
   }
 
   getAmountLabel() {

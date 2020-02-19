@@ -35,8 +35,7 @@ public class Listing implements Serializable {
     @Column(name = "type", nullable = false)
     private ListingType type;
 
-    @NotNull
-    @Column(name = "rsn", nullable = false)
+    @Column(name = "rsn")
     private String rsn;
 
     @Column(name = "amount")

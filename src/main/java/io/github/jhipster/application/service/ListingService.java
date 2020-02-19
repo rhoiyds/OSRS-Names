@@ -55,4 +55,6 @@ public interface ListingService {
     void changeOutstandingListingsStatus(List<Listing> completedListings, Boolean status);
 
     Integer getTotalListingsCount();
+
+    List<Listing> getMatches(Listing listing);
 }

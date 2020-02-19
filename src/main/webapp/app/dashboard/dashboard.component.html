@@ -20,16 +20,16 @@
     </ul>
     <div class="tab-content" id="myTabContent">
         <div class="tab-pane fade" [ngClass]="{'show active': showTab == 'buying'}" id="buying" role="tabpanel" aria-labelledby="buying-tab">
-            <div class="alert alert-warning" *ngIf="!buyingListings.length">
+            <div class="alert alert-warning" *ngIf="!buyingListings || !buyingListings.length">
                 <span>You haven't created any buying listings.</span>
             </div>
-            <jhi-listing-list [listings]="buyingListings" *ngIf="buyingListings.length"></jhi-listing-list>
+            <jhi-listing-list [listings]="buyingListings" *ngIf="buyingListings"></jhi-listing-list>
         </div>
         <div class="tab-pane fade" [ngClass]="{'show active': showTab == 'selling'}" id="selling" role="tabpanel" aria-labelledby="selling-tab">
-            <div class="alert alert-warning" *ngIf="!sellingListings.length">
+            <div class="alert alert-warning" *ngIf="!sellingListings || !sellingListings.length">
                 <span>You haven't created any selling listings.</span>
             </div>
-            <jhi-listing-list [listings]="sellingListings"  *ngIf="sellingListings.length"></jhi-listing-list>
+            <jhi-listing-list [listings]="sellingListings" *ngIf="sellingListings"></jhi-listing-list>
         </div>
     </div>
 </div>

@@ -1,6 +1,8 @@
 package io.github.jhipster.application.repository;
 
 import io.github.jhipster.application.domain.Listing;
+import io.github.jhipster.application.domain.Tag;
+
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.*;
@@ -9,6 +11,7 @@ import org.springframework.stereotype.Repository;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.Set;
 
 /**
  * Spring Data  repository for the Listing entity.
@@ -37,5 +40,7 @@ public interface ListingRepository extends JpaRepository<Listing, Long>, JpaSpec
 
     @Query("select count(distinct listing) from Listing listing where listing.owner.username = ?#{principal.username}")
     Integer countTotalListingsForUser();
+
+    List<Listing> findByRsnLikeOrTagsIn(String rsn, Set<Tag> tags);
 
 }
