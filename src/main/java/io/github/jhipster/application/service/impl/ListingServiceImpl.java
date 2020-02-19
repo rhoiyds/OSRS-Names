@@ -13,6 +13,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 /**
  * Service Implementation for managing {@link Listing}.
@@ -103,4 +104,12 @@ public class ListingServiceImpl implements ListingService {
     public Integer getTotalListingsCount() {
         return listingRepository.countTotalListingsForUser();
     }
+
+    @Override
+    public List<Listing> getMatches(Listing listing) {
+        List<Listing> matches = listingRepository.findByRsnLikeOrTagsIn(listing.getRsn(), listing.getTags());
+        matches = matches.stream().filter(l -> !l.equals(listing) && !l.getOwner().equals(listing.getOwner())).collect(Collectors.toList());
+        return matches;
+    }
+
 }

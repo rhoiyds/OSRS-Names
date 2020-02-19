@@ -61,16 +61,22 @@ export class ListingDetailComponent implements OnInit {
   }
 
   private getMatchesForListing() {
-    this.tagService.query({ 'name.contains': this.listing.rsn }).subscribe((res: HttpResponse<ITag[]>) => {
-      const criteria = {
-        'rsn.contains': this.listing.rsn,
-        'type.equals': 'WANT'
-      };
-      if (res.body.length > 0) {
-        criteria['tagsId.in'] = res.body.map(tag => tag.id);
-      }
-      this.listingService.query(criteria).subscribe((listingRes: HttpResponse<IListing[]>) => (this.matches = listingRes.body));
-    });
+    if (this.listing.type === ListingType.WANT) {
+      return;
+    }
+    const criteria = {
+      'type.equals': 'WANT'
+    };
+    if (this.listing.rsn) {
+      criteria['rsn.contains'] = this.listing.rsn;
+    }
+    if (this.listing.tags.length > 0) {
+      criteria['tagsId.in'] = this.listing.tags.map(tag => tag.id);
+    }
+    // this.listingService.query(criteria).subscribe((listingRes: HttpResponse<IListing[]>) => (this.matches = listingRes.body));
+    this.listingService
+      .getMatchesForListing(this.listing.id)
+      .subscribe((listingRes: HttpResponse<IListing[]>) => (this.matches = listingRes.body));
   }
 
   private getOffersForListing() {
