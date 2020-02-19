@@ -1,40 +1,38 @@
-<div class="row">
-    <div class="col-md-3">
-    </div>
-    <div class="col-md-9">
-        <h1 class="display-4">Welcome, Java Hipster!</h1>
-        <p class="lead">This is your homepage</p>
+<div class="pricing-header px-3 py-3 pt-md-5 pb-md-4 mx-auto text-center">
+    <h1 class="display-4">OSRS Names</h1>
+    <p class="lead">
+        The safest place to buy and sell Old School Runescape names. <br/>
+        <ul style="font-size: 1.25rem; list-style: none;">
+            <li>Stop browsing through dated forums.</li>
+            <li>Stop bumping your posts.</li>
+            <li>Stop getting scammed and sniped.</li>
+        </ul>
+        <p class="lead"><a (click)="onLoginClick()">Sign up</a> and start using for free - no payment details required!</p>
+    </p>
+</div>
 
-        <div [ngSwitch]="isAuthenticated()">
-            <div class="alert alert-success" *ngSwitchCase="true">
-                <span id="home-logged-message" *ngIf="account"
-                   > You are logged in as user "{{account.username}}". </span>
+<div class="container">
+    <div class="card-deck mb-3 text-center">
+        <div class="card mb-4 shadow-sm">
+            <div class="card-header">
+                <h4 class="my-0 font-weight-normal">Buying</h4>
             </div>
-
-            <div class="alert alert-warning" *ngSwitchCase="false">
-                <span>If you want to </span>
-                <a class="alert-link" (click)="login()">sign in</a><span>, you can try the default accounts:<br/>- Administrator (username="admin" and password="admin") <br/>- User (username="user" and password="user").</span>
+            <div class="card-body">
+                <img class="d-block mx-auto" [src]="'/content/images/buy-arrow.svg' | safe:'resourceUrl'" height="80px">
+                <h1 class="card-title pricing-card-title">{{buyingTotal}} <small class="text-muted"> wanted</small></h1>
+                <button type="button" class="btn btn-lg btn-block btn-primary" (click)="onLoginClick()">Start buying</button>
             </div>
-            <div class="alert alert-warning" *ngSwitchCase="false">
-                <span>You don't have an account yet?</span>&nbsp;
-                <a class="alert-link" routerLink="register">Register a new account</a>
+        </div>
+        <div class="card mb-4 shadow-sm">
+            <div class="card-header">
+                <h4 class="my-0 font-weight-normal">Selling</h4>
+            </div>
+            <div class="card-body">
+                <img class="d-block mx-auto" [src]="'/content/images/sell-arrow.svg' | safe:'resourceUrl'" height="80px">
+                <h1 class="card-title pricing-card-title">{{sellingTotal}}<small class="text-muted"> for sale</small></h1>
+                <button type="button" class="btn btn-lg btn-block btn-primary" (click)="onLoginClick()">Start selling</button>
             </div>
         </div>
 
-        <p>
-            If you have any question on JHipster:
-        </p>
-
-        <ul>
-            <li><a href="https://www.jhipster.tech/" target="_blank" rel="noopener">JHipster homepage</a></li>
-            <li><a href="http://stackoverflow.com/tags/jhipster/info" target="_blank" rel="noopener">JHipster on Stack Overflow</a></li>
-            <li><a href="https://github.com/jhipster/generator-jhipster/issues?state=open" target="_blank" rel="noopener">JHipster bug tracker</a></li>
-            <li><a href="https://gitter.im/jhipster/generator-jhipster" target="_blank" rel="noopener">JHipster public chat room</a></li>
-            <li><a href="https://twitter.com/java_hipster" target="_blank" rel="noopener">follow @java_hipster on Twitter</a></li>
-        </ul>
-
-        <p>
-            <span>If you like JHipster, don't forget to give us a star on</span> <a href="https://github.com/jhipster/generator-jhipster" target="_blank" rel="noopener">GitHub</a>!
-        </p>
     </div>
 </div>

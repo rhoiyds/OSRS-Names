@@ -56,5 +56,9 @@ public interface ListingService {
 
     Integer getTotalListingsCount();
 
+    Long getTotalBuyingCount();
+
+    Long getTotalSellingCount();
+
     List<Listing> getMatches(Listing listing);
 }

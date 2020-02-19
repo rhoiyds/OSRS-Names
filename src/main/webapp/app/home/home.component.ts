@@ -3,6 +3,8 @@ import { NgbModalRef } from '@ng-bootstrap/ng-bootstrap';
 import { JhiEventManager } from 'ng-jhipster';
 
 import { LoginModalService, AccountService, Account } from 'app/core';
+import { Router } from '@angular/router';
+import { ListingService } from 'app/entities/listing/listing.service';
 
 @Component({
   selector: 'jhi-home',
@@ -10,35 +12,38 @@ import { LoginModalService, AccountService, Account } from 'app/core';
   styleUrls: ['home.scss']
 })
 export class HomeComponent implements OnInit {
-  account: Account;
-  modalRef: NgbModalRef;
+  buyingTotal = 0;
+  sellingTotal = 0;
 
   constructor(
     private accountService: AccountService,
-    private loginModalService: LoginModalService,
-    private eventManager: JhiEventManager
+    private eventManager: JhiEventManager,
+    private router: Router,
+    private listingService: ListingService,
+    private loginModalService: LoginModalService
   ) {}
 
   ngOnInit() {
-    this.accountService.identity().then((account: Account) => {
-      this.account = account;
-    });
     this.registerAuthenticationSuccess();
+    this.getStats();
+  }
+
+  getStats() {
+    this.listingService.getStats().subscribe(res => {
+      this.buyingTotal = res.body.buyingTotal;
+      this.sellingTotal = res.body.sellingTotal;
+    });
   }
 
   registerAuthenticationSuccess() {
     this.eventManager.subscribe('authenticationSuccess', message => {
       this.accountService.identity().then(account => {
-        this.account = account;
+        this.router.navigate(['/']);
       });
     });
   }
 
-  isAuthenticated() {
-    return this.accountService.isAuthenticated();
-  }
-
-  login() {
-    this.modalRef = this.loginModalService.open();
+  onLoginClick() {
+    this.loginModalService.open();
   }
 }

@@ -34,7 +34,9 @@ import java.net.URI;
 import java.net.URISyntaxException;
 
 import java.time.Instant;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
@@ -217,5 +219,19 @@ public class ListingResource {
         List<Listing> matches = this.listingService.getMatches(listing.get());
         matches = matches.stream().filter(l -> l.getType().equals(ListingType.WANT)).collect(Collectors.toList());
         return ResponseEntity.ok(matches);
+    }
+
+    /**
+     * {@code GET  /listings/stats} : get the listing total stats for dashboard display.
+     *
+     * @return the {@link ResponseEntity} with status {@code 200 (OK)} and with body the listing, or with status {@code 404 (Not Found)}.
+     */
+    @GetMapping("/listings/stats")
+    public ResponseEntity<Map<String, Long>> getStats() {
+        log.debug("REST request to get stats");
+        Map<String, Long> stats = new HashMap<String, Long>();
+        stats.put("buyingTotal", this.listingService.getTotalBuyingCount());
+        stats.put("sellingTotal", this.listingService.getTotalSellingCount());
+        return ResponseEntity.ok(stats);
     }
 }

@@ -2,6 +2,7 @@ package io.github.jhipster.application.service.impl;
 
 import io.github.jhipster.application.service.ListingService;
 import io.github.jhipster.application.domain.Listing;
+import io.github.jhipster.application.domain.enumeration.ListingType;
 import io.github.jhipster.application.repository.ListingRepository;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -110,6 +111,16 @@ public class ListingServiceImpl implements ListingService {
         List<Listing> matches = listingRepository.findByRsnLikeOrTagsIn(listing.getRsn() != null ? listing.getRsn() : "", listing.getTags());
         matches = matches.stream().filter(l -> !l.equals(listing) && !l.getOwner().equals(listing.getOwner())).collect(Collectors.toList());
         return matches;
+    }
+
+    @Override
+    public Long getTotalBuyingCount() {
+        return this.listingRepository.countByTypeIsAndActiveTrue(ListingType.WANT);
+    }
+
+    @Override
+    public Long getTotalSellingCount() {
+        return this.listingRepository.countByTypeIsAndActiveTrue(ListingType.HAVE);
     }
 
 }
