@@ -1,14 +1,12 @@
 package io.github.jhipster.application.service;
 
-import io.github.jhipster.application.domain.Comment;
-import io.github.jhipster.application.domain.Listing;
-import io.github.jhipster.application.domain.User;
-import io.github.jhipster.application.domain.Offer;
+import io.github.jhipster.application.domain.*;
 
 import io.github.jhipster.config.JHipsterProperties;
 
 import java.nio.charset.StandardCharsets;
 import java.util.Locale;
+import java.util.stream.Collectors;
 import javax.mail.internet.InternetAddress;
 import javax.mail.internet.MimeMessage;
 
@@ -160,5 +158,14 @@ public class MailService {
         context.setVariable(USER, user);
         context.setVariable(BASE_URL, jHipsterProperties.getMail().getBaseUrl());
         return context;
+    }
+
+    @Async
+    public void sendNewCategoryMatchMail(User toUser, Listing matchedListing) {
+        log.debug("Sending new match category match email to '{}'",toUser.getEmail());
+        Context context = getNewContext(toUser);
+        context.setVariable(LISTING, matchedListing);
+        context.setVariable("category", matchedListing.getTags().stream().map(Tag::getName).collect(Collectors.joining(", ")));
+        sendEmailFromTemplate(context, "mail/newCategoryMatchEmail", "email.newMatch.title");
     }
 }
