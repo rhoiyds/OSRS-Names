@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+    <head>
+        <title th:text="#{email.newCategoryMatch.title}">New match</title>
+        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+        <link rel="shortcut icon" th:href="@{|${baseUrl}/favicon.ico|}" />
+    </head>
+    <body>
+        <p th:text="#{email.newCategoryMatch.greeting(${user.username})}">
+            Dear
+        </p>
+        <p th:text="#{email.newCategoryMatch.text1(${category})}">
+            You have a new match for your listing
+        </p>
+        <p>
+            <a th:with="url=(@{|${baseUrl}/listing/${listing.id}/view|})" th:href="${url}"
+            th:text="${url}">Login link</a>
+        </p>
+        <p>
+            <span>Regards, </span>
+            <br/>
+            <em th:text="#{email.signature}">JHipster.</em>
+        </p>
+        <p>
+            You can
+            <a th:with="url=(@{|${baseUrl}/settings|})" th:href="${url}">unsubscribe from email notifications</a>
+            any time by logging in and updating your preferences
+        </p>
+    </body>
+</html>

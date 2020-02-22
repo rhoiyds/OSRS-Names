@@ -34,10 +34,7 @@ import java.net.URI;
 import java.net.URISyntaxException;
 
 import java.time.Instant;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Optional;
+import java.util.*;
 import java.util.stream.Collectors;
 
 /**
@@ -99,11 +96,20 @@ public class ListingResource {
         listing.setTags(listing.getTags().stream().map(tag -> tagService.createIfNotExist(tag)).collect(Collectors.toSet()));
         Listing result = listingService.save(listing);
         if (result.getType().equals(ListingType.WANT)) {
+            List<User> sentToUser = new ArrayList<>();
             for (Listing l : listingService.getMatches(result)) {
                 if (l.getType().equals(ListingType.HAVE)) {
-                    mailService.sendNewMatchMail(l);
+                    if (result.getRsn() == null) {
+                        if (!sentToUser.contains(l.getOwner())) {
+                            mailService.sendNewCategoryMatchMail(l.getOwner(), result);
+                            sentToUser.add(l.getOwner());
+                        }
+                    } else {
+                        mailService.sendNewMatchMail(l);
+                    }
                 }
             }
+
         }
         return ResponseEntity.created(new URI("/api/listings/" + result.getId()))
             .headers(HeaderUtil.createEntityCreationAlert(applicationName, false, ENTITY_NAME, result.getId().toString()))
