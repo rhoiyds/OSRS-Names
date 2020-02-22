@@ -1,7 +1,7 @@
 <div class="table-responsive" *ngIf="listings?.length > 0">
     <table class="table table-borderless table-hover">
         <tbody>
-        <tr *ngFor="let listing of listings ;trackBy: trackId" style="cursor: pointer">
+        <tr *ngFor="let listing of listings;" style="cursor: pointer">
             <td (click)="onProfileClick(listing)">
                 <jhi-user-profile [user]="listing.owner"></jhi-user-profile>
             </td>
