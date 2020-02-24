@@ -11,6 +11,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.List;
 import java.util.Optional;
 
 /**
@@ -83,5 +84,10 @@ public class TagServiceImpl implements TagService {
         log.debug("Request to find or create Tag : {}", tag.getName());
         Optional<Tag> existingTag = tagRepository.findByName(tag.getName());
         return existingTag.isPresent() ? existingTag.get() : this.save(tag);
+    }
+
+    @Override
+    public List<Tag> getTagsByName(String name) {
+        return tagRepository.findByNameLikeIgnoreCase(name);
     }
 }

@@ -2,6 +2,7 @@ package io.github.jhipster.application.repository;
 
 import io.github.jhipster.application.domain.Tag;
 
+import java.util.List;
 import java.util.Optional;
 
 import org.springframework.data.jpa.repository.*;
@@ -16,7 +17,9 @@ import org.springframework.stereotype.Repository;
 @Repository
 public interface TagRepository extends JpaRepository<Tag, Long>, JpaSpecificationExecutor<Tag> {
 
-    @Query("select tag from Tag tag where lower(tag.name) like lower(:name)")
+    @Query("select tag from Tag tag where lower(tag.name) = lower(:name)")
     Optional<Tag> findByName(@Param("name") String name);
+
+    List<Tag> findByNameLikeIgnoreCase(String name);
 
 }

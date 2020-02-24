@@ -5,6 +5,7 @@ import io.github.jhipster.application.domain.Tag;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 
+import java.util.List;
 import java.util.Optional;
 
 /**
@@ -50,4 +51,6 @@ public interface TagService {
      * @param name the name of the tag to find/save.
      */
     Tag createIfNotExist(Tag tag);
+
+    List<Tag> getTagsByName(String name);
 }

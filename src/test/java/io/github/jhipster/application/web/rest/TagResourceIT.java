@@ -6,6 +6,7 @@ import io.github.jhipster.application.repository.TagRepository;
 import io.github.jhipster.application.service.TagService;
 import io.github.jhipster.application.web.rest.errors.ExceptionTranslator;
 import io.github.jhipster.application.service.dto.TagCriteria;
+import io.github.jhipster.application.service.ListingService;
 import io.github.jhipster.application.service.TagQueryService;
 
 import org.junit.jupiter.api.BeforeEach;
@@ -46,6 +47,9 @@ public class TagResourceIT {
     private TagService tagService;
 
     @Autowired
+    private ListingService listingService;
+
+    @Autowired
     private TagQueryService tagQueryService;
 
     @Autowired
@@ -70,7 +74,7 @@ public class TagResourceIT {
     @BeforeEach
     public void setup() {
         MockitoAnnotations.initMocks(this);
-        final TagResource tagResource = new TagResource(tagService, tagQueryService);
+        final TagResource tagResource = new TagResource(tagService, tagQueryService, listingService);
         this.restTagMockMvc = MockMvcBuilders.standaloneSetup(tagResource)
             .setCustomArgumentResolvers(pageableArgumentResolver)
             .setControllerAdvice(exceptionTranslator)

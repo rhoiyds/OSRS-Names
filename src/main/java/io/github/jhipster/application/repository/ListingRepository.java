@@ -45,5 +45,7 @@ public interface ListingRepository extends JpaRepository<Listing, Long>, JpaSpec
     List<Listing> findByRsnLikeOrTagsIn(String rsn, Set<Tag> tags);
 
     Long countByTypeIsAndActiveTrue(ListingType type);
+
+    Long countByTagsContainsAndActiveTrue(Tag tag);
     
 }
