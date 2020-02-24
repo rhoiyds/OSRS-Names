@@ -2,6 +2,7 @@ package io.github.jhipster.application.service.impl;
 
 import io.github.jhipster.application.service.ListingService;
 import io.github.jhipster.application.domain.Listing;
+import io.github.jhipster.application.domain.Tag;
 import io.github.jhipster.application.domain.enumeration.ListingType;
 import io.github.jhipster.application.repository.ListingRepository;
 import org.slf4j.Logger;
@@ -121,6 +122,12 @@ public class ListingServiceImpl implements ListingService {
     @Override
     public Long getTotalSellingCount() {
         return this.listingRepository.countByTypeIsAndActiveTrue(ListingType.HAVE);
+    }
+
+    @Override
+    public Long countByTag(Tag tag) {
+        log.debug("For tag {} there is count {}", tag.getName(), this.listingRepository.countByTagsContainsAndActiveTrue(tag));
+        return this.listingRepository.countByTagsContainsAndActiveTrue(tag);
     }
 
 }

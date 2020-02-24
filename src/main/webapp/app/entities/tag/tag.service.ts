@@ -27,12 +27,20 @@ export class TagService {
     return this.http.get<ITag>(`${this.resourceUrl}/${id}`, { observe: 'response' });
   }
 
-  query(req?: any): Observable<EntityArrayResponseType> {
+  query(req?: any) {
     const options = createRequestOption(req);
     return this.http.get<ITag[]>(this.resourceUrl, { params: options, observe: 'response' });
   }
 
+  tagAutocomplete(name) {
+    return this.http.get<any>(`${this.resourceUrl}/count?name=${name}`, { observe: 'response' });
+  }
+
   delete(id: number): Observable<HttpResponse<any>> {
     return this.http.delete<any>(`${this.resourceUrl}/${id}`, { observe: 'response' });
+  }
+
+  findTagsByName(name: string) {
+    return this.http.get<any>(`${this.resourceUrl}/search?name=${name}`, { observe: 'response' });
   }
 }

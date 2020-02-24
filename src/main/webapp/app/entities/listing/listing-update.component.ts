@@ -20,6 +20,8 @@ import { TagService } from 'app/entities/tag';
 export class ListingUpdateComponent implements OnInit {
   isSaving: boolean;
 
+  autocompleteItems = [];
+
   users: IUser[];
 
   tags: ITag[];
@@ -114,6 +116,26 @@ export class ListingUpdateComponent implements OnInit {
   }
   protected onError(errorMessage: string) {
     this.jhiAlertService.error(errorMessage, null, null);
+  }
+
+  tagSearch(text) {
+    // const criteria = {'name.contains': text };
+    // return this.tagService.query(criteria).subscribe(res => {
+    //   this.autocompleteItems = res.body.map(tag => {
+    //     return {value: tag, display: tag.name};
+    //   });
+    // });
+
+    return this.tagService.findTagsByName(text).subscribe(res => {
+      console.log(res);
+      // this.autocompleteItems = res.body.map(tag => {
+      //   return {value: tag, display: tag.name};
+      // });
+    });
+  }
+
+  onTagSelected(event) {
+    console.log(event);
   }
 
   trackUserById(index: number, item: IUser) {

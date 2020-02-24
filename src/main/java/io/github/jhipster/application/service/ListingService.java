@@ -1,6 +1,7 @@
 package io.github.jhipster.application.service;
 
 import io.github.jhipster.application.domain.Listing;
+import io.github.jhipster.application.domain.Tag;
 
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -61,4 +62,6 @@ public interface ListingService {
     Long getTotalSellingCount();
 
     List<Listing> getMatches(Listing listing);
+
+    Long countByTag(Tag tag);
 }
