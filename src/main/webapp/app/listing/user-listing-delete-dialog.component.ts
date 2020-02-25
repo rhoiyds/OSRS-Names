@@ -5,17 +5,17 @@ import { NgbActiveModal, NgbModal, NgbModalRef } from '@ng-bootstrap/ng-bootstra
 import { JhiEventManager } from 'ng-jhipster';
 
 import { IListing } from 'app/shared/model/listing.model';
-import { ListingService } from './listing.service';
+import { UserListingService } from './user-listing.service';
 
 @Component({
-  selector: 'jhi-listing-delete-dialog',
-  templateUrl: './listing-delete-dialog.component.html'
+  selector: 'jhi-user-listing-delete-dialog',
+  templateUrl: './user-listing-delete-dialog.component.html'
 })
-export class ListingDeleteDialogComponent {
+export class UserListingDeleteDialogComponent {
   listing: IListing;
 
   constructor(
-    protected listingService: ListingService,
+    protected listingService: UserListingService,
     public activeModal: NgbActiveModal,
     protected eventManager: JhiEventManager,
     private router: Router
@@ -37,10 +37,10 @@ export class ListingDeleteDialogComponent {
 }
 
 @Component({
-  selector: 'jhi-listing-delete-popup',
+  selector: 'jhi-user-listing-delete-popup',
   template: ''
 })
-export class ListingDeletePopupComponent implements OnInit, OnDestroy {
+export class UserListingDeletePopupComponent implements OnInit, OnDestroy {
   protected ngbModalRef: NgbModalRef;
 
   constructor(protected activatedRoute: ActivatedRoute, protected router: Router, protected modalService: NgbModal) {}
@@ -48,7 +48,7 @@ export class ListingDeletePopupComponent implements OnInit, OnDestroy {
   ngOnInit() {
     this.activatedRoute.data.subscribe(({ listing }) => {
       setTimeout(() => {
-        this.ngbModalRef = this.modalService.open(ListingDeleteDialogComponent as Component, { size: 'lg', backdrop: 'static' });
+        this.ngbModalRef = this.modalService.open(UserListingDeleteDialogComponent as Component, { size: 'lg', backdrop: 'static' });
         this.ngbModalRef.componentInstance.listing = listing;
         this.ngbModalRef.result.then(
           result => {

@@ -5,10 +5,6 @@ import { RouterModule } from '@angular/router';
   imports: [
     RouterModule.forChild([
       {
-        path: 'listing',
-        loadChildren: './listing/listing.module#OsrsnamesListingModule'
-      },
-      {
         path: 'tag',
         loadChildren: './tag/tag.module#OsrsnamesTagModule'
       },

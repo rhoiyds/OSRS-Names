@@ -4,7 +4,7 @@ import { JhiEventManager } from 'ng-jhipster';
 
 import { LoginModalService, AccountService, Account } from 'app/core';
 import { Router } from '@angular/router';
-import { ListingService } from 'app/entities/listing/listing.service';
+import { UserListingService } from 'app/listing/user-listing.service';
 
 @Component({
   selector: 'jhi-home',
@@ -19,7 +19,7 @@ export class HomeComponent implements OnInit {
     private accountService: AccountService,
     private eventManager: JhiEventManager,
     private router: Router,
-    private listingService: ListingService,
+    private listingService: UserListingService,
     private loginModalService: LoginModalService
   ) {}
 

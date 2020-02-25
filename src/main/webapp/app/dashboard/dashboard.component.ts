@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { UserService, IUser, TierType, AccountService } from 'app/core';
 import { RatingService } from 'app/entities/rating';
-import { ListingService } from 'app/entities/listing';
+import { UserListingService } from 'app/listing';
 import { IListing, ListingType } from 'app/shared/model/listing.model';
 
 @Component({
@@ -24,7 +24,7 @@ export class DashboardComponent implements OnInit {
     protected activatedRoute: ActivatedRoute,
     protected userService: UserService,
     protected ratingService: RatingService,
-    protected listingService: ListingService,
+    protected listingService: UserListingService,
     protected router: Router,
     protected accountService: AccountService
   ) {}

@@ -22,6 +22,10 @@ const LAYOUT_ROUTES = [navbarRoute, ...userRoute, ...errorRoute];
           path: 'pricing',
           loadChildren: './pricing/pricing.module#OsrsnamesPricingModule'
         },
+        {
+          path: 'userlisting',
+          loadChildren: './listing/user-listing.module#OsrsnamesUserListingModule'
+        },
         ...LAYOUT_ROUTES
       ],
       { enableTracing: DEBUG_INFO_ENABLED, anchorScrolling: 'enabled', onSameUrlNavigation: 'reload', scrollPositionRestoration: 'enabled' }

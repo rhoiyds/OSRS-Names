@@ -39,10 +39,7 @@
         },
         {
             "fieldName": "rsn",
-            "fieldType": "String",
-            "fieldValidateRules": [
-                "required"
-            ]
+            "fieldType": "String"
         },
         {
             "fieldName": "amount",

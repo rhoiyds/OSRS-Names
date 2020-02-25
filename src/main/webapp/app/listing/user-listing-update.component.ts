@@ -8,16 +8,16 @@ import * as moment from 'moment';
 import { DATE_TIME_FORMAT } from 'app/shared/constants/input.constants';
 import { JhiAlertService } from 'ng-jhipster';
 import { IListing, Listing, ListingType } from 'app/shared/model/listing.model';
-import { ListingService } from './listing.service';
+import { UserListingService } from './user-listing.service';
 import { IUser, UserService } from 'app/core';
 import { ITag } from 'app/shared/model/tag.model';
 import { TagService } from 'app/entities/tag';
 
 @Component({
-  selector: 'jhi-listing-update',
-  templateUrl: './listing-update.component.html'
+  selector: 'jhi-user-listing-update',
+  templateUrl: './user-listing-update.component.html'
 })
-export class ListingUpdateComponent implements OnInit {
+export class UserListingUpdateComponent implements OnInit {
   isSaving: boolean;
 
   autocompleteItems = [];
@@ -37,7 +37,7 @@ export class ListingUpdateComponent implements OnInit {
 
   constructor(
     protected jhiAlertService: JhiAlertService,
-    protected listingService: ListingService,
+    protected listingService: UserListingService,
     protected userService: UserService,
     protected tagService: TagService,
     protected activatedRoute: ActivatedRoute,

@@ -11,7 +11,7 @@ import { IOffer, Offer } from 'app/shared/model/offer.model';
 import { OfferService } from './offer.service';
 import { IUser, UserService } from 'app/core';
 import { IListing } from 'app/shared/model/listing.model';
-import { ListingService } from 'app/entities/listing';
+import { UserListingService } from 'app/listing';
 
 @Component({
   selector: 'jhi-offer-update',
@@ -37,7 +37,7 @@ export class OfferUpdateComponent implements OnInit {
     protected jhiAlertService: JhiAlertService,
     protected offerService: OfferService,
     protected userService: UserService,
-    protected listingService: ListingService,
+    protected listingService: UserListingService,
     protected activatedRoute: ActivatedRoute,
     private fb: FormBuilder
   ) {}

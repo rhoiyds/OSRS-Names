@@ -3,7 +3,7 @@ import { CanActivate, Router } from '@angular/router';
 
 import { AccountService, TierType } from 'app/core/';
 import { LoginModalService } from 'app/core/login/login-modal.service';
-import { ListingService } from 'app/entities/listing';
+import { UserListingService } from 'app/listing';
 import { JhiAlertService } from 'ng-jhipster';
 
 @Injectable({ providedIn: 'root' })
@@ -14,7 +14,7 @@ export class TotalListingsAccessService implements CanActivate {
   constructor(
     private loginModalService: LoginModalService,
     private accountService: AccountService,
-    private listingService: ListingService,
+    private listingService: UserListingService,
     private router: Router,
     private alertService: JhiAlertService
   ) {}

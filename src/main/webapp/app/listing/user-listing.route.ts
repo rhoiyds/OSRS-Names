@@ -5,18 +5,18 @@ import { UserRouteAccessService } from 'app/core';
 import { Observable, of } from 'rxjs';
 import { filter, map } from 'rxjs/operators';
 import { Listing } from 'app/shared/model/listing.model';
-import { ListingService } from './listing.service';
-import { ListingComponent } from './listing.component';
-import { ListingDetailComponent } from './listing-detail.component';
-import { ListingUpdateComponent } from './listing-update.component';
-import { ListingDeletePopupComponent } from './listing-delete-dialog.component';
+import { UserListingService } from './user-listing.service';
+import { UserListingComponent } from './user-listing.component';
+import { UserListingDetailComponent } from './user-listing-detail.component';
+import { UserListingUpdateComponent } from './user-listing-update.component';
+import { UserListingDeletePopupComponent } from './user-listing-delete-dialog.component';
 import { IListing } from 'app/shared/model/listing.model';
-import { ListingOfferPopupComponent } from './listing-offer-dialog.component';
+import { UserListingOfferPopupComponent } from './user-listing-offer-dialog.component';
 import { TotalListingsAccessService } from 'app/core/auth/total-listings-access-service';
 
 @Injectable({ providedIn: 'root' })
 export class ListingResolve implements Resolve<IListing> {
-  constructor(private service: ListingService) {}
+  constructor(private service: UserListingService) {}
 
   resolve(route: ActivatedRouteSnapshot, state: RouterStateSnapshot): Observable<IListing> {
     const id = route.params['id'] ? route.params['id'] : null;
@@ -33,7 +33,7 @@ export class ListingResolve implements Resolve<IListing> {
 export const listingRoute: Routes = [
   {
     path: '',
-    component: ListingComponent,
+    component: UserListingComponent,
     data: {
       authorities: ['ROLE_USER'],
       pageTitle: 'Listings'
@@ -42,7 +42,7 @@ export const listingRoute: Routes = [
   },
   {
     path: ':id/view',
-    component: ListingDetailComponent,
+    component: UserListingDetailComponent,
     resolve: {
       listing: ListingResolve
     },
@@ -54,7 +54,7 @@ export const listingRoute: Routes = [
   },
   {
     path: 'new',
-    component: ListingUpdateComponent,
+    component: UserListingUpdateComponent,
     resolve: {
       listing: ListingResolve
     },
@@ -66,7 +66,7 @@ export const listingRoute: Routes = [
   },
   {
     path: ':id/edit',
-    component: ListingUpdateComponent,
+    component: UserListingUpdateComponent,
     resolve: {
       listing: ListingResolve
     },
@@ -81,7 +81,7 @@ export const listingRoute: Routes = [
 export const listingPopupRoute: Routes = [
   {
     path: ':id/delete',
-    component: ListingDeletePopupComponent,
+    component: UserListingDeletePopupComponent,
     resolve: {
       listing: ListingResolve
     },
@@ -94,7 +94,7 @@ export const listingPopupRoute: Routes = [
   },
   {
     path: ':id/offer',
-    component: ListingOfferPopupComponent,
+    component: UserListingOfferPopupComponent,
     resolve: {
       listing: ListingResolve
     },
