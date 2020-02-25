@@ -119,23 +119,11 @@ export class ListingUpdateComponent implements OnInit {
   }
 
   tagSearch(text) {
-    // const criteria = {'name.contains': text };
-    // return this.tagService.query(criteria).subscribe(res => {
-    //   this.autocompleteItems = res.body.map(tag => {
-    //     return {value: tag, display: tag.name};
-    //   });
-    // });
-
     return this.tagService.findTagsByName(text).subscribe(res => {
-      console.log(res);
-      // this.autocompleteItems = res.body.map(tag => {
-      //   return {value: tag, display: tag.name};
-      // });
+      this.autocompleteItems = res.body.map(tagCount => {
+        return { value: tagCount.tag, display: tagCount.count, name: tagCount.tag.name };
+      });
     });
-  }
-
-  onTagSelected(event) {
-    console.log(event);
   }
 
   trackUserById(index: number, item: IUser) {

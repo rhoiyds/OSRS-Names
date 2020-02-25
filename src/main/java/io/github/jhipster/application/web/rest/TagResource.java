@@ -3,6 +3,7 @@ package io.github.jhipster.application.web.rest;
 import io.github.jhipster.application.domain.Tag;
 import io.github.jhipster.application.service.TagService;
 import io.github.jhipster.application.web.rest.errors.BadRequestAlertException;
+import io.github.jhipster.application.service.dto.TagCount;
 import io.github.jhipster.application.service.dto.TagCriteria;
 import io.github.jhipster.application.service.ListingService;
 import io.github.jhipster.application.service.TagQueryService;
@@ -11,8 +12,6 @@ import io.github.jhipster.web.util.HeaderUtil;
 import io.github.jhipster.web.util.PaginationUtil;
 import io.github.jhipster.web.util.ResponseUtil;
 
-import org.apache.commons.lang3.tuple.ImmutablePair;
-import org.apache.commons.lang3.tuple.Pair;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
@@ -30,7 +29,6 @@ import java.net.URI;
 import java.net.URISyntaxException;
 
 import java.util.List;
-import java.util.Map;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
@@ -175,11 +173,11 @@ public class TagResource {
      *         the tag, or with status {@code 404 (Not Found)}.
      */
     @GetMapping("/tags/search")
-    public ResponseEntity<List<ImmutablePair<Tag, Long>>> getTagsUsed(@RequestParam String name) {
+    public ResponseEntity<List<TagCount>> getTagsUsed(@RequestParam String name) {
         log.debug("REST request to get Tags by name : {}", name);
         List<Tag> tags = tagService.getTagsByName(name);
-        log.debug("REST request to get Tags by name list be like : {}", tags);
-        tags.stream().map(tag -> new ImmutablePair<>(tag, listingService.countByTag(tag))).collect(Collectors.toList());
-        return ResponseEntity.ok().body(tags.stream().map(tag -> new ImmutablePair<>(tag, listingService.countByTag(tag))).collect(Collectors.toList()));
+        return ResponseEntity.ok().body(tags.stream().map(tag -> new TagCount(tag, listingService.countByTag(tag))).collect(Collectors.toList()));
     }
+
+
 }
