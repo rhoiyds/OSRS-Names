@@ -26,8 +26,12 @@
                 </div>
                 <div class="form-group">
                     <label for="field_tags">{{getCategoryLabel()}}</label>
-                    <tag-input formControlName="tags" name="tags" id="field_tags" [onAdding]="onAdding" [identifyBy]="'name'" [displayBy]="'name'" [maxItems]="getMaxItems()" (onTextChange)="tagSearch($event)" [onlyFromAutocomplete]="true" #tagInput>
-                        <tag-input-dropdown [autocompleteItems]="autocompleteItems" [focusFirstElement]="true" (onSelect)="onTagSelected($event)"></tag-input-dropdown>
+                    <tag-input formControlName="tags" name="tags" id="field_tags" [onAdding]="onAdding" [identifyBy]="'name'" [displayBy]="'name'" [maxItems]="getMaxItems()" (onTextChange)="tagSearch($event)" [addOnBlur]="true">
+                        <tag-input-dropdown [autocompleteItems]="autocompleteItems" [identifyBy]="'name'" [displayBy]="'name'">
+                            <ng-template let-item="item" let-index="index">
+                                {{ item.name }} <span class="badge badge-secondary">{{item.display}}</span>
+                            </ng-template>
+                        </tag-input-dropdown>
                     </tag-input>
                 </div>
                 <div class="form-group">

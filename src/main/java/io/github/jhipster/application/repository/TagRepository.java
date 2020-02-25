@@ -20,6 +20,6 @@ public interface TagRepository extends JpaRepository<Tag, Long>, JpaSpecificatio
     @Query("select tag from Tag tag where lower(tag.name) = lower(:name)")
     Optional<Tag> findByName(@Param("name") String name);
 
-    List<Tag> findByNameLikeIgnoreCase(String name);
+    List<Tag> findByNameContainsIgnoreCase(String name);
 
 }
