@@ -5,13 +5,13 @@
             <td (click)="onProfileClick(listing)">
                 <jhi-user-profile [user]="listing.owner"></jhi-user-profile>
             </td>
-            <td [routerLink]="['/userlisting', listing.id, 'view']">{{listing.rsn}}</td>
-            <td [routerLink]="['/userlisting', listing.id, 'view']">
+            <td [routerLink]="['/listing', listing.id, 'view']">{{listing.rsn}}</td>
+            <td [routerLink]="['/listing', listing.id, 'view']">
                 <span class="badge badge-pill badge-info" *ngFor="let tag of listing.tags">
                     {{tag.name}}
                 </span>
             </td>
-            <td [routerLink]="['/userlisting', listing.id, 'view']">{{listing.amount | osrsCurrency}}</td>
+            <td [routerLink]="['/listing', listing.id, 'view']">{{listing.amount | osrsCurrency}}</td>
         </tr>
         </tbody>
     </table>

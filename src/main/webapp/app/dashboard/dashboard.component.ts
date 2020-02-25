@@ -4,6 +4,7 @@ import { UserService, IUser, TierType, AccountService } from 'app/core';
 import { RatingService } from 'app/entities/rating';
 import { UserListingService } from 'app/listing';
 import { IListing, ListingType } from 'app/shared/model/listing.model';
+import { ListingService } from 'app/entities/listing';
 
 @Component({
   selector: 'jhi-dashboard',
@@ -25,6 +26,7 @@ export class DashboardComponent implements OnInit {
     protected userService: UserService,
     protected ratingService: RatingService,
     protected listingService: UserListingService,
+    protected listingEntityService: ListingService,
     protected router: Router,
     protected accountService: AccountService
   ) {}
@@ -38,9 +40,10 @@ export class DashboardComponent implements OnInit {
   }
 
   loadAll(id) {
-    this.listingService
+    this.listingEntityService
       .query({
-        'ownerId.equals': id
+        'ownerId.equals': id,
+        'active.equals': true
       })
       .subscribe(listingRes => {
         this.sellingListings = listingRes.body.filter(listing => listing.type === ListingType.HAVE);

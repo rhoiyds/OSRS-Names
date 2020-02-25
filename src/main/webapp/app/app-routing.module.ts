@@ -23,7 +23,7 @@ const LAYOUT_ROUTES = [navbarRoute, ...userRoute, ...errorRoute];
           loadChildren: './pricing/pricing.module#OsrsnamesPricingModule'
         },
         {
-          path: 'userlisting',
+          path: 'listing',
           loadChildren: './listing/user-listing.module#OsrsnamesUserListingModule'
         },
         ...LAYOUT_ROUTES

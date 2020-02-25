@@ -5,23 +5,21 @@ import { UserRouteAccessService } from 'app/core';
 import { Observable, of } from 'rxjs';
 import { filter, map } from 'rxjs/operators';
 import { Listing } from 'app/shared/model/listing.model';
-import { UserListingService } from './user-listing.service';
-import { UserListingDetailComponent } from './user-listing-detail.component';
-import { UserListingUpdateComponent } from './user-listing-update.component';
-import { UserListingDeletePopupComponent } from './user-listing-delete-dialog.component';
+import { ListingService } from './listing.service';
+import { ListingComponent } from './listing.component';
+import { ListingDetailComponent } from './listing-detail.component';
+import { ListingUpdateComponent } from './listing-update.component';
+import { ListingDeletePopupComponent } from './listing-delete-dialog.component';
 import { IListing } from 'app/shared/model/listing.model';
-import { UserListingOfferPopupComponent } from './user-listing-offer-dialog.component';
-import { TotalListingsAccessService } from 'app/core/auth/total-listings-access-service';
-import { ListingService } from 'app/entities/listing';
 
 @Injectable({ providedIn: 'root' })
 export class ListingResolve implements Resolve<IListing> {
-  constructor(private service: UserListingService, private entityService: ListingService) {}
+  constructor(private service: ListingService) {}
 
   resolve(route: ActivatedRouteSnapshot, state: RouterStateSnapshot): Observable<IListing> {
     const id = route.params['id'] ? route.params['id'] : null;
     if (id) {
-      return this.entityService.find(id).pipe(
+      return this.service.find(id).pipe(
         filter((response: HttpResponse<Listing>) => response.ok),
         map((listing: HttpResponse<Listing>) => listing.body)
       );
@@ -32,8 +30,17 @@ export class ListingResolve implements Resolve<IListing> {
 
 export const listingRoute: Routes = [
   {
+    path: '',
+    component: ListingComponent,
+    data: {
+      authorities: ['ROLE_USER'],
+      pageTitle: 'Listings'
+    },
+    canActivate: [UserRouteAccessService]
+  },
+  {
     path: ':id/view',
-    component: UserListingDetailComponent,
+    component: ListingDetailComponent,
     resolve: {
       listing: ListingResolve
     },
@@ -45,7 +52,7 @@ export const listingRoute: Routes = [
   },
   {
     path: 'new',
-    component: UserListingUpdateComponent,
+    component: ListingUpdateComponent,
     resolve: {
       listing: ListingResolve
     },
@@ -53,11 +60,11 @@ export const listingRoute: Routes = [
       authorities: ['ROLE_USER'],
       pageTitle: 'Listings'
     },
-    canActivate: [UserRouteAccessService, TotalListingsAccessService]
+    canActivate: [UserRouteAccessService]
   },
   {
     path: ':id/edit',
-    component: UserListingUpdateComponent,
+    component: ListingUpdateComponent,
     resolve: {
       listing: ListingResolve
     },
@@ -72,20 +79,7 @@ export const listingRoute: Routes = [
 export const listingPopupRoute: Routes = [
   {
     path: ':id/delete',
-    component: UserListingDeletePopupComponent,
-    resolve: {
-      listing: ListingResolve
-    },
-    data: {
-      authorities: ['ROLE_USER'],
-      pageTitle: 'Listings'
-    },
-    canActivate: [UserRouteAccessService],
-    outlet: 'popup'
-  },
-  {
-    path: ':id/offer',
-    component: UserListingOfferPopupComponent,
+    component: ListingDeletePopupComponent,
     resolve: {
       listing: ListingResolve
     },

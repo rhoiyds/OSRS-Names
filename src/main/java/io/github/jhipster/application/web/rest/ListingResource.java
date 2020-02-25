@@ -83,6 +83,26 @@ public class ListingResource {
         if (listing.getId() != null) {
             throw new BadRequestAlertException("A new listing cannot already have an ID", ENTITY_NAME, "idexists");
         }
+        Listing result = listingService.save(listing);
+        return ResponseEntity.created(new URI("/api/listings/" + result.getId()))
+            .headers(HeaderUtil.createEntityCreationAlert(applicationName, false, ENTITY_NAME, result.getId().toString()))
+            .body(result);
+    }
+
+        /**
+     * {@code POST  /listings/add} : Add a new listing.
+     *
+     * @param listing the listing to create.
+     * @return the {@link ResponseEntity} with status {@code 201 (Created)} and with body the new listing, or with status {@code 400 (Bad Request)} if the listing has already an ID.
+     * @throws URISyntaxException if the Location URI syntax is incorrect.
+     */
+    @Transactional
+    @PostMapping("/listings/add")
+    public ResponseEntity<Listing> addListing(@Valid @RequestBody Listing listing) throws URISyntaxException {
+        log.debug("REST request to save Listing : {}", listing);
+        if (listing.getId() != null) {
+            throw new BadRequestAlertException("A new listing cannot already have an ID", ENTITY_NAME, "idexists");
+        }
         Optional<User> owner = this.userService.getUserWithAuthorities();
         if (!owner.isPresent()) {
             throw new BadRequestAlertException("You must create an entity as a logged user", ENTITY_NAME, "notloggeduser");
@@ -109,11 +129,10 @@ public class ListingResource {
                     }
                 }
             }
-
         }
         return ResponseEntity.created(new URI("/api/listings/" + result.getId()))
-            .headers(HeaderUtil.createEntityCreationAlert(applicationName, false, ENTITY_NAME, result.getId().toString()))
-            .body(result);
+        .headers(HeaderUtil.createEntityCreationAlert(applicationName, false, ENTITY_NAME, result.getId().toString()))
+        .body(result);
     }
 
     /**
@@ -128,6 +147,19 @@ public class ListingResource {
     @Transactional
     @PutMapping("/listings")
     public ResponseEntity<Listing> updateListing(@Valid @RequestBody Listing listing) throws URISyntaxException {
+        log.debug("REST request to update Listing : {}", listing);
+        if (listing.getId() == null) {
+            throw new BadRequestAlertException("Invalid id", ENTITY_NAME, "idnull");
+        }
+        Listing result = listingService.save(listing);
+        return ResponseEntity.ok()
+            .headers(HeaderUtil.createEntityUpdateAlert(applicationName, false, ENTITY_NAME, listing.getId().toString()))
+            .body(result);
+    }
+
+    @Transactional
+    @PutMapping("/listings/edit")
+    public ResponseEntity<Listing> editListing(@Valid @RequestBody Listing listing) throws URISyntaxException {
         log.debug("REST request to update Listing : {}", listing);
         if (listing.getId() == null) {
             throw new BadRequestAlertException("Invalid id", ENTITY_NAME, "idnull");
@@ -154,14 +186,12 @@ public class ListingResource {
      * @param pageable the pagination information.
      * @param queryParams a {@link MultiValueMap} query parameters.
      * @param uriBuilder a {@link UriComponentsBuilder} URI builder.
+     * @param criteria the criteria which the requested entities should match.
      * @return the {@link ResponseEntity} with status {@code 200 (OK)} and the list of listings in body.
      */
     @GetMapping("/listings")
     public ResponseEntity<List<Listing>> getAllListings(ListingCriteria criteria, Pageable pageable, @RequestParam MultiValueMap<String, String> queryParams, UriComponentsBuilder uriBuilder) {
         log.debug("REST request to get Listings by criteria: {}", criteria);
-        BooleanFilter activeBooleanFilter = new BooleanFilter();
-        activeBooleanFilter.setEquals(true);
-        criteria.setActive(activeBooleanFilter);
         Page<Listing> page = listingQueryService.findByCriteria(criteria, pageable);
         HttpHeaders headers = PaginationUtil.generatePaginationHttpHeaders(uriBuilder.queryParams(queryParams), page);
         return ResponseEntity.ok().headers(headers).body(page.getContent());
@@ -189,6 +219,19 @@ public class ListingResource {
     @DeleteMapping("/listings/{id}")
     public ResponseEntity<Void> deleteListing(@PathVariable Long id) {
         log.debug("REST request to delete Listing : {}", id);
+        listingService.delete(id);
+        return ResponseEntity.noContent().headers(HeaderUtil.createEntityDeletionAlert(applicationName, false, ENTITY_NAME, id.toString())).build();
+    }
+
+     /**
+     * {@code DELETE  /listings/:id} : delete the "id" listing.
+     *
+     * @param id the id of the listing to delete.
+     * @return the {@link ResponseEntity} with status {@code 204 (NO_CONTENT)}.
+     */
+    @DeleteMapping("/listings/{id}/deactivate")
+    public ResponseEntity<Void> deactivateListing(@PathVariable Long id) {
+        log.debug("REST request to delete Listing : {}", id);
         Optional<Listing> optionalListing = listingService.findOne(id);
         Optional<String> ownerUserName = SecurityUtils.getCurrentUserUsername();
         if (!optionalListing.isPresent()
@@ -203,7 +246,7 @@ public class ListingResource {
         return ResponseEntity.noContent().headers(HeaderUtil.createEntityDeletionAlert(applicationName, false, ENTITY_NAME, id.toString())).build();
     }
 
-    /**
+     /**
      * {@code GET  /listings/count} : get the total number of listings for a user.
      *
      * @return the {@link ResponseEntity} with status {@code 200 (OK)} and with body the listing, or with status {@code 404 (Not Found)}.
