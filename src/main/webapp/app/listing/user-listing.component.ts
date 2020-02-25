@@ -9,14 +9,14 @@ import { IListing, ListingType } from 'app/shared/model/listing.model';
 import { AccountService, TierType } from 'app/core';
 
 import { ITEMS_PER_PAGE } from 'app/shared';
-import { ListingService } from './listing.service';
-import { TagService } from '../tag';
+import { UserListingService } from './user-listing.service';
+import { TagService } from '../entities/tag';
 
 @Component({
   selector: 'jhi-listing',
-  templateUrl: './listing.component.html'
+  templateUrl: './user-listing.component.html'
 })
-export class ListingComponent implements OnInit, OnDestroy {
+export class UserListingComponent implements OnInit, OnDestroy {
   listings: IListing[];
   currentAccount: any;
   eventSubscriber: Subscription;
@@ -32,7 +32,7 @@ export class ListingComponent implements OnInit, OnDestroy {
   currentSearch: string;
 
   constructor(
-    protected listingService: ListingService,
+    protected listingService: UserListingService,
     protected jhiAlertService: JhiAlertService,
     protected eventManager: JhiEventManager,
     protected parseLinks: JhiParseLinks,

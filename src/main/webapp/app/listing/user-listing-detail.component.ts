@@ -8,14 +8,14 @@ import { AccountService, Account } from 'app/core';
 import { JhiEventManager } from 'ng-jhipster';
 import { HttpResponse, HttpErrorResponse } from '@angular/common/http';
 import { ITag } from 'app/shared/model/tag.model';
-import { ListingService } from './listing.service';
-import { TagService } from '../tag';
+import { UserListingService } from './user-listing.service';
+import { TagService } from '../entities/tag';
 
 @Component({
-  selector: 'jhi-listing-detail',
-  templateUrl: './listing-detail.component.html'
+  selector: 'jhi-user-listing-detail',
+  templateUrl: './user-listing-detail.component.html'
 })
-export class ListingDetailComponent implements OnInit {
+export class UserListingDetailComponent implements OnInit {
   listing: IListing;
   matches: IListing[];
   offers: IOffer[];
@@ -26,7 +26,7 @@ export class ListingDetailComponent implements OnInit {
     protected activatedRoute: ActivatedRoute,
     private router: Router,
     private offerService: OfferService,
-    private listingService: ListingService,
+    private listingService: UserListingService,
     private tagService: TagService,
     private accountService: AccountService,
     private eventManager: JhiEventManager

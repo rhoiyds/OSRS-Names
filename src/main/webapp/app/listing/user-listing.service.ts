@@ -13,7 +13,7 @@ type EntityResponseType = HttpResponse<IListing>;
 type EntityArrayResponseType = HttpResponse<IListing[]>;
 
 @Injectable({ providedIn: 'root' })
-export class ListingService {
+export class UserListingService {
   public resourceUrl = SERVER_API_URL + 'api/listings';
 
   constructor(protected http: HttpClient) {}

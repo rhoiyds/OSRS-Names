@@ -5,15 +5,15 @@ import { NgbActiveModal, NgbModal, NgbModalRef } from '@ng-bootstrap/ng-bootstra
 import { JhiEventManager } from 'ng-jhipster';
 
 import { IListing } from 'app/shared/model/listing.model';
-import { ListingService } from './listing.service';
+import { UserListingService } from './user-listing.service';
 import { OfferService } from 'app/entities/offer';
 import { Offer } from 'app/shared/model/offer.model';
 
 @Component({
-  selector: 'jhi-listing-offer-dialog',
-  templateUrl: './listing-offer-dialog.component.html'
+  selector: 'jhi-user-listing-offer-dialog',
+  templateUrl: './user-listing-offer-dialog.component.html'
 })
-export class ListingOfferDialogComponent {
+export class UserListingOfferDialogComponent {
   listing: IListing;
   message = '';
 
@@ -41,10 +41,10 @@ export class ListingOfferDialogComponent {
 }
 
 @Component({
-  selector: 'jhi-listing-delete-popup',
+  selector: 'jhi-user-listing-offer-popup',
   template: ''
 })
-export class ListingOfferPopupComponent implements OnInit, OnDestroy {
+export class UserListingOfferPopupComponent implements OnInit, OnDestroy {
   protected ngbModalRef: NgbModalRef;
 
   constructor(protected activatedRoute: ActivatedRoute, protected router: Router, protected modalService: NgbModal) {}
@@ -52,15 +52,15 @@ export class ListingOfferPopupComponent implements OnInit, OnDestroy {
   ngOnInit() {
     this.activatedRoute.data.subscribe(({ listing }) => {
       setTimeout(() => {
-        this.ngbModalRef = this.modalService.open(ListingOfferDialogComponent as Component, { size: 'lg', backdrop: 'static' });
+        this.ngbModalRef = this.modalService.open(UserListingOfferDialogComponent as Component, { size: 'lg', backdrop: 'static' });
         this.ngbModalRef.componentInstance.listing = listing;
         this.ngbModalRef.result.then(
           result => {
-            this.router.navigate(['/listing', { outlets: { popup: null } }]);
+            this.router.navigate([`/userlisting/${listing.id}/view`, { outlets: { popup: null } }]);
             this.ngbModalRef = null;
           },
           reason => {
-            this.router.navigate(['/listing', { outlets: { popup: null } }]);
+            this.router.navigate([`/userlisting/${listing.id}/view`, { outlets: { popup: null } }]);
             this.ngbModalRef = null;
           }
         );
