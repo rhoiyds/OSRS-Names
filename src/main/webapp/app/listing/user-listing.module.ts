@@ -3,7 +3,6 @@ import { RouterModule } from '@angular/router';
 
 import { OsrsnamesSharedModule } from 'app/shared';
 import {
-  UserListingComponent,
   UserListingDetailComponent,
   UserListingUpdateComponent,
   UserListingDeletePopupComponent,
@@ -19,7 +18,6 @@ const ENTITY_STATES = [...listingRoute, ...listingPopupRoute];
 @NgModule({
   imports: [OsrsnamesSharedModule, RouterModule.forChild(ENTITY_STATES)],
   declarations: [
-    UserListingComponent,
     UserListingDetailComponent,
     UserListingUpdateComponent,
     UserListingDeleteDialogComponent,
@@ -28,7 +26,6 @@ const ENTITY_STATES = [...listingRoute, ...listingPopupRoute];
     UserListingOfferPopupComponent
   ],
   entryComponents: [
-    UserListingComponent,
     UserListingUpdateComponent,
     UserListingDeleteDialogComponent,
     UserListingDeletePopupComponent,

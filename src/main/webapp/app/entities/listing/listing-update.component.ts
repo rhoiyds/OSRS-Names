@@ -7,45 +7,48 @@ import { filter, map } from 'rxjs/operators';
 import * as moment from 'moment';
 import { DATE_TIME_FORMAT } from 'app/shared/constants/input.constants';
 import { JhiAlertService } from 'ng-jhipster';
-import { IOffer, Offer } from 'app/shared/model/offer.model';
-import { OfferService } from './offer.service';
+import { IListing, Listing } from 'app/shared/model/listing.model';
+import { ListingService } from './listing.service';
 import { IUser, UserService } from 'app/core';
-import { IListing } from 'app/shared/model/listing.model';
-import { ListingService } from '../listing';
+import { ITag } from 'app/shared/model/tag.model';
+import { TagService } from 'app/entities/tag';
 
 @Component({
-  selector: 'jhi-offer-update',
-  templateUrl: './offer-update.component.html'
+  selector: 'jhi-listing-update',
+  templateUrl: './listing-update.component.html'
 })
-export class OfferUpdateComponent implements OnInit {
+export class ListingUpdateComponent implements OnInit {
   isSaving: boolean;
 
   users: IUser[];
 
-  listings: IListing[];
+  tags: ITag[];
 
   editForm = this.fb.group({
     id: [],
     timestamp: [null, [Validators.required]],
+    type: [null, [Validators.required]],
+    rsn: [],
+    amount: [],
     description: [],
-    status: [],
+    active: [],
     owner: [null, Validators.required],
-    listing: [null, Validators.required]
+    tags: []
   });
 
   constructor(
     protected jhiAlertService: JhiAlertService,
-    protected offerService: OfferService,
-    protected userService: UserService,
     protected listingService: ListingService,
+    protected userService: UserService,
+    protected tagService: TagService,
     protected activatedRoute: ActivatedRoute,
     private fb: FormBuilder
   ) {}
 
   ngOnInit() {
     this.isSaving = false;
-    this.activatedRoute.data.subscribe(({ offer }) => {
-      this.updateForm(offer);
+    this.activatedRoute.data.subscribe(({ listing }) => {
+      this.updateForm(listing);
     });
     this.userService
       .query()
@@ -54,23 +57,26 @@ export class OfferUpdateComponent implements OnInit {
         map((response: HttpResponse<IUser[]>) => response.body)
       )
       .subscribe((res: IUser[]) => (this.users = res), (res: HttpErrorResponse) => this.onError(res.message));
-    this.listingService
+    this.tagService
       .query()
       .pipe(
-        filter((mayBeOk: HttpResponse<IListing[]>) => mayBeOk.ok),
-        map((response: HttpResponse<IListing[]>) => response.body)
+        filter((mayBeOk: HttpResponse<ITag[]>) => mayBeOk.ok),
+        map((response: HttpResponse<ITag[]>) => response.body)
       )
-      .subscribe((res: IListing[]) => (this.listings = res), (res: HttpErrorResponse) => this.onError(res.message));
+      .subscribe((res: ITag[]) => (this.tags = res), (res: HttpErrorResponse) => this.onError(res.message));
   }
 
-  updateForm(offer: IOffer) {
+  updateForm(listing: IListing) {
     this.editForm.patchValue({
-      id: offer.id,
-      timestamp: offer.timestamp != null ? offer.timestamp.format(DATE_TIME_FORMAT) : null,
-      description: offer.description,
-      status: offer.status,
-      owner: offer.owner,
-      listing: offer.listing
+      id: listing.id,
+      timestamp: listing.timestamp != null ? listing.timestamp.format(DATE_TIME_FORMAT) : null,
+      type: listing.type,
+      rsn: listing.rsn,
+      amount: listing.amount,
+      description: listing.description,
+      active: listing.active,
+      owner: listing.owner,
+      tags: listing.tags
     });
   }
 
@@ -80,28 +86,31 @@ export class OfferUpdateComponent implements OnInit {
 
   save() {
     this.isSaving = true;
-    const offer = this.createFromForm();
-    if (offer.id !== undefined) {
-      this.subscribeToSaveResponse(this.offerService.update(offer));
+    const listing = this.createFromForm();
+    if (listing.id !== undefined) {
+      this.subscribeToSaveResponse(this.listingService.update(listing));
     } else {
-      this.subscribeToSaveResponse(this.offerService.create(offer));
+      this.subscribeToSaveResponse(this.listingService.create(listing));
     }
   }
 
-  private createFromForm(): IOffer {
+  private createFromForm(): IListing {
     return {
-      ...new Offer(),
+      ...new Listing(),
       id: this.editForm.get(['id']).value,
       timestamp:
         this.editForm.get(['timestamp']).value != null ? moment(this.editForm.get(['timestamp']).value, DATE_TIME_FORMAT) : undefined,
+      type: this.editForm.get(['type']).value,
+      rsn: this.editForm.get(['rsn']).value,
+      amount: this.editForm.get(['amount']).value,
       description: this.editForm.get(['description']).value,
-      status: this.editForm.get(['status']).value,
+      active: this.editForm.get(['active']).value,
       owner: this.editForm.get(['owner']).value,
-      listing: this.editForm.get(['listing']).value
+      tags: this.editForm.get(['tags']).value
     };
   }
 
-  protected subscribeToSaveResponse(result: Observable<HttpResponse<IOffer>>) {
+  protected subscribeToSaveResponse(result: Observable<HttpResponse<IListing>>) {
     result.subscribe(() => this.onSaveSuccess(), () => this.onSaveError());
   }
 
@@ -121,7 +130,18 @@ export class OfferUpdateComponent implements OnInit {
     return item.id;
   }
 
-  trackListingById(index: number, item: IListing) {
+  trackTagById(index: number, item: ITag) {
     return item.id;
+  }
+
+  getSelected(selectedVals: Array<any>, option: any) {
+    if (selectedVals) {
+      for (let i = 0; i < selectedVals.length; i++) {
+        if (option.id === selectedVals[i].id) {
+          return selectedVals[i];
+        }
+      }
+    }
+    return option;
   }
 }

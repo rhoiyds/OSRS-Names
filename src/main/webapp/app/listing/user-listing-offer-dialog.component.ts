@@ -56,11 +56,11 @@ export class UserListingOfferPopupComponent implements OnInit, OnDestroy {
         this.ngbModalRef.componentInstance.listing = listing;
         this.ngbModalRef.result.then(
           result => {
-            this.router.navigate([`/userlisting/${listing.id}/view`, { outlets: { popup: null } }]);
+            this.router.navigate([`/listing/${listing.id}/view`, { outlets: { popup: null } }]);
             this.ngbModalRef = null;
           },
           reason => {
-            this.router.navigate([`/userlisting/${listing.id}/view`, { outlets: { popup: null } }]);
+            this.router.navigate([`/listing/${listing.id}/view`, { outlets: { popup: null } }]);
             this.ngbModalRef = null;
           }
         );

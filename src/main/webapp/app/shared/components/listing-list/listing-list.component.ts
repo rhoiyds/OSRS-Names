@@ -26,6 +26,6 @@ export class ListingListComponent implements OnInit {
       this.router.navigate(['/user', listing.owner.username]);
       return;
     }
-    this.router.navigate(['/userlisting', listing.id, 'view']);
+    this.router.navigate(['/listing', listing.id, 'view']);
   }
 }

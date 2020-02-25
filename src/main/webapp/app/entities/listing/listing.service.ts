@@ -13,7 +13,7 @@ type EntityResponseType = HttpResponse<IListing>;
 type EntityArrayResponseType = HttpResponse<IListing[]>;
 
 @Injectable({ providedIn: 'root' })
-export class UserListingService {
+export class ListingService {
   public resourceUrl = SERVER_API_URL + 'api/listings';
 
   constructor(protected http: HttpClient) {}
@@ -21,31 +21,32 @@ export class UserListingService {
   create(listing: IListing): Observable<EntityResponseType> {
     const copy = this.convertDateFromClient(listing);
     return this.http
-      .post<IListing>(this.resourceUrl + '/add', copy, { observe: 'response' })
+      .post<IListing>(this.resourceUrl, copy, { observe: 'response' })
       .pipe(map((res: EntityResponseType) => this.convertDateFromServer(res)));
   }
 
   update(listing: IListing): Observable<EntityResponseType> {
     const copy = this.convertDateFromClient(listing);
     return this.http
-      .put<IListing>(this.resourceUrl + '/edit', copy, { observe: 'response' })
+      .put<IListing>(this.resourceUrl, copy, { observe: 'response' })
       .pipe(map((res: EntityResponseType) => this.convertDateFromServer(res)));
   }
 
+  find(id: number): Observable<EntityResponseType> {
+    return this.http
+      .get<IListing>(`${this.resourceUrl}/${id}`, { observe: 'response' })
+      .pipe(map((res: EntityResponseType) => this.convertDateFromServer(res)));
+  }
+
+  query(req?: any): Observable<EntityArrayResponseType> {
+    const options = createRequestOption(req);
+    return this.http
+      .get<IListing[]>(this.resourceUrl, { params: options, observe: 'response' })
+      .pipe(map((res: EntityArrayResponseType) => this.convertDateArrayFromServer(res)));
+  }
+
   delete(id: number): Observable<HttpResponse<any>> {
-    return this.http.delete<any>(`${this.resourceUrl}/${id}/deactivate`, { observe: 'response' });
-  }
-
-  getTotalListingsCount(): Observable<HttpResponse<number>> {
-    return this.http.get<any>(`${this.resourceUrl}/count`, { observe: 'response' });
-  }
-
-  getMatchesForListing(id: number): Observable<EntityArrayResponseType> {
-    return this.http.get<IListing[]>(`${this.resourceUrl}/${id}/matches`, { observe: 'response' });
-  }
-
-  getStats() {
-    return this.http.get<any>(`${this.resourceUrl}/stats`, { observe: 'response' });
+    return this.http.delete<any>(`${this.resourceUrl}/${id}`, { observe: 'response' });
   }
 
   protected convertDateFromClient(listing: IListing): IListing {

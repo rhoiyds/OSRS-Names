@@ -12,19 +12,19 @@
                     <span *ngFor="let tag of listing.tags" class="badge badge-pill badge-info" style="margin-left: 6px">{{tag.name}}</span>
                 </h6>
                 <p class="card-text">{{listing.description}}</p>
-                <button type="button" [routerLink]="['/userlisting', listing.id, 'edit']"
+                <button type="button" [routerLink]="['/listing', listing.id, 'edit']"
                     *ngIf="currentAccount?.username === listing.owner.username" class="btn btn-primary">
                     <fa-icon [icon]="'pencil-alt'"></fa-icon>
                     <span class="d-none d-md-inline">Edit</span>
                 </button>
                 <button type="submit"
-                        [routerLink]="['/', 'userlisting', { outlets: { popup: listing.id + '/delete'} }]"
+                        [routerLink]="['/', 'listing', { outlets: { popup: listing.id + '/delete'} }]"
                         *ngIf="currentAccount && currentAccount.username === listing.owner.username"
                         replaceUrl="true" queryParamsHandling="merge" class="btn btn-danger">
                     <fa-icon [icon]="'times'"></fa-icon>
                     <span class="d-none d-md-inline">Delete</span>
                 </button>
-                <button [routerLink]="['/', 'userlisting', { outlets: { popup: listing.id + '/offer'} }]"
+                <button [routerLink]="['/', 'listing', { outlets: { popup: listing.id + '/offer'} }]"
                         *ngIf="currentAccount?.username !== listing.owner.username"
                         replaceUrl="true" queryParamsHandling="merge" class="btn btn-success">
                     <fa-icon [icon]="'hand-holding-usd'"></fa-icon>&nbsp;<span> Offer</span>

@@ -70,6 +70,12 @@
                             <span>Payment</span>
                         </a>
                     </li>
+                    <li>
+                        <a class="dropdown-item" routerLink="listing-entity" routerLinkActive="active" [routerLinkActiveOptions]="{ exact: true }" (click)="collapseNavbar()">
+                            <fa-icon icon="asterisk" fixedWidth="true"></fa-icon>
+                            <span>Listing</span>
+                        </a>
+                    </li>
                     <!-- jhipster-needle-add-entity-to-menu - JHipster will add entities to the menu here -->
                 </ul>
             </li>
