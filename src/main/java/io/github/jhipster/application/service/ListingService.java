@@ -64,4 +64,6 @@ public interface ListingService {
     List<Listing> getMatches(Listing listing);
 
     Long countByTag(Tag tag);
+
+    List<String> getLatestTags();
 }

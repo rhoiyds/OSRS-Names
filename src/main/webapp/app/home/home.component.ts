@@ -14,6 +14,7 @@ import { UserListingService } from 'app/listing/user-listing.service';
 export class HomeComponent implements OnInit {
   buyingTotal = 0;
   sellingTotal = 0;
+  trending = [];
 
   constructor(
     private accountService: AccountService,
@@ -32,6 +33,7 @@ export class HomeComponent implements OnInit {
     this.listingService.getStats().subscribe(res => {
       this.buyingTotal = res.body.buyingTotal;
       this.sellingTotal = res.body.sellingTotal;
+      this.trending = res.body.trending;
     });
   }
 

@@ -12,7 +12,7 @@
 </div>
 
 <div class="container">
-    <div class="card-deck mb-3 text-center">
+    <div class="card-deck mb-4 text-center">
         <div class="card mb-4 shadow-sm">
             <div class="card-header">
                 <h4 class="my-0 font-weight-normal">Buying</h4>
@@ -33,6 +33,27 @@
                 <button type="button" class="btn btn-lg btn-block btn-primary" (click)="onLoginClick()">Start selling</button>
             </div>
         </div>
-
+    </div>
+    <div class="card-deck mb-4 text-center">
+        <div class="card mb-4 shadow-sm">
+            <div class="card-header">
+                <h4 class="my-0 font-weight-normal">Basics</h4>
+            </div>
+            <div class="card-body videoWrapper">
+                <iframe width="560" height="315" src="https://www.youtube.com/embed/xWIvndG-Gbo?controls=0" frameborder="0" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+            </div>
+        </div>
+        <div class="card mb-4 shadow-sm">
+            <div class="card-header">
+                <h4 class="my-0 font-weight-normal">Trending</h4>
+            </div>
+            <div class="card-body">
+                <fa-icon [icon]="'chart-line'" [size]="'5x'"></fa-icon>
+                <ul class="list-group list-group-flush">
+                    <li class="list-group-item" *ngFor="let tag of trending">{{tag}}</li>
+                </ul>
+            </div>
+        </div>
     </div>
 </div>
+
