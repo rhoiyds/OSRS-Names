@@ -130,4 +130,13 @@ public class ListingServiceImpl implements ListingService {
         return this.listingRepository.countByTagsContainsAndActiveTrue(tag);
     }
 
+    @Override
+    public List<String> getLatestTags() {
+        return this.listingRepository.findTop10ByOrderByTimestampDesc().stream().map(listing -> listing.getTags().stream().map(Tag::getName)
+            .collect(Collectors.toList()))
+            .flatMap(List::stream)
+            .distinct()
+            .collect(Collectors.toList());
+    }
+
 }

@@ -57,13 +57,13 @@ export class UserComponent implements OnInit {
       this.ratingService.getAverageRatingForUser(this.user.id).subscribe(averageRatingRespone => {
         this.averageRating = averageRatingRespone.body;
       });
-      this.listingService
-        .query({
-          'ownerId.equals': this.user.id
-        })
-        .subscribe(listingRes => {
-          this.listings = listingRes.body;
-        });
+      // this.listingService
+      //   .query({
+      //     'ownerId.equals': this.user.id
+      //   })
+      //   .subscribe(listingRes => {
+      //     this.listings = listingRes.body;
+      //   });
     });
   }
 

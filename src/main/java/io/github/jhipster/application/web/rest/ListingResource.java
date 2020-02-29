@@ -276,11 +276,12 @@ public class ListingResource {
      * @return the {@link ResponseEntity} with status {@code 200 (OK)} and with body the listing, or with status {@code 404 (Not Found)}.
      */
     @GetMapping("/listings/stats")
-    public ResponseEntity<Map<String, Long>> getStats() {
+    public ResponseEntity<Map<String, Object>> getStats() {
         log.debug("REST request to get stats");
-        Map<String, Long> stats = new HashMap<String, Long>();
+        Map<String, Object> stats = new HashMap<String, Object>();
         stats.put("buyingTotal", this.listingService.getTotalBuyingCount());
         stats.put("sellingTotal", this.listingService.getTotalSellingCount());
+        stats.put("trending", this.listingService.getLatestTags());
         return ResponseEntity.ok(stats);
     }
 }

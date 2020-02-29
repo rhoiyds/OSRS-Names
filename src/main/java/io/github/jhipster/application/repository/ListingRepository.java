@@ -47,5 +47,7 @@ public interface ListingRepository extends JpaRepository<Listing, Long>, JpaSpec
     Long countByTypeIsAndActiveTrue(ListingType type);
 
     Long countByTagsContainsAndActiveTrue(Tag tag);
-    
+
+    List<Listing> findTop10ByOrderByTimestampDesc();
+
 }
