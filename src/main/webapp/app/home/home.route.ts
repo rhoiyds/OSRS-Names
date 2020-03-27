@@ -7,6 +7,6 @@ export const HOME_ROUTE: Route = {
   component: HomeComponent,
   data: {
     authorities: [],
-    pageTitle: 'Welcome to OSRS Names!'
+    pageTitle: 'OSRS Names - Buy and sell Old School Runescape usernames!'
   }
 };
